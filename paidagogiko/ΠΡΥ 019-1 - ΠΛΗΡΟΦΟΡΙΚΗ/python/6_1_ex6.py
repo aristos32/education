@@ -1,9 +1,9 @@
 # variable declarations
-price=int(input("Δώσε τιμή βασικού πακέτου:"))
-quality=int(input("Δώσε ποιότητα (1=Basic, 2=Standard, 3=Premium):"))
-devices=int(input("Δώσε αριθμό συσκευών (1-4):"))
-is_student=int(input("Είσαι φοιτητής; (1=ΝΑΙ, 0=ΟΧΙ):"))
-yearly=int(input("Ετήσια συνδρομή; (1=ΝΑΙ, 0=ΟΧΙ):"))
+price = int(input("Δώσε τιμή βασικού πακέτου: "))
+quality = int(input("Δώσε ποιότητα (1=Basic, 2=Standard, 3=Premium): "))
+devices = int(input("Δώσε αριθμό συσκευών (1-4): "))
+is_student = int(input("Είσαι φοιτητής; (1=ΝΑΙ, 0=ΟΧΙ): "))
+yearly = int(input("Ετήσια συνδρομή; (1=ΝΑΙ, 0=ΟΧΙ): "))
 quality_cost = 0
 device_cost = 0
 student_discount_percentage = 1
