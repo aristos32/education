@@ -1,0 +1,54 @@
+A5M5 – Εικόνες για το Kahoot
+
+Οι εικόνες προέρχονται από το Wikimedia Commons.
+Η αντιστοίχιση a–j ακολουθεί τη σειρά των 10 ερωτήσεων.
+
+1. A5M5-a.png — Προστασία από κακόβουλο λογισμικό
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_shield-alt.svg
+
+2. A5M5-b.png — Τείχος προστασίας
+   Δημιουργός: jiricek72
+   Άδεια: CC0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFirewall_(computing).svg
+
+3. A5M5-c.png — Κακόβουλο λογισμικό και spyware
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_bug.svg
+
+4. A5M5-d.png — Βιντεοκλήση
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_video.svg
+
+5. A5M5-e.png — Άμεση ανταλλαγή μηνυμάτων
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_comments.svg
+
+6. A5M5-f.png — Κοινωνικό δίκτυο και κοινή χρήση
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_share-alt.svg
+
+7. A5M5-g.png — Παραπλανητικό μήνυμα phishing
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_envelope-open-text.svg
+
+8. A5M5-h.png — Προστασία και αναφορά στο διαδίκτυο
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_user-shield.svg
+
+9. A5M5-i.png — Ύποπτος σύνδεσμος ή προειδοποίηση
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_exclamation-triangle.svg
+
+10. A5M5-j.png — Ασφάλεια ανηλίκων στο διαδίκτυο
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_child.svg
