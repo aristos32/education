@@ -1,0 +1,54 @@
+A5M4 - Images for the Kahoot quiz
+
+The images come from Wikimedia Commons.
+The a-j sequence follows the order of the 10 questions.
+
+1. A5M4-a.png - Wi-Fi connection
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_wifi.svg
+
+2. A5M4-b.jpg - Wireless router
+   Creator: Abhi25t
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3ATP-Link_AX1500_Wi-Fi_6_Router_Front.jpg
+
+3. A5M4-c.jpg - Network interface card
+   Creator: Wikimedia Commons contributor
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File%3ANetwork_card.jpg
+
+4. A5M4-d.png - Power off before installing hardware
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_power-off.svg
+
+5. A5M4-e.png - Device driver and configuration
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_cogs.svg
+
+6. A5M4-f.png - DHCP server
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_server.svg
+
+7. A5M4-g.png - Wireless signal strength
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_signal.svg
+
+8. A5M4-h.png - Wi-Fi password and WPA2 security
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_lock.svg
+
+9. A5M4-i.png - Ping connection test
+   Creator: Michel Bakni
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3APing_command_example.png
+
+10. A5M4-j.png - Weak signal and interference warning
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_exclamation-triangle.svg

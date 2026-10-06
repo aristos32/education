@@ -1,0 +1,54 @@
+A5M5 – Images for the Kahoot quiz
+
+The images come from Wikimedia Commons.
+The a–j sequence follows the order of the 10 questions.
+
+1. A5M5-a.png — Προστασία από κακόβουλο λογισμικό
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_shield-alt.svg
+
+2. A5M5-b.png — Τείχος προστασίας
+   Creator: jiricek72
+   License: CC0
+   Source: https://commons.wikimedia.org/wiki/File%3AFirewall_(computing).svg
+
+3. A5M5-c.png — Κακόβουλο λογισμικό και spyware
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_bug.svg
+
+4. A5M5-d.png — Βιντεοκλήση
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_video.svg
+
+5. A5M5-e.png — Άμεση ανταλλαγή μηνυμάτων
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_comments.svg
+
+6. A5M5-f.png — Κοινωνικό δίκτυο και κοινή χρήση
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_share-alt.svg
+
+7. A5M5-g.png — Παραπλανητικό μήνυμα phishing
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_envelope-open-text.svg
+
+8. A5M5-h.png — Προστασία και αναφορά στο διαδίκτυο
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_user-shield.svg
+
+9. A5M5-i.png — Ύποπτος σύνδεσμος ή προειδοποίηση
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_exclamation-triangle.svg
+
+10. A5M5-j.png — Ασφάλεια ανηλίκων στο διαδίκτυο
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_child.svg

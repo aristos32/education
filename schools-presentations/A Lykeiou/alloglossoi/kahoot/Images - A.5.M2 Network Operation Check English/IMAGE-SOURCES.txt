@@ -1,0 +1,54 @@
+A5M2 – Images for the Kahoot quiz
+
+The images come from Wikimedia Commons.
+The a–j sequence follows the order of the 10 questions.
+
+1. A5M2-a.png — Λογική διεύθυνση συσκευής
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_address-card.svg
+
+2. A5M2-b.png — Διαχωρισμός δικτύου με μάσκα υποδικτύου
+   Creator: And1mu
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AAddress_space_in_Variable_Length_Subnet_Masking_(VLSM).svg
+
+3. A5M2-c.png — Πύλη προς άλλα δίκτυα
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_project-diagram.svg
+
+4. A5M2-d.png — Αποτελέσματα της εντολής ipconfig /all
+   Creator: Wikimedia Commons contributor
+   License: CC0
+   Source: https://commons.wikimedia.org/wiki/File%3AIpconfig-all.png
+
+5. A5M2-e.jpg — Κάρτα δικτύου και φυσική διεύθυνση MAC
+   Creator: Wikimedia Commons contributor
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File%3ANetwork_card.jpg
+
+6. A5M2-f.png — Εξυπηρετητής DNS
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_server.svg
+
+7. A5M2-g.png — Έλεγχος επικοινωνίας με ping
+   Creator: Michel Bakni
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3APing_command_example.png
+
+8. A5M2-h.png — Διαδρομή πακέτων και tracert
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_route.svg
+
+9. A5M2-i.png — Συσκευές στο ίδιο υποδίκτυο
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_network-wired.svg
+
+10. A5M2-j.png — Διάγνωση προβλήματος DNS
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_exclamation-triangle.svg
