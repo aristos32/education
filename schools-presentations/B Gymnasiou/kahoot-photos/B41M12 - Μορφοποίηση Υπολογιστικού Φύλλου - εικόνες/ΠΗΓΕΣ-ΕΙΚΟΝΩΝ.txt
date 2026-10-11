@@ -1,0 +1,42 @@
+B41M12 – Μορφοποίηση Υπολογιστικού Φύλλου
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Συγχώνευση κελιών
+   Αρχείο: B41M12-a.jpg
+   Πηγή: https://10pcg.com/wp-content/uploads/15-unmerge-multiple.jpg
+
+2. Κατάργηση συγχώνευσης
+   Αρχείο: B41M12-b.jpg
+   Πηγή: https://10pcg.com/wp-content/uploads/15-unmerge-multiple.jpg
+
+3. Αναδίπλωση κειμένου
+   Αρχείο: B41M12-c.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+4. Όλα τα περιγράμματα
+   Αρχείο: B41M12-d.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+5. Οριζόντια στοίχιση στο κέντρο
+   Αρχείο: B41M12-e.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+6. Κατακόρυφη στοίχιση στο μέσο
+   Αρχείο: B41M12-f.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+7. Κατακόρυφο κείμενο
+   Αρχείο: B41M12-g.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+8. Χρώμα και στυλ περιγράμματος
+   Αρχείο: B41M12-h.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+9. Συγχώνευση A1:E1
+   Αρχείο: B41M12-i.jpg
+   Πηγή: https://10pcg.com/wp-content/uploads/15-unmerge-multiple.jpg
+
+10. Αναδίπλωση μεγάλου κειμένου
+   Αρχείο: B41M12-j.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png

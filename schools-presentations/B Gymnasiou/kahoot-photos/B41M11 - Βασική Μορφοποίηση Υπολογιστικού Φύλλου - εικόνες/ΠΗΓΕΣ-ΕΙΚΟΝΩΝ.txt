@@ -1,0 +1,42 @@
+B41M11 – Βασική Μορφοποίηση Υπολογιστικού Φύλλου
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Έντονη γραφή
+   Αρχείο: B41M11-a.jpg
+   Πηγή: https://images.flatworldknowledge.com/manzoexcel/manzoexcel-fig01_036.jpg
+
+2. Πλάγια γραφή
+   Αρχείο: B41M11-b.jpg
+   Πηγή: https://images.flatworldknowledge.com/manzoexcel/manzoexcel-fig01_036.jpg
+
+3. Χρώμα γεμίσματος
+   Αρχείο: B41M11-c.jpg
+   Πηγή: https://images.flatworldknowledge.com/manzoexcel/manzoexcel-fig01_036.jpg
+
+4. Χρώμα γραμματοσειράς
+   Αρχείο: B41M11-d.jpg
+   Πηγή: https://images.flatworldknowledge.com/manzoexcel/manzoexcel-fig01_036.jpg
+
+5. Πινέλο μορφοποίησης
+   Αρχείο: B41M11-e.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+6. Νομισματική μορφή
+   Αρχείο: B41M11-f.png
+   Πηγή: https://www.excelmojo.com/wp-content/uploads/2023/04/How-to-Use-Excel-Statistical-Functions-Example-1-Find-Average-Sale-Per-Month.png
+
+7. Μορφή ποσοστού
+   Αρχείο: B41M11-g.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+8. Δεκαδικά ψηφία
+   Αρχείο: B41M11-h.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+9. Μετατροπή 0,25 σε ποσοστό
+   Αρχείο: B41M11-i.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png
+
+10. Αντιγραφή νομισματικής μορφής
+   Αρχείο: B41M11-j.png
+   Πηγή: https://pressbooks.pub/app/uploads/sites/294/2021/02/Figure_1.38_Sheet1_with_Data_Alignment_Features_Added.png

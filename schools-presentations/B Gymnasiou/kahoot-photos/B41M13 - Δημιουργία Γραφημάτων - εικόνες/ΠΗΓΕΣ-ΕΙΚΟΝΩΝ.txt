@@ -1,0 +1,42 @@
+B41M13 – Δημιουργία Γραφημάτων
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Επιλογή περιοχής δεδομένων
+   Αρχείο: B41M13-a.png
+   Πηγή: https://unica.vn/media/imagesck/1672025519_ve-bieu-do-ket-hop-2.png?v=1672025519
+
+2. Καρτέλα Insert
+   Αρχείο: B41M13-b.png
+   Πηγή: https://unica.vn/media/imagesck/1672025519_ve-bieu-do-ket-hop-2.png?v=1672025519
+
+3. Γράφημα Bar
+   Αρχείο: B41M13-c.png
+   Πηγή: https://unica.vn/media/imagesck/1672025519_ve-bieu-do-ket-hop-2.png?v=1672025519
+
+4. Γράφημα Column
+   Αρχείο: B41M13-d.png
+   Πηγή: https://images.surferseo.art/2e3984f4-46af-4cfe-9df8-0ac93c685576.jpeg
+
+5. Γράφημα Line
+   Αρχείο: B41M13-e.png
+   Πηγή: https://unica.vn/media/imagesck/1672025519_ve-bieu-do-ket-hop-2.png?v=1672025519
+
+6. Επιλογή γραφήματος
+   Αρχείο: B41M13-f.png
+   Πηγή: https://images.surferseo.art/2e3984f4-46af-4cfe-9df8-0ac93c685576.jpeg
+
+7. Μετακίνηση γραφήματος
+   Αρχείο: B41M13-g.png
+   Πηγή: https://images.surferseo.art/2e3984f4-46af-4cfe-9df8-0ac93c685576.jpeg
+
+8. Αλλαγή μεγέθους γραφήματος
+   Αρχείο: B41M13-h.png
+   Πηγή: https://images.surferseo.art/2e3984f4-46af-4cfe-9df8-0ac93c685576.jpeg
+
+9. Αλλαγή τύπου γραφήματος
+   Αρχείο: B41M13-i.png
+   Πηγή: https://unica.vn/media/imagesck/1672025519_ve-bieu-do-ket-hop-2.png?v=1672025519
+
+10. Αυτόματη ενημέρωση γραφήματος
+   Αρχείο: B41M13-j.png
+   Πηγή: https://unica.vn/media/imagesck/1672025519_ve-bieu-do-ket-hop-2.png?v=1672025519

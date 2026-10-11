@@ -1,0 +1,42 @@
+B41M15 – Ρυθμίσεις Εκτύπωσης Υπολογιστικών Φύλλων
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Περιθώρια σελίδας
+   Αρχείο: B41M15-a.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+2. Κατακόρυφος προσανατολισμός
+   Αρχείο: B41M15-b.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+3. Οριζόντιος προσανατολισμός
+   Αρχείο: B41M15-c.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+4. Κεφαλίδα
+   Αρχείο: B41M15-d.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+5. Υποσέλιδο
+   Αρχείο: B41M15-e.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+6. Αριθμός σελίδας σε κεφαλίδα ή υποσέλιδο
+   Αρχείο: B41M15-f.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+7. Μέγεθος χαρτιού
+   Αρχείο: B41M15-g.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+8. Προσαρμογή σε μία σελίδα
+   Αρχείο: B41M15-h.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+9. Μία σελίδα πλάτος και δύο ύψος
+   Αρχείο: B41M15-i.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png
+
+10. Αυτόματη τρέχουσα ημερομηνία
+   Αρχείο: B41M15-j.png
+   Πηγή: https://www.customguide.com/images/lessons/excel-2019/excel-2019--headers-and-footers--04.png

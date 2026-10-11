@@ -1,0 +1,42 @@
+B41M16 – Έλεγχος και Εκτύπωση Υπολογιστικών Φύλλων
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Ορθογραφικός έλεγχος
+   Αρχείο: B41M16-a.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+2. Προεπισκόπηση εκτύπωσης
+   Αρχείο: B41M16-b.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+3. Εκτύπωση γραμμών πλέγματος
+   Αρχείο: B41M16-c.jpg
+   Πηγή: https://www.tutorialspoint.com/excel/images/sheet_options.jpg
+
+4. Εκτύπωση επικεφαλίδων γραμμών και στηλών
+   Αρχείο: B41M16-d.jpg
+   Πηγή: https://www.tutorialspoint.com/excel/images/sheet_options.jpg
+
+5. Επανάληψη γραμμών τίτλων
+   Αρχείο: B41M16-e.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+6. Εκτύπωση επιλογής
+   Αρχείο: B41M16-f.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+7. Εκτύπωση ολόκληρου βιβλίου
+   Αρχείο: B41M16-g.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+8. Αριθμός αντιγράφων
+   Αρχείο: B41M16-h.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+9. Εκτύπωση τριών επιλεγμένων κελιών
+   Αρχείο: B41M16-i.jpg
+   Πηγή: https://cdn.prod.website-files.com/6634a8f8dd9b2a63c9e6be83/669f80340448237de4697d8f_office-2019-excel-page-setup.jpeg
+
+10. Επανάληψη γραμμών 1 και 2
+   Αρχείο: B41M16-j.jpg
+   Πηγή: https://www.tutorialspoint.com/excel/images/sheet_options.jpg

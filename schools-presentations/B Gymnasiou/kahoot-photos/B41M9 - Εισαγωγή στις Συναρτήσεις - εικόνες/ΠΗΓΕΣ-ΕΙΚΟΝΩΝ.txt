@@ -1,0 +1,42 @@
+B41M9 – Εισαγωγή στις Συναρτήσεις
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Συνάρτηση SUM
+   Αρχείο: B41M9-a.jpg
+   Πηγή: https://cdn.educba.com/academy/wp-content/uploads/2013/12/Excel-SUM-MAX-MIN-AVERAGE.jpg
+
+2. Συνάρτηση AVERAGE
+   Αρχείο: B41M9-b.png
+   Πηγή: https://www.excelmojo.com/wp-content/uploads/2023/04/How-to-Use-Excel-Statistical-Functions-Example-1-Find-Average-Sale-Per-Month.png
+
+3. Συνάρτηση MAX
+   Αρχείο: B41M9-c.jpg
+   Πηγή: https://cdn.educba.com/academy/wp-content/uploads/2013/12/Excel-SUM-MAX-MIN-AVERAGE.jpg
+
+4. Συνάρτηση MIN
+   Αρχείο: B41M9-d.jpg
+   Πηγή: https://cdn.educba.com/academy/wp-content/uploads/2013/12/Excel-SUM-MAX-MIN-AVERAGE.jpg
+
+5. Συνάρτηση ROUND
+   Αρχείο: B41M9-e.png
+   Πηγή: https://cdn-ak.f.st-hatena.com/images/fotolife/s/syabondama58/20191002/20191002143412.png
+
+6. Τύπος =SUM(B3:B22)
+   Αρχείο: B41M9-f.png
+   Πηγή: https://cdn-ak.f.st-hatena.com/images/fotolife/s/syabondama58/20191002/20191002143412.png
+
+7. Περιοχή κελιών B3:B22
+   Αρχείο: B41M9-g.png
+   Πηγή: https://cdn-ak.f.st-hatena.com/images/fotolife/s/syabondama58/20191002/20191002143412.png
+
+8. Τύπος =MAX(C3:C22)
+   Αρχείο: B41M9-h.jpg
+   Πηγή: https://cdn.educba.com/academy/wp-content/uploads/2013/12/Excel-SUM-MAX-MIN-AVERAGE.jpg
+
+9. ROUND μαζί με AVERAGE
+   Αρχείο: B41M9-i.png
+   Πηγή: https://www.excelmojo.com/wp-content/uploads/2023/04/How-to-Use-Excel-Statistical-Functions-Example-1-Find-Average-Sale-Per-Month.png
+
+10. Αντιγραφή τύπου δύο στήλες δεξιά
+   Αρχείο: B41M9-j.png
+   Πηγή: https://cdn-ak.f.st-hatena.com/images/fotolife/s/syabondama58/20191002/20191002143412.png
