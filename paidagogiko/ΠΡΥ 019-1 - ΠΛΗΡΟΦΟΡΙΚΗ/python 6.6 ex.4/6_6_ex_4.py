@@ -73,7 +73,7 @@ def main():
     print(f"Στην έρευνα συμμετέχουν {len(courses)} μαθήματα")
         
     epl_courses = find_epl_courses(courses)
-    print(f"Μαθήματα Πληροφορικής: {epl_courses}")
+    print(f"Μαθήματα Πληροφορικής: {' '.join(epl_courses)}")
 
     find_highest_stress_course(courses, scores)
 
