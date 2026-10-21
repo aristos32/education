@@ -1,0 +1,1021 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Πρακτικό διαδραστικό τεστ για την ενότητα A5 Δίκτυα και Ασφάλεια">
+  <title>A5 Δίκτυα και Ασφάλεια – Πρακτικό Εργαστήριο</title>
+  <style>
+    :root {
+      --ink: #10263d;
+      --muted: #5e7184;
+      --paper: #f7fbfe;
+      --panel: #ffffff;
+      --line: #cfe1ec;
+      --blue: #087ea4;
+      --blue-dark: #075c7a;
+      --cyan: #22b8cf;
+      --orange: #e77d16;
+      --green: #17844a;
+      --red: #c43d3d;
+      --terminal: #07151f;
+      --terminal-green: #73e2a7;
+      --shadow: 0 18px 48px rgba(23, 64, 90, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(34,184,207,.13), transparent 28rem),
+        radial-gradient(circle at 90% 10%, rgba(231,125,22,.09), transparent 25rem),
+        var(--paper);
+      font-family: Inter, Aptos, "Segoe UI", Arial, sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    .app-shell { width: min(1180px, calc(100% - 28px)); margin: 0 auto; padding: 22px 0 46px; }
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding: 15px 18px;
+      border: 1px solid rgba(8,126,164,.18);
+      border-radius: 18px;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 28px rgba(23,64,90,.08);
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+    }
+    .brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+    .brand-mark {
+      width: 44px; height: 44px; border-radius: 13px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
+      display: grid; place-items: center; color: white; font-weight: 900;
+      letter-spacing: -.06em; box-shadow: 0 8px 18px rgba(8,126,164,.24);
+    }
+    .brand h1 { margin: 0; font-size: clamp(17px, 2.3vw, 24px); line-height: 1.15; }
+    .brand p { margin: 3px 0 0; color: var(--muted); font-size: 13px; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .language-picker { display: grid; gap: 3px; }
+    .language-picker label { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+    .language-picker select { min-width: 128px; padding: 8px 30px 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); font-weight: 750; }
+    .score-chip { text-align: right; min-width: 135px; }
+    .score-chip strong { display: block; font-size: 23px; color: var(--blue-dark); }
+    .score-chip span { color: var(--muted); font-size: 12px; }
+    .progress { grid-column: 1 / -1; height: 7px; border-radius: 99px; background: #e4eff5; overflow: hidden; }
+    .progress > span { display: block; width: 0%; height: 100%; background: linear-gradient(90deg, var(--blue), var(--cyan)); transition: width .35s ease; }
+
+    .hero {
+      display: grid; grid-template-columns: 1.15fr .85fr; gap: 28px;
+      align-items: center; padding: 54px 18px 30px;
+    }
+    .eyebrow { margin: 0 0 10px; color: var(--blue); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; }
+    .hero h2 { margin: 0; max-width: 760px; font-size: clamp(36px, 5.8vw, 72px); line-height: .98; letter-spacing: -.045em; }
+    .hero h2 span { color: var(--blue); }
+    .hero-copy { max-width: 660px; color: var(--muted); font-size: clamp(17px, 2vw, 21px); line-height: 1.55; margin: 20px 0 26px; }
+    .primary, .secondary, .ghost {
+      border: 0; border-radius: 12px; padding: 12px 18px; font-weight: 800;
+      transition: transform .15s, box-shadow .15s, background .15s;
+    }
+    .primary { background: var(--blue); color: #fff; box-shadow: 0 9px 20px rgba(8,126,164,.23); }
+    .primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
+    .secondary { background: #e8f6fa; color: var(--blue-dark); }
+    .secondary:hover { background: #d9eff6; }
+    .ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+    .ghost:hover { color: var(--ink); background: #f2f8fb; }
+
+    .network-visual {
+      min-height: 310px; border-radius: 28px; background: #0e3146;
+      position: relative; overflow: hidden; box-shadow: var(--shadow);
+    }
+    .network-visual::before, .network-visual::after {
+      content: ""; position: absolute; border-radius: 50%; filter: blur(1px);
+    }
+    .network-visual::before { width: 260px; height: 260px; right: -70px; top: -80px; background: rgba(34,184,207,.19); }
+    .network-visual::after { width: 210px; height: 210px; left: -100px; bottom: -100px; background: rgba(231,125,22,.18); }
+    .node {
+      position: absolute; display: grid; place-items: center; width: 74px; height: 74px;
+      border: 2px solid rgba(255,255,255,.78); border-radius: 18px;
+      background: rgba(255,255,255,.1); color: white; font-weight: 800; font-size: 13px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+    }
+    .node.router { left: calc(50% - 38px); top: calc(50% - 35px); background: var(--orange); border-color: #ffc88f; }
+    .node.pc1 { left: 32px; top: 36px; }
+    .node.pc2 { left: 38px; bottom: 34px; }
+    .node.server { right: 30px; top: 42px; }
+    .node.cloud { right: 32px; bottom: 34px; border-radius: 50%; background: var(--blue); }
+    .wire { position: absolute; height: 2px; background: rgba(255,255,255,.55); transform-origin: left center; }
+    .wire.w1 { left: 95px; top: 92px; width: 145px; transform: rotate(18deg); }
+    .wire.w2 { left: 98px; bottom: 87px; width: 145px; transform: rotate(-19deg); }
+    .wire.w3 { left: 58%; top: 142px; width: 135px; transform: rotate(-18deg); }
+    .wire.w4 { left: 58%; top: 166px; width: 138px; transform: rotate(18deg); }
+    .pulse { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--terminal-green); box-shadow: 0 0 0 7px rgba(115,226,167,.13); animation: pulse 2.1s infinite ease-in-out; }
+    .pulse.p1 { left: 41%; top: 39%; }
+    .pulse.p2 { right: 31%; bottom: 35%; animation-delay: .8s; }
+    @keyframes pulse { 50% { transform: scale(1.45); opacity: .55; } }
+
+    .module-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0 24px; }
+    .module-tab {
+      border: 1px solid var(--line); border-radius: 16px; padding: 15px 16px; text-align: left;
+      background: white; color: var(--ink); box-shadow: 0 7px 20px rgba(23,64,90,.06);
+    }
+    .module-tab small { display: block; color: var(--muted); margin-top: 4px; }
+    .module-tab.active { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(8,126,164,.11); }
+    .module-tab.done { border-color: #9ed2b6; background: #f0fbf5; }
+    .module-tab .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; margin-right: 8px; background: #e8f6fa; color: var(--blue-dark); font-weight: 900; }
+
+    .module { display: none; animation: rise .28s ease; }
+    .module.active { display: block; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+    .module-head { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin-bottom: 18px; }
+    .module-head h3 { margin: 0; font-size: clamp(27px, 4vw, 43px); letter-spacing: -.03em; }
+    .module-head p { margin: 6px 0 0; color: var(--muted); }
+    .counter { color: var(--blue-dark); font-weight: 850; white-space: nowrap; }
+
+    .card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 20px;
+      padding: clamp(18px, 3vw, 30px); box-shadow: var(--shadow); margin-bottom: 18px;
+    }
+    .scenario-label { display: inline-flex; align-items: center; gap: 8px; color: var(--orange); font-weight: 850; font-size: 13px; text-transform: uppercase; letter-spacing: .07em; }
+    .scenario-label::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); }
+    .question { font-size: clamp(20px, 3vw, 28px); line-height: 1.3; margin: 12px 0 20px; }
+    .scenario-box { border-left: 4px solid var(--cyan); background: #eff9fc; padding: 14px 16px; border-radius: 0 12px 12px 0; color: #29485c; margin-bottom: 18px; line-height: 1.5; }
+    .options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 11px; }
+    .option {
+      padding: 14px 15px; border: 1.5px solid var(--line); border-radius: 13px;
+      background: #fff; color: var(--ink); text-align: left; min-height: 58px;
+    }
+    .option:hover:not(:disabled) { border-color: var(--blue); background: #f1faff; }
+    .option.selected { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(8,126,164,.11); }
+    .option.correct { border-color: var(--green); background: #effaf4; color: #0c6736; }
+    .option.wrong { border-color: var(--red); background: #fff1f1; color: #942b2b; }
+    .feedback { min-height: 26px; margin-top: 14px; font-weight: 700; line-height: 1.45; }
+    .feedback.good { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .actions { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+    .match-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 20px; }
+    .match-column h4 { margin: 0 0 10px; color: var(--muted); font-size: 14px; text-transform: uppercase; letter-spacing: .06em; }
+    .match-item, .drop-zone {
+      border: 1.5px solid var(--line); border-radius: 13px; min-height: 62px; padding: 12px 14px;
+      display: flex; align-items: center; margin-bottom: 10px; background: white;
+    }
+    .match-item { font-weight: 850; color: var(--blue-dark); cursor: grab; user-select: none; }
+    .match-item:hover, .match-item.chosen { border-color: var(--blue); background: #eef9fc; }
+    .match-item.used { opacity: .34; pointer-events: none; }
+    .drop-zone { color: #395166; position: relative; padding-right: 145px; }
+    .drop-zone.over { border-color: var(--orange); background: #fff7ee; }
+    .drop-zone.matched { border-color: var(--green); background: #effaf4; }
+    .drop-zone.error { animation: shake .25s linear; border-color: var(--red); }
+    .drop-answer { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--green); font-weight: 900; max-width: 130px; text-align: right; }
+    @keyframes shake { 33% { transform: translateX(-5px); } 66% { transform: translateX(5px); } }
+    .match-note { color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+    .command-brief {
+      margin-bottom: 18px; padding: 20px 22px; border: 2px solid #b9dfea; border-left: 8px solid var(--blue);
+      border-radius: 16px; background: linear-gradient(135deg, #f7fcfe 0%, #eaf7fb 100%);
+      box-shadow: 0 10px 26px rgba(10, 73, 95, .10);
+    }
+    .command-brief-label {
+      display: inline-block; margin-bottom: 9px; color: var(--blue-dark); font-size: 13px;
+      font-weight: 900; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .terminal-task { color: #173e50; font-size: 18px; font-weight: 750; line-height: 1.55; white-space: pre-line; }
+    .terminal-wrap { overflow: hidden; border-radius: 18px; box-shadow: 0 20px 45px rgba(5,22,33,.24); }
+    .terminal-title { display: flex; align-items: center; gap: 7px; background: #1c2d38; color: #d7e4eb; padding: 10px 14px; font-size: 13px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; background: #ff6b6b; }
+    .dot:nth-child(2) { background: #ffd43b; }
+    .dot:nth-child(3) { background: #51cf66; }
+    .terminal {
+      min-height: 310px; max-height: 430px; overflow-y: auto; background: var(--terminal);
+      color: #e7f2f6; padding: 20px; font-family: Consolas, "Courier New", monospace; line-height: 1.45;
+    }
+    .terminal-history { white-space: pre-wrap; color: #b8cad4; }
+    .terminal-history .ok { color: var(--terminal-green); }
+    .terminal-history .err { color: #ff8d8d; }
+    .prompt-line { display: flex; align-items: center; margin-top: 8px; }
+    html[dir="rtl"] .module-head, html[dir="rtl"] .command-brief, html[dir="rtl"] .card, html[dir="rtl"] .hero-copy { text-align: right; }
+    html[dir="rtl"] .terminal, html[dir="rtl"] .terminal-title, html[dir="rtl"] .prompt-line { direction: ltr; text-align: left; }
+    .prompt-prefix { color: var(--terminal-green); flex: 0 0 auto; }
+    .prompt-input {
+      flex: 1; min-width: 80px; background: transparent; border: 0; outline: 0; color: #fff;
+      caret-color: var(--terminal-green); padding: 0 0 0 8px; font-family: inherit;
+    }
+    .terminal-hint { margin: 14px 0 0; color: var(--muted); font-size: 14px; }
+
+    .result { text-align: center; padding: clamp(28px, 5vw, 54px); }
+    .result-ring {
+      width: 170px; height: 170px; margin: 0 auto 24px; border-radius: 50%;
+      display: grid; place-items: center; background: conic-gradient(var(--blue) 0deg, #deebf2 0deg);
+      position: relative;
+    }
+    .result-ring::before { content: ""; position: absolute; inset: 15px; background: white; border-radius: 50%; }
+    .result-ring strong { position: relative; font-size: 40px; color: var(--blue-dark); }
+    .result h3 { font-size: clamp(30px, 5vw, 48px); margin: 0 0 8px; }
+    .result > p { color: var(--muted); margin-bottom: 28px; }
+    .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 720px; margin: 0 auto 28px; }
+    .metric { border: 1px solid var(--line); border-radius: 15px; padding: 16px; background: #f9fcfe; }
+    .metric strong { display: block; font-size: 25px; color: var(--blue-dark); }
+    .metric span { color: var(--muted); font-size: 13px; }
+    .hidden { display: none !important; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; padding-top: 36px; }
+      .network-visual { min-height: 270px; }
+      .module-nav { grid-template-columns: 1fr; }
+      .match-grid { grid-template-columns: 1fr; }
+      .options { grid-template-columns: 1fr; }
+      .breakdown { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .app-shell { width: min(100% - 18px, 1180px); padding-top: 9px; }
+      .topbar { top: 5px; padding: 11px; }
+      .brand-mark { width: 38px; height: 38px; }
+      .brand p { display: none; }
+      .top-actions { gap: 7px; }
+      .language-picker label { display: none; }
+      .language-picker select { min-width: 102px; max-width: 112px; padding: 7px 24px 7px 8px; font-size: 13px; }
+      .score-chip { min-width: 90px; }
+      .hero { padding-left: 5px; padding-right: 5px; }
+      .network-visual { min-height: 230px; }
+      .node { width: 60px; height: 60px; font-size: 11px; }
+      .node.router { left: calc(50% - 30px); }
+      .wire { opacity: .55; }
+      .drop-zone { padding-right: 105px; }
+      .drop-answer { max-width: 95px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">A5</div>
+        <div>
+          <h1>Δίκτυα και Ασφάλεια</h1>
+          <p>Πρακτικό εργαστήριο επανάληψης</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="language-picker">
+          <label for="languageSelect">Language</label>
+          <select id="languageSelect" aria-label="Language">
+            <option value="el">Ελληνικά</option>
+            <option value="en">English</option>
+            <option value="ru">Русский</option>
+            <option value="fa">فارسی</option>
+          </select>
+        </div>
+        <div class="score-chip" aria-live="polite">
+          <strong id="scoreTop">0 / 100</strong>
+          <span id="timerTop">00:00</span>
+        </div>
+      </div>
+      <div class="progress" aria-label="Πρόοδος"><span id="progressBar"></span></div>
+    </header>
+
+    <section class="hero" id="hero">
+      <div>
+        <p class="eyebrow">A.5.M1 · A.5.M2 · A.5.M5</p>
+        <h2>Μάθε αν μπορείς να <span>λύσεις το πρόβλημα</span></h2>
+        <p class="hero-copy">Δεν αρκεί να θυμάσαι τους όρους. Θα επιλέξεις εξοπλισμό, θα διαγνώσεις βλάβες, θα αντιστοιχίσεις έννοιες και θα γράψεις πραγματικές εντολές δικτύου.</p>
+        <button class="primary" id="startBtn">Έναρξη πρακτικού τεστ</button>
+      </div>
+      <div class="network-visual" aria-label="Σχηματική αναπαράσταση δικτύου">
+        <div class="wire w1"></div><div class="wire w2"></div><div class="wire w3"></div><div class="wire w4"></div>
+        <div class="node pc1">PC A</div><div class="node pc2">Laptop</div>
+        <div class="node router">Router</div><div class="node server">Server</div><div class="node cloud">Internet</div>
+        <span class="pulse p1"></span><span class="pulse p2"></span>
+      </div>
+    </section>
+
+    <section id="lab" class="hidden">
+      <nav class="module-nav" aria-label="Ενότητες τεστ">
+        <button class="module-tab active" data-module="mcq"><span class="num">1</span>Πρακτικά σενάρια<small>Multiple choice · 30 μονάδες</small></button>
+        <button class="module-tab" data-module="matching"><span class="num">2</span>Αντιστοίχιση<small>10 ζεύγη · 30 μονάδες</small></button>
+        <button class="module-tab" data-module="terminal"><span class="num">3</span>Command Prompt<small>5 εντολές · 40 μονάδες</small></button>
+      </nav>
+
+      <section class="module active" id="module-mcq">
+        <div class="module-head">
+          <div><h3>Πρακτικά σενάρια</h3><p>Επίλεξε τη λύση που θα εφάρμοζες στην πράξη.</p></div>
+          <div class="counter" id="mcqCounter">1 / 6</div>
+        </div>
+        <div class="card" id="mcqCard">
+          <span class="scenario-label">Σενάριο</span>
+          <div class="scenario-box" id="scenarioText"></div>
+          <h4 class="question" id="questionText"></h4>
+          <div class="options" id="options"></div>
+          <div class="feedback" id="mcqFeedback" aria-live="polite"></div>
+          <div class="actions">
+            <button class="ghost" id="resetQuestion">Καθαρισμός επιλογής</button>
+            <button class="primary" id="checkMcq">Έλεγχος</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="module" id="module-matching">
+        <div class="module-head">
+          <div><h3>Αντιστοίχιση</h3><p>Σύρε τον όρο στη σωστή περιγραφή ή πάτησε πρώτα τον όρο και μετά την περιγραφή.</p></div>
+          <div class="counter" id="matchCounter">0 / 10</div>
+        </div>
+        <div id="matchingArea"></div>
+        <div class="actions">
+          <button class="ghost" id="resetMatching">Επαναφορά αντιστοίχισης</button>
+          <button class="primary" id="toTerminal" disabled>Συνέχεια στο Command Prompt</button>
+        </div>
+      </section>
+
+      <section class="module" id="module-terminal">
+        <div class="module-head">
+          <div><h3>Command Prompt</h3><p>Γράψε την κατάλληλη εντολή. Δεν αλλάζεις ρυθμίσεις, εκτελείς μόνο ελέγχους.</p></div>
+          <div class="counter" id="terminalCounter">1 / 5</div>
+        </div>
+        <div class="command-brief" aria-live="polite">
+          <span class="command-brief-label">Τρέχουσα αποστολή</span>
+          <div class="terminal-task" id="terminalTask"></div>
+        </div>
+        <div class="terminal-wrap">
+          <div class="terminal-title"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">Command Prompt · Student-PC</span></div>
+          <div class="terminal" id="terminalBox" role="application" aria-label="Προσομοίωση γραμμής εντολών">
+            <div class="terminal-history" id="terminalHistory"></div>
+            <form class="prompt-line" id="promptForm" autocomplete="off">
+              <label for="promptInput" class="prompt-prefix">C:\Users\Student&gt;</label>
+              <input id="promptInput" class="prompt-input" spellcheck="false" autocapitalize="off" aria-label="Γράψε εντολή">
+            </form>
+          </div>
+        </div>
+        <p class="terminal-hint">Πάτησε <strong>Enter</strong> για εκτέλεση. Οι εντολές γίνονται δεκτές με κεφαλαία ή πεζά.</p>
+        <div class="actions">
+          <button class="secondary" id="commandHint">Υπόδειξη</button>
+          <button class="primary hidden" id="showResult">Προβολή αποτελέσματος</button>
+        </div>
+      </section>
+
+      <section class="module" id="module-result">
+        <div class="card result">
+          <div class="result-ring" id="resultRing"><strong id="finalScore">0%</strong></div>
+          <h3 id="resultTitle">Αποτέλεσμα</h3>
+          <p id="resultMessage"></p>
+          <div class="breakdown">
+            <div class="metric"><strong id="networkMetric">0%</strong><span>Δίκτυα και εξοπλισμός</span></div>
+            <div class="metric"><strong id="diagMetric">0%</strong><span>Διάγνωση με εντολές</span></div>
+            <div class="metric"><strong id="securityMetric">0%</strong><span>Ασφάλεια</span></div>
+          </div>
+          <div class="actions" style="justify-content:center">
+            <button class="secondary" id="printResult">Εκτύπωση αποτελέσματος</button>
+            <button class="primary" id="restartBtn">Νέα προσπάθεια</button>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const baseMcqs = [
+      {
+        area: 'network',
+        scenario: 'Σε ένα σχολικό εργαστήριο, 18 υπολογιστές και ένας εκτυπωτής βρίσκονται στο ίδιο κτήριο και συνδέονται μεταξύ τους.',
+        q: 'Πώς χαρακτηρίζεται κυρίως αυτό το δίκτυο;',
+        options: ['WAN', 'LAN', 'Internet', 'Client'],
+        answer: 1,
+        explain: 'LAN είναι δίκτυο μικρής περιοχής, όπως ένα δωμάτιο ή ένα σχολικό κτήριο.'
+      },
+      {
+        area: 'network',
+        scenario: 'Το σχολείο πρέπει να συνδέσει δύο κτήρια που απέχουν περίπου 2 km και χρειάζεται μεγάλη ταχύτητα με μικρές απώλειες.',
+        q: 'Ποιο μέσο μετάδοσης είναι η καλύτερη επιλογή;',
+        options: ['Καλώδιο Cat 5 μήκους 2 km', 'Bluetooth', 'Optical Fiber', 'Απλό καλώδιο τηλεφώνου'],
+        answer: 2,
+        explain: 'Το Optical Fiber μεταφέρει δεδομένα με φως και υποστηρίζει πολύ υψηλές ταχύτητες σε μεγάλες αποστάσεις.'
+      },
+      {
+        area: 'network',
+        scenario: 'Ένα LAN πρέπει να επικοινωνήσει με το δίκτυο του παρόχου Internet.',
+        q: 'Ποια συσκευή προωθεί τα δεδομένα ανάμεσα στα διαφορετικά δίκτυα;',
+        options: ['Switch', 'NIC', 'Router', 'Access Point'],
+        answer: 2,
+        explain: 'Το Router συνδέει διαφορετικά δίκτυα και προωθεί τα δεδομένα προς τον κατάλληλο προορισμό.'
+      },
+      {
+        area: 'network',
+        scenario: 'PC A: 192.168.1.25 /24. Laptop: 192.168.2.10 /24. Οι δύο συσκευές θέλουν να επικοινωνήσουν.',
+        q: 'Τι ισχύει για τις δύο συσκευές;',
+        options: ['Είναι στο ίδιο Subnet', 'Χρειάζονται Router ή Default Gateway', 'Έχουν την ίδια IP Address', 'Η Subnet Mask είναι λανθασμένη'],
+        answer: 1,
+        explain: 'Με Subnet Mask /24, τα 192.168.1.x και 192.168.2.x είναι διαφορετικά Subnets και χρειάζονται Router.'
+      },
+      {
+        area: 'diagnostics',
+        scenario: 'Ο υπολογιστής απαντά στο ping 8.8.8.8, αλλά το ping www.google.com αποτυγχάνει.',
+        q: 'Ποιο είναι το πιθανότερο πρόβλημα;',
+        options: ['Το καλώδιο δεν είναι συνδεδεμένο', 'Το Switch είναι κλειστό', 'Ο DNS Server δεν λειτουργεί σωστά', 'Η NIC απουσιάζει'],
+        answer: 2,
+        explain: 'Η σύνδεση Internet λειτουργεί αφού απαντά η IP 8.8.8.8. Αποτυγχάνει η μετατροπή ονόματος σε IP, άρα ελέγχουμε DNS.'
+      },
+      {
+        area: 'security',
+        scenario: 'Λαμβάνεις μήνυμα: «ΕΠΕΙΓΟΝ! Ο λογαριασμός σου θα κλειδωθεί. Πάτησε εδώ και γράψε τον κωδικό σου.» Ο αποστολέας μοιάζει με τράπεζα αλλά το domain είναι παράξενο.',
+        q: 'Ποια είναι η ασφαλέστερη αντίδραση;',
+        options: ['Πατάω το link και αλλάζω κωδικό', 'Απαντώ ζητώντας περισσότερες πληροφορίες', 'Προωθώ το μήνυμα σε φίλους', 'Δεν πατάω το link και ανοίγω μόνος μου την επίσημη εφαρμογή'],
+        answer: 3,
+        explain: 'Τα σημάδια δείχνουν phishing. Δεν χρησιμοποιούμε τον σύνδεσμο και ενημερώνουμε έναν υπεύθυνο.'
+      }
+    ];
+
+    const baseMatchGroups = [
+      {
+        title: 'Εξοπλισμός δικτύου',
+        items: [
+          ['NIC / κάρτα δικτύου', 'Συνδέει μία συσκευή ενσύρματα ή ασύρματα'],
+          ['Switch', 'Συνδέει πολλές ενσύρματες συσκευές στο ίδιο LAN'],
+          ['Access Point', 'Συνδέει ασύρματες συσκευές στο LAN'],
+          ['Router', 'Συνδέει διαφορετικά δίκτυα και προωθεί δεδομένα'],
+          ['Modem', 'Προσαρμόζει το σήμα για τη σύνδεση με τον πάροχο Internet']
+        ]
+      },
+      {
+        title: 'Ρυθμίσεις και υπηρεσίες',
+        items: [
+          ['IP Address', 'Μοναδική διεύθυνση της συσκευής στο δίκτυο'],
+          ['Subnet Mask', 'Δείχνει ποιο μέρος της IP ανήκει στο δίκτυο'],
+          ['Default Gateway', 'Η IP του Router προς άλλα δίκτυα'],
+          ['DNS Server', 'Μετατρέπει ένα όνομα ιστοσελίδας σε IP Address'],
+          ['FTP', 'Μεταφέρει αρχεία ανάμεσα σε Client και Server']
+        ]
+      }
+    ];
+
+    const baseCommands = [
+      {
+        task: 'Αποστολή 1/5\nΘέλεις να δεις IP Address, Subnet Mask, Default Gateway και DNS Server του υπολογιστή. Γράψε την κατάλληλη εντολή.',
+        accepts: [/^ipconfig\s+\/all$/i],
+        hint: 'Η εντολή αρχίζει με ipconfig και χρειάζεται την παράμετρο /all.',
+        output: 'Windows IP Configuration\n   IPv4 Address . . . . . : 192.168.1.25\n   Subnet Mask  . . . . . : 255.255.255.0\n   Default Gateway  . . . : 192.168.1.1\n   DNS Servers  . . . . . : 192.168.1.1'
+      },
+      {
+        task: 'Αποστολή 2/5\nΘέλεις να ελέγξεις αν απαντά το Default Gateway 192.168.1.1. Γράψε την εντολή.',
+        accepts: [/^ping\s+192\.168\.1\.1$/i],
+        hint: 'Χρησιμοποίησε ping και μετά την IP Address του Gateway.',
+        output: 'Pinging 192.168.1.1 with 32 bytes of data:\nReply from 192.168.1.1: bytes=32 time=2ms TTL=64\nPackets: Sent = 4, Received = 4, Lost = 0 (0% loss)'
+      },
+      {
+        task: 'Αποστολή 3/5\nΘέλεις να ελέγξεις τη σύνδεση Internet χωρίς να εξαρτάσαι από DNS. Χρησιμοποίησε τη δημόσια IP 8.8.8.8.',
+        accepts: [/^ping\s+8\.8\.8\.8$/i],
+        hint: 'Η σωστή δοκιμή είναι ping προς τη συγκεκριμένη IP.',
+        output: 'Pinging 8.8.8.8 with 32 bytes of data:\nReply from 8.8.8.8: bytes=32 time=28ms TTL=116\nInternet connection: reachable without DNS.'
+      },
+      {
+        task: 'Αποστολή 4/5\nΘέλεις να βρεις ποιος DNS Server χρησιμοποιείται και σε ποια IP αντιστοιχεί το example.com.',
+        accepts: [/^nslookup\s+example\.com$/i],
+        hint: 'Η εντολή αρχίζει με nslookup και ακολουθεί το domain.',
+        output: 'Server:  router.local\nAddress: 192.168.1.1\n\nName:    example.com\nAddress: 93.184.216.34'
+      },
+      {
+        task: 'Αποστολή 5/5\nΘέλεις να δεις τα ενδιάμεσα Routers (hops) μέχρι το google.com σε Windows.',
+        accepts: [/^tracert\s+(?:www\.)?google\.com$/i],
+        hint: 'Στα Windows χρησιμοποιούμε tracert και μετά το domain.',
+        output: 'Tracing route to google.com\n  1    2 ms    192.168.1.1\n  2   10 ms    isp-gateway\n  3   24 ms    google.com\nTrace complete.'
+      }
+    ];
+
+    const uiText = {
+      el: {
+        brandTitle:'Δίκτυα και Ασφάλεια', brandSub:'Πρακτικό εργαστήριο επανάληψης',
+        heroTitle:'Μάθε αν μπορείς να <span>λύσεις το πρόβλημα</span>',
+        heroCopy:'Δεν αρκεί να θυμάσαι τους όρους. Θα επιλέξεις εξοπλισμό, θα διαγνώσεις βλάβες, θα αντιστοιχίσεις έννοιες και θα γράψεις πραγματικές εντολές δικτύου.',
+        start:'Έναρξη πρακτικού τεστ', progress:'Πρόοδος', nav:'Ενότητες τεστ',
+        tabScenarios:'Πρακτικά σενάρια', tabScenariosSmall:'Multiple choice · 30 μονάδες',
+        tabMatching:'Αντιστοίχιση', tabMatchingSmall:'10 ζεύγη · 30 μονάδες',
+        tabTerminalSmall:'5 εντολές · 40 μονάδες',
+        scenariosTitle:'Πρακτικά σενάρια', scenariosSub:'Επίλεξε τη λύση που θα εφάρμοζες στην πράξη.',
+        scenario:'Σενάριο', clear:'Καθαρισμός επιλογής', check:'Έλεγχος',
+        matchingTitle:'Αντιστοίχιση', matchingSub:'Σύρε τον όρο στη σωστή περιγραφή ή πάτησε πρώτα τον όρο και μετά την περιγραφή.',
+        resetMatching:'Επαναφορά αντιστοίχισης', toTerminal:'Συνέχεια στο Command Prompt',
+        terminalSub:'Γράψε την κατάλληλη εντολή. Δεν αλλάζεις ρυθμίσεις, εκτελείς μόνο ελέγχους.',
+        currentMission:'Τρέχουσα αποστολή',
+        terminalHint:'Πάτησε <strong>Enter</strong> για εκτέλεση. Οι εντολές γίνονται δεκτές με κεφαλαία ή πεζά.',
+        hint:'Υπόδειξη', showResult:'Προβολή αποτελέσματος', result:'Αποτέλεσμα',
+        metricNetwork:'Δίκτυα και εξοπλισμός', metricDiag:'Διάγνωση με εντολές', metricSecurity:'Ασφάλεια',
+        print:'Εκτύπωση αποτελέσματος', restart:'Νέα προσπάθεια',
+        correct:'Σωστά. ', wrong:'Όχι. ', choose:'Επίλεξε πρώτα μία απάντηση.',
+        next:'Επόμενο σενάριο', continueMatching:'Συνέχεια στην αντιστοίχιση',
+        group:'Ομάδα', terms:'Όροι', descriptions:'Περιγραφές',
+        touch:'Σε οθόνη αφής: πάτησε έναν όρο και μετά τη σωστή περιγραφή.',
+        wrongCommand:'Η εντολή δεν εκτελεί τον ζητούμενο έλεγχο. Δοκίμασε ξανά.',
+        hintPrefix:'Υπόδειξη: ', complete:'Όλες οι αποστολές ολοκληρώθηκαν.',
+        excellent:'Πολύ καλή ετοιμότητα', good:'Καλή βάση', practice:'Χρειάζεται ακόμη εξάσκηση',
+        highMessage:'Μπορείς να εφαρμόσεις τις βασικές γνώσεις δικτύων και ασφάλειας σε πρακτικά προβλήματα.',
+        lowMessage:'Μελέτησε τα σημεία με τη χαμηλότερη βαθμολογία και δοκίμασε ξανά.'
+      },
+      en: {
+        brandTitle:'Networks and Security', brandSub:'Practical revision laboratory',
+        heroTitle:'Find out if you can <span>solve the problem</span>',
+        heroCopy:'Remembering terms is not enough. You will choose equipment, diagnose faults, match concepts, and type real network commands.',
+        start:'Start practical test', progress:'Progress', nav:'Test sections',
+        tabScenarios:'Practical scenarios', tabScenariosSmall:'Multiple choice · 30 points',
+        tabMatching:'Matching', tabMatchingSmall:'10 pairs · 30 points',
+        tabTerminalSmall:'5 commands · 40 points',
+        scenariosTitle:'Practical scenarios', scenariosSub:'Choose the solution you would use in practice.',
+        scenario:'Scenario', clear:'Clear selection', check:'Check',
+        matchingTitle:'Matching', matchingSub:'Drag each term to the correct description, or select the term and then the description.',
+        resetMatching:'Reset matching', toTerminal:'Continue to Command Prompt',
+        terminalSub:'Type the correct command. You are only running tests; you are not changing settings.',
+        currentMission:'Current mission',
+        terminalHint:'Press <strong>Enter</strong> to run the command. Uppercase and lowercase commands are accepted.',
+        hint:'Hint', showResult:'Show result', result:'Result',
+        metricNetwork:'Networks and equipment', metricDiag:'Command diagnosis', metricSecurity:'Security',
+        print:'Print result', restart:'Try again',
+        correct:'Correct. ', wrong:'Not correct. ', choose:'Choose an answer first.',
+        next:'Next scenario', continueMatching:'Continue to matching',
+        group:'Group', terms:'Terms', descriptions:'Descriptions',
+        touch:'On a touch screen: select a term and then its correct description.',
+        wrongCommand:'This command does not perform the requested test. Try again.',
+        hintPrefix:'Hint: ', complete:'All missions are complete.',
+        excellent:'Excellent readiness', good:'Good foundation', practice:'More practice is needed',
+        highMessage:'You can apply the basic knowledge of networks and security to practical problems.',
+        lowMessage:'Review the areas with the lowest score and try again.'
+      },
+      ru: {
+        brandTitle:'Сети и безопасность', brandSub:'Практическая лаборатория для повторения',
+        heroTitle:'Проверьте, можете ли вы <span>решить проблему</span>',
+        heroCopy:'Недостаточно просто помнить термины. Вы выберете оборудование, диагностируете неисправности, сопоставите понятия и введёте реальные сетевые команды.',
+        start:'Начать практический тест', progress:'Прогресс', nav:'Разделы теста',
+        tabScenarios:'Практические сценарии', tabScenariosSmall:'Multiple choice · 30 баллов',
+        tabMatching:'Сопоставление', tabMatchingSmall:'10 пар · 30 баллов',
+        tabTerminalSmall:'5 команд · 40 баллов',
+        scenariosTitle:'Практические сценарии', scenariosSub:'Выберите решение, которое вы применили бы на практике.',
+        scenario:'Сценарий', clear:'Очистить выбор', check:'Проверить',
+        matchingTitle:'Сопоставление', matchingSub:'Перетащите термин к правильному описанию или сначала выберите термин, а затем описание.',
+        resetMatching:'Сбросить сопоставление', toTerminal:'Перейти к Command Prompt',
+        terminalSub:'Введите подходящую команду. Вы только выполняете проверки и не изменяете настройки.',
+        currentMission:'Текущее задание',
+        terminalHint:'Нажмите <strong>Enter</strong> для выполнения. Команды принимаются в верхнем и нижнем регистре.',
+        hint:'Подсказка', showResult:'Показать результат', result:'Результат',
+        metricNetwork:'Сети и оборудование', metricDiag:'Диагностика командами', metricSecurity:'Безопасность',
+        print:'Печать результата', restart:'Новая попытка',
+        correct:'Верно. ', wrong:'Неверно. ', choose:'Сначала выберите ответ.',
+        next:'Следующий сценарий', continueMatching:'Перейти к сопоставлению',
+        group:'Группа', terms:'Термины', descriptions:'Описания',
+        touch:'На сенсорном экране: выберите термин, затем правильное описание.',
+        wrongCommand:'Эта команда не выполняет требуемую проверку. Попробуйте ещё раз.',
+        hintPrefix:'Подсказка: ', complete:'Все задания выполнены.',
+        excellent:'Отличная готовность', good:'Хорошая основа', practice:'Нужно ещё потренироваться',
+        highMessage:'Вы умеете применять основные знания о сетях и безопасности для решения практических задач.',
+        lowMessage:'Повторите темы с самой низкой оценкой и попробуйте ещё раз.'
+      },
+      fa: {
+        brandTitle:'شبکه‌ها و امنیت', brandSub:'آزمایشگاه عملی مرور درس',
+        heroTitle:'بررسی کنید آیا می‌توانید <span>مسئله را حل کنید</span>',
+        heroCopy:'فقط حفظ کردن اصطلاحات کافی نیست. تجهیزات را انتخاب می‌کنید، خطاها را تشخیص می‌دهید، مفاهیم را تطبیق می‌دهید و فرمان‌های واقعی شبکه را وارد می‌کنید.',
+        start:'شروع آزمون عملی', progress:'پیشرفت', nav:'بخش‌های آزمون',
+        tabScenarios:'سناریوهای عملی', tabScenariosSmall:'Multiple choice · ۳۰ امتیاز',
+        tabMatching:'تطبیق', tabMatchingSmall:'۱۰ جفت · ۳۰ امتیاز',
+        tabTerminalSmall:'۵ فرمان · ۴۰ امتیاز',
+        scenariosTitle:'سناریوهای عملی', scenariosSub:'راه‌حلی را انتخاب کنید که در عمل به کار می‌برید.',
+        scenario:'سناریو', clear:'پاک کردن انتخاب', check:'بررسی',
+        matchingTitle:'تطبیق', matchingSub:'هر اصطلاح را روی توضیح درست بکشید، یا ابتدا اصطلاح و سپس توضیح را انتخاب کنید.',
+        resetMatching:'بازنشانی تطبیق', toTerminal:'ادامه به Command Prompt',
+        terminalSub:'فرمان مناسب را وارد کنید. فقط آزمایش انجام می‌دهید و تنظیمات را تغییر نمی‌دهید.',
+        currentMission:'مأموریت فعلی',
+        terminalHint:'برای اجرا <strong>Enter</strong> را فشار دهید. حروف بزرگ و کوچک پذیرفته می‌شوند.',
+        hint:'راهنما', showResult:'نمایش نتیجه', result:'نتیجه',
+        metricNetwork:'شبکه‌ها و تجهیزات', metricDiag:'تشخیص با فرمان‌ها', metricSecurity:'امنیت',
+        print:'چاپ نتیجه', restart:'تلاش دوباره',
+        correct:'درست است. ', wrong:'نادرست است. ', choose:'ابتدا یک پاسخ انتخاب کنید.',
+        next:'سناریوی بعدی', continueMatching:'ادامه به تطبیق',
+        group:'گروه', terms:'اصطلاحات', descriptions:'توضیحات',
+        touch:'در صفحه لمسی: یک اصطلاح و سپس توضیح درست آن را انتخاب کنید.',
+        wrongCommand:'این فرمان آزمایش خواسته‌شده را انجام نمی‌دهد. دوباره تلاش کنید.',
+        hintPrefix:'راهنما: ', complete:'همه مأموریت‌ها کامل شدند.',
+        excellent:'آمادگی بسیار خوب', good:'پایه خوب', practice:'به تمرین بیشتری نیاز است',
+        highMessage:'می‌توانید دانش پایه شبکه‌ها و امنیت را در مسائل عملی به کار ببرید.',
+        lowMessage:'بخش‌هایی را که امتیاز کمتری دارند مرور کنید و دوباره تلاش کنید.'
+      }
+    };
+
+    const questionText = {
+      en: [
+        {scenario:'In a school computer laboratory, 18 computers and one printer are in the same building and are connected to each other.',q:'How is this network mainly classified?',options:['WAN','LAN','Internet','Client'],explain:'A LAN covers a small area, such as one room or a school building.'},
+        {scenario:'The school must connect two buildings about 2 km apart and needs high speed with low signal loss.',q:'Which transmission medium is the best choice?',options:['A 2 km Cat 5 cable','Bluetooth','Optical Fiber','A basic telephone cable'],explain:'Optical Fiber carries data using light and supports very high speed over long distances.'},
+        {scenario:'A LAN must communicate with the Internet Service Provider network.',q:'Which device forwards data between different networks?',options:['Switch','NIC','Router','Access Point'],explain:'A Router connects different networks and forwards data to the correct destination.'},
+        {scenario:'PC A: 192.168.1.25 /24. Laptop: 192.168.2.10 /24. The two devices need to communicate.',q:'What is true about these two devices?',options:['They are in the same Subnet','They need a Router or Default Gateway','They have the same IP Address','The Subnet Mask is incorrect'],explain:'With a /24 Subnet Mask, 192.168.1.x and 192.168.2.x are different Subnets and need a Router.'},
+        {scenario:'The computer receives a reply from ping 8.8.8.8, but ping www.google.com fails.',q:'What is the most likely problem?',options:['The cable is disconnected','The Switch is off','The DNS Server is not working correctly','The NIC is missing'],explain:'Internet connectivity works because 8.8.8.8 replies. Name-to-IP resolution fails, so check the DNS Server.'},
+        {scenario:'You receive a message: “URGENT! Your account will be locked. Click here and enter your password.” The sender looks like a bank, but the domain is unusual.',q:'What is the safest response?',options:['Click the link and change the password','Reply and ask for more information','Forward the message to friends','Do not click the link; open the official application yourself'],explain:'These are signs of phishing. Do not use the link and inform a responsible adult or administrator.'}
+      ],
+      ru: [
+        {scenario:'В школьной компьютерной лаборатории 18 компьютеров и один принтер находятся в одном здании и соединены друг с другом.',q:'Как в основном классифицируется эта сеть?',options:['WAN','LAN','Internet','Client'],explain:'LAN охватывает небольшую территорию, например одну комнату или школьное здание.'},
+        {scenario:'Школе нужно соединить два здания на расстоянии около 2 km с высокой скоростью и малыми потерями сигнала.',q:'Какую среду передачи лучше выбрать?',options:['Кабель Cat 5 длиной 2 km','Bluetooth','Optical Fiber','Обычный телефонный кабель'],explain:'Optical Fiber передаёт данные светом и поддерживает очень высокую скорость на больших расстояниях.'},
+        {scenario:'LAN должна связаться с сетью Internet Service Provider.',q:'Какое устройство передаёт данные между разными сетями?',options:['Switch','NIC','Router','Access Point'],explain:'Router соединяет разные сети и направляет данные к нужному месту назначения.'},
+        {scenario:'PC A: 192.168.1.25 /24. Laptop: 192.168.2.10 /24. Два устройства должны обмениваться данными.',q:'Что верно для этих устройств?',options:['Они находятся в одной Subnet','Им нужен Router или Default Gateway','У них одинаковый IP Address','Subnet Mask неверна'],explain:'При Subnet Mask /24 сети 192.168.1.x и 192.168.2.x являются разными Subnet и требуют Router.'},
+        {scenario:'Компьютер получает ответ на ping 8.8.8.8, но ping www.google.com не работает.',q:'Какова наиболее вероятная причина?',options:['Кабель не подключён','Switch выключен','DNS Server работает неправильно','NIC отсутствует'],explain:'Подключение к Internet работает, потому что 8.8.8.8 отвечает. Не работает преобразование имени в IP Address, поэтому проверьте DNS Server.'},
+        {scenario:'Вы получаете сообщение: «СРОЧНО! Ваш аккаунт будет заблокирован. Нажмите здесь и введите пароль». Отправитель похож на банк, но domain выглядит странно.',q:'Как действовать безопаснее всего?',options:['Нажать link и изменить password','Ответить и запросить подробности','Переслать сообщение друзьям','Не нажимать link и самостоятельно открыть официальное application'],explain:'Это признаки phishing. Не используйте link и сообщите ответственному взрослому или administrator.'}
+      ],
+      fa: [
+        {scenario:'در یک آزمایشگاه کامپیوتر مدرسه، ۱۸ کامپیوتر و یک چاپگر در یک ساختمان قرار دارند و به هم متصل هستند.',q:'این شبکه بیشتر چگونه طبقه‌بندی می‌شود؟',options:['WAN','LAN','Internet','Client'],explain:'LAN یک محدوده کوچک مانند یک اتاق یا ساختمان مدرسه را پوشش می‌دهد.'},
+        {scenario:'مدرسه باید دو ساختمان را در فاصله حدود ۲ km با سرعت بالا و افت سیگنال کم به هم متصل کند.',q:'بهترین رسانه انتقال کدام است؟',options:['کابل Cat 5 به طول ۲ km','Bluetooth','Optical Fiber','کابل معمولی تلفن'],explain:'Optical Fiber داده را با نور منتقل می‌کند و سرعت بسیار بالا را در فاصله‌های طولانی پشتیبانی می‌کند.'},
+        {scenario:'یک LAN باید با شبکه Internet Service Provider ارتباط برقرار کند.',q:'کدام دستگاه داده را بین شبکه‌های مختلف هدایت می‌کند؟',options:['Switch','NIC','Router','Access Point'],explain:'Router شبکه‌های مختلف را به هم متصل می‌کند و داده را به مقصد درست می‌فرستد.'},
+        {scenario:'PC A: 192.168.1.25 /24. Laptop: 192.168.2.10 /24. این دو دستگاه باید با هم ارتباط داشته باشند.',q:'کدام عبارت درباره این دو دستگاه درست است؟',options:['در یک Subnet هستند','به Router یا Default Gateway نیاز دارند','IP Address یکسان دارند','Subnet Mask اشتباه است'],explain:'با Subnet Mask /24، آدرس‌های 192.168.1.x و 192.168.2.x در دو Subnet متفاوت هستند و به Router نیاز دارند.'},
+        {scenario:'کامپیوتر از ping 8.8.8.8 پاسخ می‌گیرد، اما ping www.google.com ناموفق است.',q:'محتمل‌ترین مشکل چیست؟',options:['کابل وصل نیست','Switch خاموش است','DNS Server درست کار نمی‌کند','NIC وجود ندارد'],explain:'اتصال Internet برقرار است چون 8.8.8.8 پاسخ می‌دهد. تبدیل نام به IP Address ناموفق است، پس DNS Server را بررسی کنید.'},
+        {scenario:'پیامی دریافت می‌کنید: «فوری! حساب شما مسدود می‌شود. اینجا کلیک کنید و password خود را وارد کنید.» فرستنده شبیه بانک است اما domain عجیب است.',q:'امن‌ترین واکنش چیست؟',options:['روی link کلیک و password را عوض کنم','پاسخ بدهم و اطلاعات بیشتری بخواهم','پیام را برای دوستان بفرستم','روی link کلیک نکنم و خودم application رسمی را باز کنم'],explain:'این‌ها نشانه‌های phishing هستند. از link استفاده نکنید و یک بزرگسال مسئول یا administrator را آگاه کنید.'}
+      ]
+    };
+
+    const matchTerms = [
+      ['NIC / Network Interface Card','Switch','Access Point','Router','Modem'],
+      ['IP Address','Subnet Mask','Default Gateway','DNS Server','FTP']
+    ];
+    const matchText = {
+      el: [
+        {title:'Εξοπλισμός δικτύου',descriptions:['Συνδέει μία συσκευή ενσύρματα ή ασύρματα','Συνδέει πολλές ενσύρματες συσκευές στο ίδιο LAN','Συνδέει ασύρματες συσκευές στο LAN','Συνδέει διαφορετικά δίκτυα και προωθεί δεδομένα','Προσαρμόζει το σήμα για τη σύνδεση με τον Internet Service Provider']},
+        {title:'Ρυθμίσεις και υπηρεσίες',descriptions:['Μοναδική διεύθυνση της συσκευής στο δίκτυο','Δείχνει ποιο μέρος της IP Address ανήκει στο δίκτυο','Η IP Address του Router προς άλλα δίκτυα','Μετατρέπει ένα domain name σε IP Address','Μεταφέρει αρχεία ανάμεσα σε Client και Server']}
+      ],
+      en: [
+        {title:'Network equipment',descriptions:['Connects one device by cable or wirelessly','Connects many wired devices in the same LAN','Connects wireless devices to the LAN','Connects different networks and forwards data','Adapts the signal for the Internet Service Provider connection']},
+        {title:'Settings and services',descriptions:['The unique address of a device on the network','Shows which part of the IP Address belongs to the network','The Router IP Address used to reach other networks','Converts a domain name to an IP Address','Transfers files between a Client and a Server']}
+      ],
+      ru: [
+        {title:'Сетевое оборудование',descriptions:['Подключает одно устройство по кабелю или беспроводным способом','Соединяет несколько проводных устройств в одной LAN','Подключает беспроводные устройства к LAN','Соединяет разные сети и пересылает данные','Адаптирует сигнал для соединения с Internet Service Provider']},
+        {title:'Настройки и службы',descriptions:['Уникальный адрес устройства в сети','Показывает, какая часть IP Address относится к сети','IP Address устройства Router для выхода в другие сети','Преобразует domain name в IP Address','Передаёт файлы между Client и Server']}
+      ],
+      fa: [
+        {title:'تجهیزات شبکه',descriptions:['یک دستگاه را با کابل یا به‌صورت بی‌سیم متصل می‌کند','چند دستگاه سیمی را در یک LAN متصل می‌کند','دستگاه‌های بی‌سیم را به LAN متصل می‌کند','شبکه‌های مختلف را متصل و داده را هدایت می‌کند','سیگنال را برای اتصال به Internet Service Provider آماده می‌کند']},
+        {title:'تنظیمات و سرویس‌ها',descriptions:['نشانی یکتای یک دستگاه در شبکه','نشان می‌دهد کدام بخش IP Address متعلق به شبکه است','IP Address مربوط به Router برای دسترسی به شبکه‌های دیگر','یک domain name را به IP Address تبدیل می‌کند','فایل‌ها را بین Client و Server منتقل می‌کند']}
+      ]
+    };
+
+    const commandText = {
+      el: [
+        {task:'Αποστολή 1/5\nΘέλεις να δεις IP Address, Subnet Mask, Default Gateway και DNS Server του υπολογιστή. Γράψε την κατάλληλη εντολή.',hint:'Η εντολή αρχίζει με ipconfig και χρειάζεται την παράμετρο /all.'},
+        {task:'Αποστολή 2/5\nΘέλεις να ελέγξεις αν απαντά το Default Gateway 192.168.1.1. Γράψε την εντολή.',hint:'Χρησιμοποίησε ping και μετά την IP Address του Default Gateway.'},
+        {task:'Αποστολή 3/5\nΘέλεις να ελέγξεις τη σύνδεση Internet χωρίς να εξαρτάσαι από DNS Server. Χρησιμοποίησε τη δημόσια IP Address 8.8.8.8.',hint:'Η σωστή δοκιμή είναι ping προς τη συγκεκριμένη IP Address.'},
+        {task:'Αποστολή 4/5\nΘέλεις να βρεις ποιος DNS Server χρησιμοποιείται και σε ποια IP Address αντιστοιχεί το example.com.',hint:'Η εντολή αρχίζει με nslookup και ακολουθεί το domain name.'},
+        {task:'Αποστολή 5/5\nΘέλεις να δεις τα ενδιάμεσα Router hops μέχρι το google.com σε Windows.',hint:'Στα Windows χρησιμοποιούμε tracert και μετά το domain name.'}
+      ],
+      en: [
+        {task:'Mission 1/5\nYou need to view the computer’s IP Address, Subnet Mask, Default Gateway, and DNS Server. Type the correct command.',hint:'The command starts with ipconfig and needs the /all parameter.'},
+        {task:'Mission 2/5\nCheck whether Default Gateway 192.168.1.1 replies. Type the command.',hint:'Use ping followed by the Default Gateway IP Address.'},
+        {task:'Mission 3/5\nCheck the Internet connection without depending on the DNS Server. Use public IP Address 8.8.8.8.',hint:'The correct test is ping followed by the given IP Address.'},
+        {task:'Mission 4/5\nFind which DNS Server is used and the IP Address for example.com.',hint:'The command starts with nslookup followed by the domain name.'},
+        {task:'Mission 5/5\nView the intermediate Router hops to google.com in Windows.',hint:'In Windows, use tracert followed by the domain name.'}
+      ],
+      ru: [
+        {task:'Задание 1/5\nНужно увидеть IP Address, Subnet Mask, Default Gateway и DNS Server компьютера. Введите подходящую команду.',hint:'Команда начинается с ipconfig и требует параметр /all.'},
+        {task:'Задание 2/5\nПроверьте, отвечает ли Default Gateway 192.168.1.1. Введите команду.',hint:'Используйте ping, затем IP Address устройства Default Gateway.'},
+        {task:'Задание 3/5\nПроверьте Internet без зависимости от DNS Server. Используйте публичный IP Address 8.8.8.8.',hint:'Правильная проверка — ping с указанным IP Address.'},
+        {task:'Задание 4/5\nОпределите используемый DNS Server и IP Address для example.com.',hint:'Команда начинается с nslookup, после неё указывается domain name.'},
+        {task:'Задание 5/5\nПосмотрите промежуточные Router hops до google.com в Windows.',hint:'В Windows используйте tracert, затем domain name.'}
+      ],
+      fa: [
+        {task:'مأموریت ۱/۵\nمی‌خواهید IP Address، Subnet Mask، Default Gateway و DNS Server کامپیوتر را ببینید. فرمان مناسب را وارد کنید.',hint:'فرمان با ipconfig شروع می‌شود و به پارامتر /all نیاز دارد.'},
+        {task:'مأموریت ۲/۵\nبررسی کنید آیا Default Gateway با IP Address برابر 192.168.1.1 پاسخ می‌دهد. فرمان را وارد کنید.',hint:'از ping و سپس IP Address مربوط به Default Gateway استفاده کنید.'},
+        {task:'مأموریت ۳/۵\nاتصال Internet را بدون وابستگی به DNS Server بررسی کنید. از IP Address عمومی 8.8.8.8 استفاده کنید.',hint:'آزمایش درست، ping به IP Address داده‌شده است.'},
+        {task:'مأموریت ۴/۵\nمشخص کنید کدام DNS Server استفاده می‌شود و example.com به چه IP Address مربوط است.',hint:'فرمان با nslookup شروع می‌شود و سپس domain name می‌آید.'},
+        {task:'مأموریت ۵/۵\nRouter hops میانی تا google.com را در Windows مشاهده کنید.',hint:'در Windows از tracert و سپس domain name استفاده کنید.'}
+      ]
+    };
+
+    let currentLanguage = 'el';
+    let mcqs = baseMcqs;
+    let matchGroups = baseMatchGroups;
+    let commands = baseCommands;
+    const U = key => uiText[currentLanguage][key];
+
+    function buildLanguageData() {
+      mcqs = currentLanguage === 'el'
+        ? baseMcqs
+        : baseMcqs.map((item, i) => ({...item, ...questionText[currentLanguage][i]}));
+      matchGroups = matchText[currentLanguage].map((group, gi) => ({
+        title: group.title,
+        items: matchTerms[gi].map((term, i) => [term, group.descriptions[i]])
+      }));
+      commands = baseCommands.map((item, i) => ({...item, ...commandText[currentLanguage][i]}));
+    }
+
+    function applyLanguage() {
+      currentLanguage = document.querySelector('#languageSelect').value;
+      const u = uiText[currentLanguage];
+      document.documentElement.lang = currentLanguage;
+      document.documentElement.dir = currentLanguage === 'fa' ? 'rtl' : 'ltr';
+      document.title = `A5 · ${u.brandTitle} · Practical Lab`;
+      document.querySelector('.brand h1').textContent = u.brandTitle;
+      document.querySelector('.brand p').textContent = u.brandSub;
+      document.querySelector('.hero h2').innerHTML = u.heroTitle;
+      document.querySelector('.hero-copy').textContent = u.heroCopy;
+      document.querySelector('#startBtn').textContent = u.start;
+      document.querySelector('.progress').setAttribute('aria-label', u.progress);
+      document.querySelector('.module-nav').setAttribute('aria-label', u.nav);
+      const tabs = document.querySelectorAll('.module-tab');
+      tabs[0].innerHTML = `<span class="num">1</span>${u.tabScenarios}<small>${u.tabScenariosSmall}</small>`;
+      tabs[1].innerHTML = `<span class="num">2</span>${u.tabMatching}<small>${u.tabMatchingSmall}</small>`;
+      tabs[2].innerHTML = `<span class="num">3</span>Command Prompt<small>${u.tabTerminalSmall}</small>`;
+      document.querySelector('#module-mcq .module-head h3').textContent = u.scenariosTitle;
+      document.querySelector('#module-mcq .module-head p').textContent = u.scenariosSub;
+      document.querySelector('#mcqCard .scenario-label').textContent = u.scenario;
+      document.querySelector('#resetQuestion').textContent = u.clear;
+      document.querySelector('#checkMcq').textContent = u.check;
+      document.querySelector('#module-matching .module-head h3').textContent = u.matchingTitle;
+      document.querySelector('#module-matching .module-head p').textContent = u.matchingSub;
+      document.querySelector('#resetMatching').textContent = u.resetMatching;
+      document.querySelector('#toTerminal').textContent = u.toTerminal;
+      document.querySelector('#module-terminal .module-head p').textContent = u.terminalSub;
+      document.querySelector('.command-brief-label').textContent = u.currentMission;
+      document.querySelector('.terminal-hint').innerHTML = u.terminalHint;
+      document.querySelector('#commandHint').textContent = u.hint;
+      document.querySelector('#showResult').textContent = u.showResult;
+      document.querySelector('#resultTitle').textContent = u.result;
+      const labels = document.querySelectorAll('.metric span');
+      labels[0].textContent = u.metricNetwork; labels[1].textContent = u.metricDiag; labels[2].textContent = u.metricSecurity;
+      document.querySelector('#printResult').textContent = u.print;
+      document.querySelector('#restartBtn').textContent = u.restart;
+      buildLanguageData();
+    }
+
+    const state = {
+      startedAt: null,
+      mcqIndex: 0,
+      selected: null,
+      mcqAnswered: Array(mcqs.length).fill(false),
+      mcqCorrect: Array(mcqs.length).fill(false),
+      matched: {},
+      commandIndex: 0,
+      commandCorrect: Array(commands.length).fill(false),
+      commandAttempts: Array(commands.length).fill(0),
+      chosenMatch: null
+    };
+
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    let timerId = null;
+
+    function score() {
+      const mcq = state.mcqCorrect.filter(Boolean).length * 5;
+      const matching = Object.keys(state.matched).length * 3;
+      const cmd = state.commandCorrect.filter(Boolean).length * 8;
+      return mcq + matching + cmd;
+    }
+
+    function completedUnits() {
+      return state.mcqAnswered.filter(Boolean).length + Object.keys(state.matched).length + state.commandCorrect.filter(Boolean).length;
+    }
+
+    function updateTop() {
+      $('#scoreTop').textContent = `${score()} / 100`;
+      $('#progressBar').style.width = `${Math.round((completedUnits() / 21) * 100)}%`;
+    }
+
+    function startTimer() {
+      state.startedAt = Date.now();
+      timerId = setInterval(() => {
+        const sec = Math.floor((Date.now() - state.startedAt) / 1000);
+        $('#timerTop').textContent = `${String(Math.floor(sec / 60)).padStart(2,'0')}:${String(sec % 60).padStart(2,'0')}`;
+      }, 1000);
+    }
+
+    function showModule(name) {
+      $$('.module').forEach(m => m.classList.remove('active'));
+      $(`#module-${name}`).classList.add('active');
+      $$('.module-tab').forEach(t => t.classList.toggle('active', t.dataset.module === name));
+      window.scrollTo({ top: $('#lab').offsetTop - 95, behavior: 'smooth' });
+      if (name === 'terminal') setTimeout(() => $('#promptInput').focus(), 350);
+    }
+
+    function renderMcq() {
+      const q = mcqs[state.mcqIndex];
+      state.selected = null;
+      $('#mcqCounter').textContent = `${state.mcqIndex + 1} / ${mcqs.length}`;
+      $('#scenarioText').textContent = q.scenario;
+      $('#questionText').textContent = q.q;
+      $('#mcqFeedback').textContent = '';
+      $('#mcqFeedback').className = 'feedback';
+      $('#checkMcq').textContent = U('check');
+      $('#options').innerHTML = '';
+      q.options.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option';
+        btn.textContent = option;
+        btn.addEventListener('click', () => {
+          if (state.mcqAnswered[state.mcqIndex]) return;
+          state.selected = index;
+          $$('.option').forEach((x, i) => x.classList.toggle('selected', i === index));
+        });
+        $('#options').appendChild(btn);
+      });
+      if (state.mcqAnswered[state.mcqIndex]) revealMcq();
+    }
+
+    function revealMcq() {
+      const q = mcqs[state.mcqIndex];
+      const chosen = state.selected;
+      $$('.option').forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === q.answer) btn.classList.add('correct');
+        if (i === chosen && i !== q.answer) btn.classList.add('wrong');
+      });
+      const ok = chosen === q.answer;
+      $('#mcqFeedback').textContent = `${ok ? U('correct') : U('wrong')}${q.explain}`;
+      $('#mcqFeedback').className = `feedback ${ok ? 'good' : 'bad'}`;
+      $('#checkMcq').textContent = state.mcqIndex === mcqs.length - 1 ? U('continueMatching') : U('next');
+    }
+
+    $('#checkMcq').addEventListener('click', () => {
+      if (!state.mcqAnswered[state.mcqIndex]) {
+        if (state.selected === null) {
+          $('#mcqFeedback').textContent = U('choose');
+          $('#mcqFeedback').className = 'feedback bad';
+          return;
+        }
+        state.mcqAnswered[state.mcqIndex] = true;
+        state.mcqCorrect[state.mcqIndex] = state.selected === mcqs[state.mcqIndex].answer;
+        revealMcq();
+        updateTop();
+      } else if (state.mcqIndex < mcqs.length - 1) {
+        state.mcqIndex++;
+        renderMcq();
+      } else {
+        $$('.module-tab')[0].classList.add('done');
+        showModule('matching');
+      }
+    });
+
+    $('#resetQuestion').addEventListener('click', () => {
+      if (state.mcqAnswered[state.mcqIndex]) return;
+      state.selected = null;
+      $$('.option').forEach(x => x.classList.remove('selected'));
+      $('#mcqFeedback').textContent = '';
+    });
+
+    function shuffled(arr) { return [...arr].sort(() => Math.random() - .5); }
+
+    function renderMatching() {
+      $('#matchingArea').innerHTML = '';
+      let globalIndex = 0;
+      matchGroups.forEach((group, groupIndex) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const pairData = group.items.map((p, itemIndex) => ({ term: p[0], desc: p[1], key: `${groupIndex}-${itemIndex}`, global: globalIndex++ }));
+        const terms = shuffled(pairData);
+        const descriptions = shuffled(pairData);
+        card.innerHTML = `<span class="scenario-label">${U('group')} ${groupIndex + 1}</span><h4 class="question" style="margin-bottom:18px">${group.title}</h4><div class="match-grid"><div class="match-column terms"><h4>${U('terms')}</h4></div><div class="match-column targets"><h4>${U('descriptions')}</h4></div></div><p class="match-note">${U('touch')}</p>`;
+        const termCol = card.querySelector('.terms');
+        const targetCol = card.querySelector('.targets');
+        terms.forEach(x => {
+          const el = document.createElement('div');
+          el.className = 'match-item'; el.draggable = true; el.dataset.key = x.key; el.dataset.term = x.term; el.textContent = x.term;
+          if (state.matched[x.key]) el.classList.add('used');
+          el.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', x.key));
+          el.addEventListener('click', () => {
+            if (el.classList.contains('used')) return;
+            state.chosenMatch = x.key;
+            $$('.match-item').forEach(i => i.classList.toggle('chosen', i.dataset.key === x.key));
+          });
+          termCol.appendChild(el);
+        });
+        descriptions.forEach(x => {
+          const zone = document.createElement('div');
+          zone.className = 'drop-zone'; zone.dataset.key = x.key; zone.textContent = x.desc;
+          if (state.matched[x.key]) {
+            zone.classList.add('matched');
+            zone.insertAdjacentHTML('beforeend', `<span class="drop-answer">${x.term}</span>`);
+          }
+          zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+          zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+          zone.addEventListener('drop', e => { e.preventDefault(); zone.classList.remove('over'); tryMatch(e.dataTransfer.getData('text/plain'), zone); });
+          zone.addEventListener('click', () => { if (state.chosenMatch) tryMatch(state.chosenMatch, zone); });
+          targetCol.appendChild(zone);
+        });
+        $('#matchingArea').appendChild(card);
+      });
+      updateMatchCounter();
+    }
+
+    function tryMatch(termKey, zone) {
+      if (state.matched[zone.dataset.key]) return;
+      if (termKey === zone.dataset.key) {
+        state.matched[termKey] = true;
+        state.chosenMatch = null;
+        zone.classList.add('matched');
+        const term = $(`.match-item[data-key="${termKey}"]`);
+        term.classList.remove('chosen'); term.classList.add('used');
+        zone.insertAdjacentHTML('beforeend', `<span class="drop-answer">${term.dataset.term}</span>`);
+        updateMatchCounter(); updateTop();
+      } else {
+        zone.classList.remove('error'); void zone.offsetWidth; zone.classList.add('error');
+      }
+    }
+
+    function updateMatchCounter() {
+      const n = Object.keys(state.matched).length;
+      $('#matchCounter').textContent = `${n} / 10`;
+      $('#toTerminal').disabled = n !== 10;
+      if (n === 10) $$('.module-tab')[1].classList.add('done');
+    }
+
+    $('#resetMatching').addEventListener('click', () => {
+      state.matched = {}; state.chosenMatch = null; renderMatching(); updateTop();
+    });
+    $('#toTerminal').addEventListener('click', () => showModule('terminal'));
+
+    function renderCommand() {
+      const cmd = commands[state.commandIndex];
+      $('#terminalCounter').textContent = `${state.commandIndex + 1} / ${commands.length}`;
+      $('#terminalTask').textContent = cmd.task;
+      $('#promptInput').value = '';
+      $('#promptInput').disabled = false;
+      $('#promptInput').focus();
+    }
+
+    $('#promptForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const input = $('#promptInput').value.trim().replace(/\s+/g, ' ');
+      if (!input) return;
+      const cmd = commands[state.commandIndex];
+      state.commandAttempts[state.commandIndex]++;
+      const ok = cmd.accepts.some(rx => rx.test(input));
+      const history = $('#terminalHistory');
+      if (ok) {
+        state.commandCorrect[state.commandIndex] = true;
+        history.insertAdjacentHTML('beforeend', `<div>C:\\Users\\Student&gt;${escapeHtml(input)}</div><div class="ok">${escapeHtml(cmd.output)}</div><br>`);
+        updateTop();
+        if (state.commandIndex < commands.length - 1) {
+          state.commandIndex++;
+          renderCommand();
+        } else {
+          $('#terminalTask').textContent = U('complete');
+          $('#promptInput').disabled = true;
+          $('#showResult').classList.remove('hidden');
+          $$('.module-tab')[2].classList.add('done');
+          clearInterval(timerId);
+        }
+      } else {
+        history.insertAdjacentHTML('beforeend', `<div>C:\\Users\\Student&gt;${escapeHtml(input)}</div><div class="err">This command does not perform the requested test. Try again.</div><br>`);
+        $('#promptInput').value = '';
+      }
+      $('#terminalBox').scrollTop = $('#terminalBox').scrollHeight;
+    });
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+    }
+
+    $('#commandHint').addEventListener('click', () => {
+      const cmd = commands[state.commandIndex];
+      const englishHint = commandText.en[state.commandIndex].hint;
+      $('#terminalHistory').insertAdjacentHTML('beforeend', `<div class="err">Hint: ${escapeHtml(englishHint)}</div><br>`);
+      $('#terminalBox').scrollTop = $('#terminalBox').scrollHeight;
+      $('#promptInput').focus();
+    });
+
+    function showResults() {
+      showModule('result');
+      const total = score();
+      $('#finalScore').textContent = `${total}%`;
+      $('#resultRing').style.background = `conic-gradient(var(--blue) ${total * 3.6}deg, #deebf2 0deg)`;
+      $('#resultTitle').textContent = total >= 85 ? U('excellent') : total >= 65 ? U('good') : U('practice');
+      $('#resultMessage').textContent = total >= 85 ? U('highMessage') : U('lowMessage');
+
+      const networkMcq = [0,1,2,3].filter(i => state.mcqCorrect[i]).length * 5;
+      const diagnosticMcq = state.mcqCorrect[4] ? 5 : 0;
+      const safetyMcq = state.mcqCorrect[5] ? 5 : 0;
+      const deviceMatches = Object.keys(state.matched).filter(k => k.startsWith('0-')).length * 3;
+      const settingMatches = Object.keys(state.matched).filter(k => k.startsWith('1-')).length * 3;
+      const cmdPts = state.commandCorrect.filter(Boolean).length * 8;
+      const networkPct = Math.round(((networkMcq + deviceMatches + settingMatches) / 50) * 100);
+      const diagPct = Math.round(((diagnosticMcq + cmdPts) / 45) * 100);
+      const securityPct = Math.round((safetyMcq / 5) * 100);
+      $('#networkMetric').textContent = `${networkPct}%`;
+      $('#diagMetric').textContent = `${diagPct}%`;
+      $('#securityMetric').textContent = `${securityPct}%`;
+    }
+
+    $('#showResult').addEventListener('click', showResults);
+    $('#printResult').addEventListener('click', () => window.print());
+    $('#restartBtn').addEventListener('click', () => location.reload());
+
+    $$('.module-tab').forEach(tab => tab.addEventListener('click', () => {
+      const name = tab.dataset.module;
+      if (name === 'matching' && !state.mcqAnswered.every(Boolean)) return;
+      if (name === 'terminal' && Object.keys(state.matched).length !== 10) return;
+      showModule(name);
+    }));
+
+    $('#languageSelect').addEventListener('change', applyLanguage);
+    applyLanguage();
+
+    $('#startBtn').addEventListener('click', () => {
+      $('#languageSelect').disabled = true;
+      $('#hero').classList.add('hidden');
+      $('#lab').classList.remove('hidden');
+      renderMcq(); renderMatching(); renderCommand(); updateTop(); startTimer();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
