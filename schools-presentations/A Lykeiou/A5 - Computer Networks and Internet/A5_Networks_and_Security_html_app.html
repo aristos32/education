@@ -456,7 +456,7 @@
     const baseCommands = [
       {
         task: 'Αποστολή 1/5\nΘέλεις να δεις IP Address, Subnet Mask, Default Gateway και DNS Server του υπολογιστή. Γράψε την κατάλληλη εντολή.',
-        accepts: [/^ipconfig\s+\/all$/i],
+        accepts: [/^ipconfig\s*\/all$/i],
         hint: 'Η εντολή αρχίζει με ipconfig και χρειάζεται την παράμετρο /all.',
         output: 'Windows IP Configuration\n   IPv4 Address . . . . . : 192.168.1.25\n   Subnet Mask  . . . . . : 255.255.255.0\n   Default Gateway  . . . : 192.168.1.1\n   DNS Servers  . . . . . : 192.168.1.1'
       },
