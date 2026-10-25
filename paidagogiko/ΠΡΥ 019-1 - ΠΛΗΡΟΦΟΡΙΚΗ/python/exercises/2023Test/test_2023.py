@@ -36,7 +36,4 @@ def process_number(file_inp, file_out):
     fileIn.close()
     fileOut.close()
 
-    
-   
-
 process_number("in.txt", "output.txt")
