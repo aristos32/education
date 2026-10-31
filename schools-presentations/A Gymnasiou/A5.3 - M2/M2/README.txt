@@ -1,0 +1,1 @@
+Αποσυμπίεσε όλα τα αρχεία. Άνοιξε professor_index.html ή Student_index.html. Κράτησε τον φάκελο material για το offline βίντεο. Οι δραστηριότητες online έρευνας χρειάζονται σύνδεση.
