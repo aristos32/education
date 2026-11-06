@@ -1,0 +1,54 @@
+A5M3 - Images for the Kahoot quiz
+
+The images come from Wikimedia Commons.
+The a-j sequence follows the order of the 10 questions.
+
+1. A5M3-a.png - Simple network diagram
+   Creator: SilverStar at English Wikipedia
+   License: CC BY 2.5
+   Source: https://commons.wikimedia.org/wiki/File%3ASample-network-diagram.png
+
+2. A5M3-b.jpg - Network switch
+   Creator: Simon A. Eugster
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File%3ANetgear_Gigabit_Switch_5-port.jpg
+
+3. A5M3-c.png - Computer used as an end device
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_desktop.svg
+
+4. A5M3-d.png - Wired network topology
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_network-wired.svg
+
+5. A5M3-e.jpg - Straight-through Ethernet cable and RJ45 connector
+   Creator: No machine-readable author provided. David.Monniaux assumed (based on copyright claims).
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File%3AEthernet_RJ45_connector_p1160054.jpg
+
+6. A5M3-f.png - Device identity and IP settings
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_address-card.svg
+
+7. A5M3-g.png - Ping command
+   Creator: Michel Bakni
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3APing_command_example.png
+
+8. A5M3-h.png - Network path and test packet
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_route.svg
+
+9. A5M3-i.png - Saving a simulation
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_save.svg
+
+10. A5M3-j.png - Network troubleshooting warning
+   Creator: Font Awesome
+   License: CC BY 4.0
+   Source: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_exclamation-triangle.svg

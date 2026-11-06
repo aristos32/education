@@ -1,0 +1,5 @@
+John Smith 7.9
+Bob Dylan 9.2
+George Andrew 6.2
+Mark Owen 8.6
+Paul Ralf 7.8

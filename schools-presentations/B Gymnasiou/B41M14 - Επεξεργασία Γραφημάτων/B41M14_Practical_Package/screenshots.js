@@ -1,0 +1,1 @@
+const shots={"title": "assets/excel-element.png", "labels": "assets/excel-element.png", "color": "assets/excel-fill.png", "legend": "assets/excel-element.png", "font": "assets/excel-font.png"};

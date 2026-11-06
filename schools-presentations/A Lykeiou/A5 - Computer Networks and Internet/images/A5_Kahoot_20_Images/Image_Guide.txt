@@ -1,0 +1,66 @@
+20 illustrations for the English A5 Kahoot
+Files A5-01.png to A5-20.png correspond to questions 1–20.
+Online source: Lucide (https://lucide.dev). Authors: Lucide contributors.
+License: ISC. Full copyright and permission notice in LICENSE.txt.
+Adaptation: blue stroke, light background, PNG conversion.
+These are topic illustrations, not equipment photographs or command screenshots.
+
+A5-01.png — Computer network
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/network.svg
+
+A5-02.png — School LAN
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/school.svg
+
+A5-03.png — Router
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/router.svg
+
+A5-04.png — Switch and wired LAN
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/ethernet-port.svg
+
+A5-05.png — Wireless Access Point
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/wifi.svg
+
+A5-06.png — Client–Server
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/server.svg
+
+A5-07.png — Fibre-optic cable
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/cable.svg
+
+A5-08.png — Data transfer speed
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/gauge.svg
+
+A5-09.png — Web service
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/globe.svg
+
+A5-10.png — IP Address
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/locate-fixed.svg
+
+A5-11.png — Subnet
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/git-branch.svg
+
+A5-12.png — Default Gateway
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/route.svg
+
+A5-13.png — DNS lookup
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/book-open.svg
+
+A5-14.png — ipconfig command
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/terminal.svg
+
+A5-15.png — Connectivity test
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/radio-tower.svg
+
+A5-16.png — tracert hops
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/waypoints.svg
+
+A5-17.png — Firewall
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/shield.svg
+
+A5-18.png — Digital footprint
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/footprints.svg
+
+A5-19.png — Phishing message
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/mail-warning.svg
+
+A5-20.png — Online stranger safety
+https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/user-round-x.svg

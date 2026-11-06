@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>B41M8 – Αναφορές κελιών σε 5 λεπτά</title>
+<style>
+:root{--blue:#175f8d;--blue2:#0d456a;--green:#16834d;--red:#c94343;--gold:#f2a52b;--ink:#17354a;--pale:#eef5f9;--line:#b8cad6}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Segoe UI",sans-serif;background:var(--pale);color:var(--ink)}
+button{font:inherit}.app{max-width:1100px;margin:auto;min-height:100vh;background:#fff;box-shadow:0 0 30px #17354a22}
+header{background:var(--blue);color:#fff;padding:18px 28px;display:flex;gap:20px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:4}
+header h1{font-size:clamp(22px,3vw,34px);margin:0}.timer{background:#fff;color:var(--blue2);font-weight:800;border-radius:14px;padding:10px 16px;min-width:92px;text-align:center;font-size:21px}
+.bar{height:8px;background:#d8e5ec}.bar>div{height:100%;width:0;background:#27a96b;transition:.3s}
+main{padding:25px}.screen{display:none}.screen.active{display:block}.intro{text-align:center;padding:25px 8px}
+.intro h2{font-size:34px;margin:15px}.intro p{font-size:22px;max-width:780px;margin:12px auto;line-height:1.45}
+.primary,.secondary,.copy{border:0;border-radius:12px;padding:13px 22px;font-weight:800;cursor:pointer}.primary{background:var(--green);color:#fff;font-size:21px}.secondary{background:#e4eef4;color:var(--blue2)}
+.hint{background:#fff3d8;border-left:6px solid var(--gold);padding:14px 18px;border-radius:8px;font-size:19px;margin:18px 0}
+.slide-card{border:3px solid var(--line);border-radius:20px;padding:22px;background:#fbfdfe;min-height:540px}.slide-card h3{margin:0;color:var(--blue2);font-size:30px;text-align:center}.slide-card .ref{font-family:Consolas,monospace;font-size:34px;font-weight:900;color:var(--blue);background:#e2f2fb;padding:5px 13px;border-radius:9px;display:inline-block}.slide-card>p{text-align:center;font-size:21px;margin:10px}.direction-banner{margin:14px auto 10px;max-width:800px;padding:11px 14px;border-radius:10px;background:#e6f2f8;color:var(--blue2);font-size:21px;font-weight:900;text-align:center}.direction-banner b{font-size:29px;color:var(--red)}
+.excel-demo{display:flex;align-items:center;justify-content:center;gap:24px;min-height:310px;margin:8px 0}.sheet{display:grid;border:3px solid #7995a7;background:#fff;box-shadow:0 6px 16px #17354a22}.sheet.down{grid-template-columns:64px 160px 260px;grid-template-rows:48px repeat(3,72px)}.sheet.right{grid-template-columns:70px repeat(3,225px);grid-template-rows:48px repeat(2,76px)}.corner,.colhdr,.rowhdr{display:flex;align-items:center;justify-content:center;background:#dfe8ed;border:1px solid #9fb3bf;font-size:21px;font-weight:900;color:#35586d;text-align:center}.cell{border:1px solid #b7c8d2;display:flex;align-items:center;justify-content:center;font:700 21px Consolas,monospace;background:#fff;padding:6px;text-align:center}.cell.data{background:#edf6fb;color:#31566d}.cell.source{background:#fff0b9;outline:5px solid var(--green);z-index:1}.cell.target{background:#f6fafc}.cell.filled{animation:fill .45s;background:#dff4e7}.move-arrow{font-size:74px;font-weight:900;color:var(--red);line-height:1}.cell-label{display:block;font:700 14px Arial,sans-serif;color:#617d8f;margin-bottom:3px}@keyframes fill{from{transform:scale(.75);opacity:.1}to{transform:scale(1);opacity:1}}
+.copy{background:var(--blue);color:#fff;padding:9px 14px}.explain{font-weight:700;color:#31566d;min-height:24px;margin-top:9px}.nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+.quiz-head{display:flex;align-items:center;justify-content:space-between}.pill{background:#e5f2f8;border-radius:99px;padding:8px 14px;font-weight:800}.question{font-size:27px;margin:24px 0 16px}.formula{font-family:Consolas,monospace;background:#edf3f7;border-radius:8px;padding:3px 8px;color:#164f73;white-space:nowrap}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{border:2px solid var(--line);background:#fff;border-radius:13px;padding:15px;text-align:left;font-size:19px;cursor:pointer;min-height:58px}.answer:hover{border-color:var(--blue)}.answer.correct{background:#dff5e8;border-color:var(--green)}.answer.wrong{background:#ffe2e2;border-color:var(--red)}.answer:disabled{cursor:default;color:inherit}
+.feedback{display:none;margin-top:18px;border-radius:12px;padding:15px 18px;font-size:18px;line-height:1.4}.feedback.show{display:block}.feedback.good{background:#e0f5e9;border-left:6px solid var(--green)}.feedback.bad{background:#fff0e4;border-left:6px solid var(--red)}
+.result{text-align:center;padding:15px}.score{font-size:64px;font-weight:900;color:var(--blue)}.result h2{font-size:33px}.review{max-width:820px;margin:20px auto;text-align:left}.review li{padding:8px;margin:5px 0;background:#f3f7fa;border-radius:8px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.legend span{padding:7px 11px;border-radius:9px;background:#edf4f7;font-weight:700}
+@media(max-width:760px){.answers{grid-template-columns:1fr}main{padding:12px}.slide-card{padding:10px}.sheet.down{grid-template-columns:42px 80px 170px;grid-template-rows:38px repeat(3,62px)}.sheet.right{grid-template-columns:45px repeat(3,94px);grid-template-rows:38px repeat(2,68px)}.cell{font-size:14px}.colhdr,.rowhdr{font-size:16px}.move-arrow{font-size:40px}.excel-demo{gap:8px;min-height:260px}header{padding:13px}.question{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><h1>Αναφορές κελιών σε 5 λεπτά</h1><div class="timer" id="timer">5:00</div></header>
+<div class="bar"><div id="progress"></div></div>
+<main>
+  <section class="screen active intro" id="start">
+    <div style="font-size:68px">📊</div><h2>Τι αλλάζει όταν αντιγράφω έναν τύπο;</h2>
+    <div class="pill" style="display:inline-block;background:#dff5e8;color:#12653d;font-size:19px">Νέα έκδοση: 4 ξεχωριστές διαφάνειες με πλέγμα από A1</div>
+    <p>Πρώτα θα δεις τέσσερα σύντομα παραδείγματα. Μετά θα απαντήσεις σε 6 ερωτήσεις με άμεση εξήγηση.</p>
+    <div class="hint"><b>Βασικός κανόνας:</b> το σύμβολο <span class="formula">$</span> κλειδώνει το γράμμα ή τον αριθμό που βρίσκεται αμέσως μετά.</div>
+    <button class="primary" onclick="begin()">Ξεκινώ</button>
+  </section>
+
+  <section class="screen" id="theory">
+    <div class="quiz-head"><h2 style="margin:0">1. Δες τι συμβαίνει κατά την αντιγραφή</h2><span class="pill" id="caseCount"></span></div>
+    <div class="legend"><span>Χωρίς $ = αλλάζει</span><span>Με $ = μένει σταθερό</span></div>
+    <div id="caseSlide"></div>
+    <div class="nav"><button class="secondary" id="caseBack" onclick="previousCase()">Προηγούμενη</button><button class="primary" id="caseNext" onclick="nextCase()">Επόμενη περίπτωση</button></div>
+  </section>
+
+  <section class="screen" id="quiz">
+    <div class="quiz-head"><span class="pill" id="qcount"></span><span class="pill" id="points">0 σωστές</span></div>
+    <div class="question" id="qtext"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div>
+    <div class="nav"><span></span><button class="primary" id="next" onclick="nextQuestion()" style="display:none">Επόμενη</button></div>
+  </section>
+
+  <section class="screen result" id="result">
+    <h2>Ολοκλήρωσες την επανάληψη!</h2><div class="score" id="score"></div><p id="message" style="font-size:22px"></p>
+    <div class="review" id="review"></div><button class="primary" onclick="restart()">Ξανά από την αρχή</button>
+  </section>
+</main>
+</div>
+<script>
+const cases=[
+ {title:'Σχετική αναφορά',ref:'A1',desc:'Αλλάζουν και η στήλη και η γραμμή.',dir:'↓',before:'=A1*2',after:['=A2*2','=A3*2'],why:'Η αναφορά ακολουθεί τη νέα γραμμή: A1 → A2 → A3.'},
+ {title:'Απόλυτη αναφορά',ref:'$A$1',desc:'Δεν αλλάζει ούτε η στήλη ούτε η γραμμή.',dir:'↓',before:'=$A$1*2',after:['=$A$1*2','=$A$1*2'],why:'Και το A και το 1 είναι κλειδωμένα. Η αναφορά μένει $A$1.'},
+ {title:'Μικτή: σταθερή στήλη',ref:'$A1',desc:'Η στήλη A μένει σταθερή. Η γραμμή αλλάζει.',dir:'↓',before:'=$A1*2',after:['=$A2*2','=$A3*2'],why:'Το $ κλειδώνει τη στήλη A, ενώ η γραμμή αλλάζει: 1 → 2 → 3.'},
+ {title:'Μικτή: σταθερή γραμμή',ref:'A$1',desc:'Η γραμμή 1 μένει σταθερή. Η στήλη αλλάζει.',dir:'→',before:'=A$1*2',after:['=B$1*2','=C$1*2'],why:'Το $ κλειδώνει τη γραμμή 1, ενώ η στήλη αλλάζει: A → B → C.'}
+];
+const questions=[
+ {q:'Ποια είναι σχετική αναφορά;',a:['A1','$A$1','$A1','A$1'],ok:0,e:'Η A1 δεν έχει κανένα $. Άρα μπορούν να αλλάξουν και η στήλη και η γραμμή.'},
+ {q:'Ο τύπος <span class="formula">=A1*2</span> αντιγράφεται μία γραμμή κάτω. Ποιος γίνεται;',a:['=A1*2','=A2*2','=B1*2','=$A$1*2'],ok:1,e:'Η αντιγραφή προς τα κάτω αλλάζει τη γραμμή: 1 → 2. Η στήλη A μένει ίδια.'},
+ {q:'Ο τύπος <span class="formula">=$A$1*2</span> αντιγράφεται δύο γραμμές κάτω. Ποιος γίνεται;',a:['=$A$3*2','=A3*2','=$A$1*2','=C$1*2'],ok:2,e:'Στην $A$1 είναι κλειδωμένα και το A και το 1. Η αναφορά δεν αλλάζει.'},
+ {q:'Η αναφορά <span class="formula">$A1</span> αντιγράφεται δύο γραμμές κάτω. Πώς γίνεται;',a:['$A3','$C1','A$3','$A$1'],ok:0,e:'Το A είναι κλειδωμένο, αλλά η γραμμή αλλάζει κατά 2: 1 → 3.'},
+ {q:'Η αναφορά <span class="formula">A$1</span> αντιγράφεται δύο στήλες δεξιά. Πώς γίνεται;',a:['A$3','C$1','$C1','$A$1'],ok:1,e:'Η γραμμή 1 είναι κλειδωμένη. Η στήλη αλλάζει κατά 2: A → B → C.'},
+ {q:'Η τιμή ΦΠΑ βρίσκεται πάντα στο E2. Ποια αναφορά πρέπει να χρησιμοποιηθεί όταν αντιγράφουμε τον τύπο σε πολλές γραμμές;',a:['E2','$E$2','$E2','E$3'],ok:1,e:'Το κελί του ΦΠΑ πρέπει να μείνει εντελώς σταθερό, άρα χρησιμοποιούμε απόλυτη αναφορά $E$2.'}
+];
+let q=0,score=0,started=false,seconds=300,tick=null,wrong=[],caseIndex=0,currentCorrect=0;
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function begin(){started=true;caseIndex=0;show('theory');renderCaseSlide();if(!tick)tick=setInterval(()=>{if(seconds>0){seconds--;document.getElementById('timer').textContent=Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0')}},1000);setProgress(12)}
+function caseVisual(c,i){
+ if(c.dir==='↓')return `<div class="direction-banner">Αντιγράφουμε το κελί <b>B1</b> στην <u>επόμενη γραμμή</u> <b>↓</b></div><div class="excel-demo"><div class="sheet down"><div class="corner"></div><div class="colhdr">A</div><div class="colhdr">B</div><div class="rowhdr">1</div><div class="cell data">10</div><div class="cell source"><span><span class="cell-label">B1 — αρχικό</span>${c.before}</span></div><div class="rowhdr">2</div><div class="cell data">20</div><div class="cell target" id="c${i}a"><span class="cell-label">B2 — κενό</span></div><div class="rowhdr">3</div><div class="cell data">30</div><div class="cell target" id="c${i}b"><span class="cell-label">B3 — κενό</span></div></div><div class="move-arrow">↓</div></div>`;
+ return `<div class="direction-banner">Αντιγράφουμε το κελί <b>A2</b> στην <u>επόμενη στήλη</u> <b>→</b></div><div class="excel-demo"><div class="sheet right"><div class="corner"></div><div class="colhdr">A</div><div class="colhdr">B</div><div class="colhdr">C</div><div class="rowhdr">1</div><div class="cell data">10</div><div class="cell data">20</div><div class="cell data">30</div><div class="rowhdr">2</div><div class="cell source"><span><span class="cell-label">A2 — αρχικό</span>${c.before}</span></div><div class="cell target" id="c${i}a"><span class="cell-label">B2 — κενό</span></div><div class="cell target" id="c${i}b"><span class="cell-label">C2 — κενό</span></div></div><div class="move-arrow">→</div></div>`
+}
+function renderCaseSlide(){let c=cases[caseIndex];document.getElementById('caseCount').textContent=`Περίπτωση ${caseIndex+1} από 4`;document.getElementById('caseSlide').innerHTML=`<article class="slide-card"><h3>${c.title} <span class="ref">${c.ref}</span></h3><p>${c.desc}</p>${caseVisual(c,caseIndex)}<div style="text-align:center"><button class="copy" data-step="0" onclick="animateCase(${caseIndex},this)">${c.dir==='↓'?'1η αντιγραφή: B1 → B2 ↓':'1η αντιγραφή: A2 → B2 →'}</button></div><div class="explain" id="e${caseIndex}" style="text-align:center;font-size:20px">Τα κελιά προορισμού είναι ακόμη κενά.</div></article>`;document.getElementById('caseBack').textContent=caseIndex===0?'Αρχή':'Προηγούμενη';document.getElementById('caseNext').textContent=caseIndex===cases.length-1?'Πάμε στις ερωτήσεις':'Επόμενη περίπτωση';setProgress(12+caseIndex*6)}
+function previousCase(){if(caseIndex===0)show('start');else{caseIndex--;renderCaseSlide()}}
+function nextCase(){if(caseIndex===cases.length-1)startQuiz();else{caseIndex++;renderCaseSlide()}}
+function animateCase(i,btn){let c=cases[i],a=document.getElementById(`c${i}a`),b=document.getElementById(`c${i}b`),e=document.getElementById(`e${i}`),step=Number(btn.dataset.step||0);if(step===0){a.innerHTML=`<span><span class="cell-label">B2</span>${c.after[0]}</span>`;a.classList.add('filled');e.textContent=(c.dir==='↓'?'Μία γραμμή κάτω, στο B2: ':'Μία στήλη δεξιά, στο B2: ')+c.after[0];btn.dataset.step='1';btn.textContent=c.dir==='↓'?'2η αντιγραφή: B2 → B3 ↓':'2η αντιγραφή: B2 → C2 →';return}if(step===1){b.innerHTML=`<span><span class="cell-label">${c.dir==='↓'?'B3':'C2'}</span>${c.after[1]}</span>`;b.classList.add('filled');e.textContent=c.why;btn.dataset.step='2';btn.textContent='Επανάληψη παραδείγματος';return}a.innerHTML='<span class="cell-label">B2 — κενό</span>';b.innerHTML=`<span class="cell-label">${c.dir==='↓'?'B3':'C2'} — κενό</span>`;a.classList.remove('filled');b.classList.remove('filled');e.textContent='Τα κελιά προορισμού είναι πάλι κενά.';btn.dataset.step='0';btn.textContent=c.dir==='↓'?'1η αντιγραφή: B1 → B2 ↓':'1η αντιγραφή: A2 → B2 →'}
+function startQuiz(){q=0;score=0;wrong=[];show('quiz');renderQuestion();setProgress(35)}
+function renderQuestion(){let x=questions[q],shifts=[1,0,2,3,1,2],shift=shifts[q%shifts.length],opts=x.a.map((_,i)=>x.a[(i+shift)%x.a.length]);currentCorrect=(x.ok-shift+x.a.length)%x.a.length;document.getElementById('qcount').textContent=`Ερώτηση ${q+1} από ${questions.length}`;document.getElementById('points').textContent=`${score} σωστές`;document.getElementById('qtext').innerHTML=x.q;document.getElementById('answers').innerHTML=opts.map((v,i)=>`<button class="answer" onclick="answer(${i})"><b>${['Α','Β','Γ','Δ'][i]}.</b> ${v}</button>`).join('');document.getElementById('feedback').className='feedback';document.getElementById('next').style.display='none';setProgress(35+q/questions.length*55)}
+function answer(i){let x=questions[q],buttons=[...document.querySelectorAll('.answer')];buttons.forEach(b=>b.disabled=true);buttons[currentCorrect].classList.add('correct');let good=i===currentCorrect;if(!good){buttons[i].classList.add('wrong');wrong.push(q)}else score++;let f=document.getElementById('feedback');f.className='feedback show '+(good?'good':'bad');f.innerHTML=`<b>${good?'Σωστά!':'Όχι ακόμη.'}</b> ${x.e}`;document.getElementById('points').textContent=`${score} σωστές`;document.getElementById('next').textContent=q===questions.length-1?'Αποτελέσματα':'Επόμενη';document.getElementById('next').style.display='block'}
+function nextQuestion(){if(++q<questions.length)renderQuestion();else finish()}
+function finish(){show('result');setProgress(100);document.getElementById('score').textContent=`${score}/${questions.length}`;document.getElementById('message').textContent=score>=5?'Πολύ καλά! Κατανόησες τις αναφορές.':score>=3?'Καλή προσπάθεια. Ξαναδές τις περιπτώσεις με $ που σε δυσκόλεψαν.':'Χρειάζεται ακόμη μία σύντομη επανάληψη της θεωρίας.';document.getElementById('review').innerHTML=wrong.length?'<h3>Ξαναδές αυτές τις έννοιες:</h3><ul>'+wrong.map(i=>`<li>${questions[i].e}</li>`).join('')+'</ul>':'<p class="hint">Απάντησες σωστά σε όλες τις ερωτήσεις.</p>'}
+function setProgress(v){document.getElementById('progress').style.width=v+'%'}
+function restart(){seconds=300;q=score=0;wrong=[];document.getElementById('timer').textContent='5:00';show('start');setProgress(0)}
+</script>
+</body>
+</html>

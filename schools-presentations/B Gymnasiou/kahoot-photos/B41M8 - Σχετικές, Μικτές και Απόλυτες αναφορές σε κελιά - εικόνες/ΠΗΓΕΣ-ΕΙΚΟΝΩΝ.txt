@@ -1,0 +1,42 @@
+B41M8 – Σχετικές, Μικτές και Απόλυτες αναφορές σε κελιά
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. Σχετική αναφορά B3
+   Αρχείο: B41M8-a.jpg
+   Πηγή: https://cdn.shopify.com/s/files/1/0381/7642/4068/files/Cell-Reference-in-Excel-1.jpg
+
+2. Απόλυτη αναφορά $B$3
+   Αρχείο: B41M8-b.jpg
+   Πηγή: https://cdn.shopify.com/s/files/1/0381/7642/4068/files/Cell-Reference-in-Excel-1.jpg
+
+3. Αντιγραφή σχετικής αναφοράς προς τα κάτω
+   Αρχείο: B41M8-c.jpg
+   Πηγή: https://www.skillsetmaster.com/images/excel/cell-references/3.jpg
+
+4. Αντιγραφή σχετικής αναφοράς προς τα δεξιά
+   Αρχείο: B41M8-d.png
+   Πηγή: https://byu-pathway.brightspotcdn.com/c9/71/eee56b1246a0af4ea34d0d7e08b8/m01-07-fig05.png
+
+5. Μικτή αναφορά $B3: σταθερή στήλη
+   Αρχείο: B41M8-e.jpg
+   Πηγή: https://www.omnisecu.com/images/excel/formulas-and-functions/mixed-cell-reference-05.jpg
+
+6. Μικτή αναφορά B$3: σταθερή γραμμή
+   Αρχείο: B41M8-f.png
+   Πηγή: https://asset.watch.impress.co.jp/img/wf/docs/1107/424/image18020914_s.png
+
+7. Σταθερό κελί ΦΠΑ με απόλυτη αναφορά
+   Αρχείο: B41M8-g.png
+   Πηγή: https://cdn.sanity.io/images/n1bn8kr3/production/1818ac2ec89f841f20894c9b01827b8fc1c21567-691x457.png
+
+8. Πολλαπλασιασμός με σταθερή τιμή $B$3
+   Αρχείο: B41M8-h.png
+   Πηγή: https://cdn.educba.com/academy/wp-content/uploads/2019/06/Mixed-Reference-in-Excel.png
+
+9. Μεταβολή της $B3 δύο γραμμές κάτω
+   Αρχείο: B41M8-i.jpg
+   Πηγή: https://www.omnisecu.com/images/excel/formulas-and-functions/mixed-cell-reference-05.jpg
+
+10. Αντιγραφή τύπου με σχετική και απόλυτη αναφορά
+   Αρχείο: B41M8-j.jpg
+   Πηγή: https://cdn.shopify.com/s/files/1/0381/7642/4068/files/Cell-Reference-in-Excel-1.jpg

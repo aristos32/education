@@ -1,0 +1,42 @@
+B41M10 – Συναρτήσεις
+Αντιστοίχιση εικόνων στις 10 ερωτήσεις του Kahoot
+
+1. COUNT: μέτρηση αριθμών
+   Αρχείο: B41M10-a.jpg
+   Πηγή: https://videoencodingpublic-hgeaeyeba8gycee3.b01.azurefd.net/public-d1aa2e72-e42f-4394-a3d3-c2e897162205/thumbnail_w800.jpeg
+
+2. COUNTA: μέτρηση μη κενών κελιών
+   Αρχείο: B41M10-b.jpg
+   Πηγή: https://videoencodingpublic-hgeaeyeba8gycee3.b01.azurefd.net/public-d1aa2e72-e42f-4394-a3d3-c2e897162205/thumbnail_w800.jpeg
+
+3. Συνάρτηση IF
+   Αρχείο: B41M10-c.jpg
+   Πηγή: https://tutorialspoint.org.cn/assets/questions/media/483469-1660221295.jpg
+
+4. Τα δύο αποτελέσματα της IF
+   Αρχείο: B41M10-d.jpg
+   Πηγή: https://tutorialspoint.org.cn/assets/questions/media/483469-1660221295.jpg
+
+5. Τύπος IF με όριο 100000
+   Αρχείο: B41M10-e.jpg
+   Πηγή: https://tutorialspoint.org.cn/assets/questions/media/483469-1660221295.jpg
+
+6. Σύμβολο μεγαλύτερο από
+   Αρχείο: B41M10-f.jpg
+   Πηγή: https://tutorialspoint.org.cn/assets/questions/media/483469-1660221295.jpg
+
+7. COUNT και κείμενο
+   Αρχείο: B41M10-g.jpg
+   Πηγή: https://videoencodingpublic-hgeaeyeba8gycee3.b01.azurefd.net/public-d1aa2e72-e42f-4394-a3d3-c2e897162205/thumbnail_w800.jpeg
+
+8. COUNTA με αριθμούς και κείμενο
+   Αρχείο: B41M10-h.jpg
+   Πηγή: https://videoencodingpublic-hgeaeyeba8gycee3.b01.azurefd.net/public-d1aa2e72-e42f-4394-a3d3-c2e897162205/thumbnail_w800.jpeg
+
+9. COUNT σε μικτό εύρος
+   Αρχείο: B41M10-i.jpg
+   Πηγή: https://videoencodingpublic-hgeaeyeba8gycee3.b01.azurefd.net/public-d1aa2e72-e42f-4394-a3d3-c2e897162205/thumbnail_w800.jpeg
+
+10. IF όταν η τιμή ισούται με το όριο
+   Αρχείο: B41M10-j.jpg
+   Πηγή: https://tutorialspoint.org.cn/assets/questions/media/483469-1660221295.jpg

@@ -1,0 +1,54 @@
+A5M1P1 – Images for the Kahoot quiz
+
+The images come from Wikimedia Commons.
+The a–j sequence follows the order of the 10 questions.
+
+1. A5M1P1-a.png — Δίκτυο υπολογιστών
+   Creator: WDGraham
+   License: Public domain
+   Source: https://commons.wikimedia.org/wiki/File:StarNetwork.svg
+
+2. A5M1P1-b.png — Τοπικό δίκτυο (LAN)
+   Creator: Wikimedia Commons contributor
+   License: CC0
+   Source: https://commons.wikimedia.org/wiki/File:Home_LAN_local_area_network_example_diagram.png
+
+3. A5M1P1-c.png — Δίκτυο ευρείας περιοχής (WAN)
+   Creator: Andreas Kaltenbrunner
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File:Connections_between_sister_cities_visualised_on_a_world_map_(jetlog).svg
+
+4. A5M1P1-d.png — Κοινόχρηστος εκτυπωτής δικτύου
+   Creator: Jeff Waugh, Daniel Holbach and Martin Pitt
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File:Human-gnome-dev-printer-network.svg
+
+5. A5M1P1-e.jpg — Κάρτα δικτύου (NIC)
+   Creator: Nixdorf / Wikimedia Commons
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File:Network_card.jpg
+
+6. A5M1P1-f.jpg — Switch δικτύου
+   Creator: Simon A. Eugster
+   License: CC BY-SA 3.0
+   Source: https://commons.wikimedia.org/wiki/File:Netgear_Gigabit_Switch_5-port.jpg
+
+7. A5M1P1-g.jpg — Ασύρματο Access Point
+   Creator: Rodrigo César
+   License: Public domain
+   Source: https://commons.wikimedia.org/wiki/File:Access-point-wireless.jpg
+
+8. A5M1P1-h.jpg — Router
+   Creator: Abhi25t
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File:TP-Link_AX1500_Wi-Fi_6_Router_Front.jpg
+
+9. A5M1P1-i.jpg — Modem
+   Creator: Jonathan Schilling
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File:Arris_TM_1602_cable_modem,_branded_with_US_TV_and_internet_service_provider_%27Optimum%27_(edited,_no_BG).jpg
+
+10. A5M1P1-j.png — Μοντέλο Client–Server
+   Creator: Michel Bakni
+   License: CC BY-SA 4.0
+   Source: https://commons.wikimedia.org/wiki/File:Client-Server_Model-en.svg

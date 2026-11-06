@@ -1,0 +1,48 @@
+Α5.3 Μ2 – Κίνδυνοι στο Διαδίκτυο
+4 ερωτήσεις κλεισίματος μαθήματος
+
+Create → Add question → Import → Import spreadsheet.
+Εισάγεις το A53M2_Kahoot.xlsx. Όλες οι ερωτήσεις είναι standard Quiz, με 4 επιλογές και μία σωστή απάντηση. Χρόνος 60 δευτερόλεπτα ανά ερώτηση.
+Οι εικόνες προστίθενται χειροκίνητα μετά την εισαγωγή.
+1 → A53M2-a.png, 2 → A53M2-b.png, 3 → A53M2-c.png, 4 → A53M2-d.png.
+Οδηγίες https://support.kahoot.com/hc/en-us/articles/115002812547
+
+Δείκτες
+Πηγή Αναλυτικό Πρόγραμμα Πληροφορικής Α΄ Γυμνασίου, ap_pliroforiki_gym_a_mex.pdf, σελ. 31.
+Επιτυχίας A5.4.1. Αναγνωρίζουν και περιγράφουν διάφορες κατηγορίες κινδύνων που μπορεί να προκύψουν από τη χρήση του Διαδικτύου.
+Επιτυχίας A5.4.2. Αντιμετωπίζουν διάφορες κατηγορίες κινδύνων που μπορεί να προκύψουν από τη χρήση του Διαδικτύου.
+Επάρκειας A5.4.1. Κίνδυνοι και τρόποι αντιμετώπισής τους. Εδώ ελέγχεται το διδαχθέν μέρος του Μ2, ακατάλληλο περιεχόμενο, παραβίαση πνευματικών δικαιωμάτων και εθισμός στο Διαδίκτυο.
+
+Απαντήσεις και αντιστοίχιση
+1. Β (2). Ακατάλληλο περιεχόμενο, A5.4.1 και A5.4.2. Σταματώ την προβολή, αποφεύγω τη διάδοση και ζητώ βοήθεια.
+2. Δ (4). PEGI, A5.4.1. Η ηλικιακή ένδειξη αφορά την καταλληλότητα του περιεχομένου. Η ευκολία ή η απενεργοποίηση του chat δεν αλλάζει την ένδειξη PEGI.
+3. Α (1). Copyright, A5.4.1 και A5.4.2. Κατάλληλη άδεια και τήρηση των όρων. Η αναφορά πηγής ή η μη εμπορική χρήση δεν εξασφαλίζουν από μόνες τους άδεια.
+4. Γ (3). Προβληματική χρήση TikTok, A5.4.1 και A5.4.2. Χρονικά όρια, προτεραιότητα στα μαθήματα και άλλες δραστηριότητες. Το σενάριο δεν θέτει διάγνωση.
+Μετά από κάθε ερώτηση ζήτησε σύντομη αιτιολόγηση για να ελέγξεις το σκεπτικό.
+
+Εικόνες και άδειες
+A53M2-a.png – Smartphone icon.svg
+Δημιουργός: G.Hagedorn. Άδεια CC BY-SA 3.0.
+Πηγή: https://commons.wikimedia.org/wiki/File:Smartphone_icon.svg
+Πρωτότυπο: https://upload.wikimedia.org/wikipedia/commons/3/37/Smartphone_icon.svg
+Άδεια: https://creativecommons.org/licenses/by-sa/3.0/
+Η προσαρμογή διανέμεται επίσης με CC BY-SA 3.0.
+
+A53M2-b.png – Gamecontroller.svg, Edward Boatman / The Noun Project, CC BY 3.0.
+https://commons.wikimedia.org/wiki/File:Gamecontroller.svg
+https://creativecommons.org/licenses/by/3.0/
+Μετατροπή SVG σε PNG και προσθήκη λευκού περιθωρίου.
+
+A53M2-c.png – Copyright.svg
+Δημιουργός: μη προσδιορισμένος. Public domain (PD-ineligible: κοινό σύμβολο χωρίς πρωτότυπη δημιουργία).
+Πηγή: https://commons.wikimedia.org/wiki/File:Copyright.svg
+Πρωτότυπο: https://upload.wikimedia.org/wikipedia/commons/b/b0/Copyright.svg
+
+
+A53M2-d.png – ClockIcon.svg, ClkerFreeVectorImages, CC0 1.0.
+https://commons.wikimedia.org/wiki/File:ClockIcon.svg
+https://creativecommons.org/publicdomain/zero/1.0/
+Μετατροπή SVG σε PNG και προσθήκη λευκού περιθωρίου.
+
+Πρόσθεσε δημιουργό, σύνδεσμο πηγής, άδεια και αλλαγές στις πιστώσεις για a και b.
+Οι πηγές ελέγχθηκαν στις 05/11/2026.

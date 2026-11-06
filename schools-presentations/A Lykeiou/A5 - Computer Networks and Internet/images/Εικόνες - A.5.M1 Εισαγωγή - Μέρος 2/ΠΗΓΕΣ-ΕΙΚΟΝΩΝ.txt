@@ -1,0 +1,54 @@
+A5M1P2 – Εικόνες για το Kahoot
+
+Οι εικόνες προέρχονται από το Wikimedia Commons.
+Η αντιστοίχιση a–j ακολουθεί τη σειρά των 10 ερωτήσεων.
+
+1. A5M1P2-a.jpg — Καλώδια Ethernet Cat 6
+   Δημιουργός: www.heimnetzwerke.net
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AEthernet_socket_with_two_cables_connected_(TIA-568B)_(CAT6).jpg
+
+2. A5M1P2-b.jpg — Βύσμα RJ45
+   Δημιουργός: No machine-readable author provided. David.Monniaux assumed (based on copyright claims).
+   Άδεια: CC BY-SA 3.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AEthernet_RJ45_connector_p1160054.jpg
+
+3. A5M1P2-c.jpg — Καλώδιο οπτικής ίνας
+   Δημιουργός: Asurnipal
+   Άδεια: CC BY-SA 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AOptical_fiber_cable-01ASD.jpg
+
+4. A5M1P2-d.png — Ασύρματη σύνδεση Wi-Fi
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_wifi.svg
+
+5. A5M1P2-e.png — Ισχύς και ποιότητα ασύρματου σήματος
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_signal.svg
+
+6. A5M1P2-f.png — Μεταφορά δεδομένων ανά δευτερόλεπτο
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_exchange-alt.svg
+
+7. A5M1P2-g.png — Ταχύτητα σύνδεσης
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_tachometer-alt.svg
+
+8. A5M1P2-h.png — Υπηρεσία ηλεκτρονικού ταχυδρομείου
+   Δημιουργός: Font Awesome
+   Άδεια: CC BY 4.0
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AFont_Awesome_5_solid_envelope.svg
+
+9. A5M1P2-i.png — Συνδυασμός μέσων σε δίκτυο
+   Δημιουργός: SilverStar at English Wikipedia
+   Άδεια: CC BY 2.5
+   Πηγή: https://commons.wikimedia.org/wiki/File%3ASample-network-diagram.png
+
+10. A5M1P2-j.jpg — Ασύρματο Access Point
+   Δημιουργός: Rodrigo César
+   Άδεια: Public domain
+   Πηγή: https://commons.wikimedia.org/wiki/File%3AAccess-point-wireless.jpg

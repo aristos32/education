@@ -1,0 +1,9 @@
+/schools-Yliko/
+*.iso
+*.wim
+/schools-Yliko/
+/big-files/
+*.iso
+*.wim
+**/*~BROMIUM*/
+~BROMIUM/

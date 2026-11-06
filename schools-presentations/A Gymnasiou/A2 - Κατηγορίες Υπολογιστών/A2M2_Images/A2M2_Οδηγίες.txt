@@ -1,0 +1,48 @@
+A2M2 – Kahoot αξιολόγησης
+
+4 ερωτήσεις Quiz, μία σωστή επιλογή ανά ερώτηση, 30 δευτερόλεπτα.
+Εισαγωγή: Create → Add → Import → Import spreadsheet → επίλεξε το XLSX.
+Πρόκειται για απλές ερωτήσεις Quiz, χωρίς premium τύπους.
+Οι εικόνες προστίθενται χειροκίνητα μετά την εισαγωγή. a=ερώτηση 1, b=2, c=3, d=4.
+Τα XLSX έχουν τη δομή του επίσημου προτύπου Kahoot. Δεν πραγματοποιήθηκε εισαγωγή σε λογαριασμό Kahoot.
+
+ΑΝΤΙΣΤΟΙΧΙΣΗ ΚΑΙ ΑΠΑΝΤΗΣΕΙΣ ΚΑΘΗΓΗΤΗ
+1. Σωστή επιλογή 2: Hardware: Keyboard, CPU · Software: Word
+A2.2.1: Hardware/Software με παραδείγματα.
+2. Σωστή επιλογή 4: Επεξεργασία · προσωρινή μνήμη · επικοινωνία
+A2.2.2: κύριες μονάδες CPU/RAM/I/O Unit και ρόλοι.
+3. Σωστή επιλογή 1: Είσοδος και έξοδος
+A2.2.3, A2.2.4: περιφερειακά εισόδου–εξόδου.
+4. Σωστή επιλογή 3: Microphone · Speakers · USB Flash Drive
+A2.2.3, A2.2.4: είσοδος/έξοδος/αποθήκευση σε εργασία.
+
+Πηγές περιεχομένου: Σημειώσεις Πληροφορικής Α΄ Γυμνασίου και Φύλλα Εργασίας, αντίστοιχο Α.2.Μ1 ή Α.2.Μ2. Αναλυτικό Πρόγραμμα: Δείκτες Επιτυχίας και Δείκτες Επάρκειας Α2.1 ή Α2.2.
+Επάρκεια Α2.2.1–Α2.2.5 (Μ2): Hardware/Software, κύριες μονάδες και περιφερειακά εισόδου, εξόδου, αποθήκευσης.
+
+ΠΗΓΕΣ ΕΙΚΟΝΩΝ ΚΑΙ ΑΝΑΦΟΡΑ ΔΗΜΙΟΥΡΓΩΝ
+
+A2M2-a.png
+Πηγή: https://commons.wikimedia.org/wiki/File%3APersonal_computer%2C_exploded_4.svg
+Δημιουργός: Gustavb
+Άδεια: CC BY 2.5 https://creativecommons.org/licenses/by/2.5
+Καμία αλλαγή στο περιεχόμενο. Μικρογραφία Wikimedia, όπου διατίθεται.
+
+A2M2-b.jpg
+Πηγή: https://commons.wikimedia.org/wiki/File%3ASDRAM_memory_module%2C_zoomed.jpg
+Δημιουργός: Vitaly Zdanevich
+Άδεια: CC0 http://creativecommons.org/publicdomain/zero/1.0/deed.en
+Καμία αλλαγή στο περιεχόμενο. Μικρογραφία Wikimedia, όπου διατίθεται.
+
+A2M2-c.jpg
+Πηγή: https://commons.wikimedia.org/wiki/File%3ACapacitive_touchscreen.jpg
+Δημιουργός: Medvedev
+Άδεια: CC BY 3.0 https://creativecommons.org/licenses/by/3.0
+Καμία αλλαγή στο περιεχόμενο. Μικρογραφία Wikimedia, όπου διατίθεται.
+
+A2M2-d.jpg
+Πηγή: https://commons.wikimedia.org/wiki/File%3AMicrophone_closeup.jpg
+Δημιουργός: Angie from Sawara, Chiba-ken, Japan
+Άδεια: CC BY 2.0 https://creativecommons.org/licenses/by/2.0
+Καμία αλλαγή στο περιεχόμενο. Μικρογραφία Wikimedia, όπου διατίθεται.
+
+Επίσημες οδηγίες εισαγωγής: https://support.kahoot.com/hc/en-us/articles/115002812547-How-to-import-questions-from-a-spreadsheet-to-your-kahoot
