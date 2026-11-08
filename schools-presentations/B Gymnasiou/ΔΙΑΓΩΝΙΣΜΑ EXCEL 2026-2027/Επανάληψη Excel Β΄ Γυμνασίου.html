@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Επανάληψη Excel Β΄ Γυμνασίου</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Layout: one long revision sheet, sticky topic bar, each topic = explanation column + live mini-spreadsheet */
+  --paper: #f5f7f4;
+  --surface: #ffffff;
+  --ink: #18222b;
+  --muted: #5a6670;
+  --line: #d3dad4;
+  --accent: #1e6b45;
+  --accent-soft: #e3f0e8;
+  --ref-a: #2563d9;
+  --ref-b: #d9531e;
+  --bad: #b42318;
+  --bad-soft: #fde8e6;
+  --hdr: #eef2ee;
+  --sel: rgba(30,107,69,.14);
+  --display: "Literata", Georgia, "Times New Roman", serif;
+  --body: "Commissioner", "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11171a; --surface: #182024; --ink: #e6ece7; --muted: #9aa7a1; --line: #2e3b37;
+    --accent: #5cc38c; --accent-soft: #1d3329; --ref-a: #6c9bff; --ref-b: #ff8a57;
+    --bad: #ff7b6e; --bad-soft: #3a1f1d; --hdr: #1f2a2e; --sel: rgba(92,195,140,.18);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11171a; --surface: #182024; --ink: #e6ece7; --muted: #9aa7a1; --line: #2e3b37;
+  --accent: #5cc38c; --accent-soft: #1d3329; --ref-a: #6c9bff; --ref-b: #ff8a57;
+  --bad: #ff7b6e; --bad-soft: #3a1f1d; --hdr: #1f2a2e; --sel: rgba(92,195,140,.18);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--paper); color: var(--ink); font: 16px/1.55 var(--body); }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.4rem); }
+h2 { font-size: clamp(1.35rem, 3vw, 1.8rem); }
+h3 { font-size: 1.1rem; font-family: var(--body); font-weight: 700; }
+p { margin: 0; max-width: 65ch; }
+code, .mono { font-family: var(--mono); font-size: .92em; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible { outline: 3px solid var(--ref-a); outline-offset: 2px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+header.top { padding: 32px 0 20px; display: grid; gap: 8px; }
+header.top .kicker { color: var(--accent); font-weight: 600; letter-spacing: .02em; }
+header.top p { color: var(--muted); }
+
+nav.topics { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+nav.topics .wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; }
+nav.topics a { white-space: nowrap; text-decoration: none; color: var(--ink); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: .93rem; }
+nav.topics a b { color: var(--accent); margin-right: 4px; }
+nav.topics a:hover { border-color: var(--accent); }
+
+section.topic { padding: 40px 0 8px; scroll-margin-top: 64px; }
+.topic-head { display: grid; gap: 6px; margin-bottom: 20px; }
+.topic-head .num { font-family: var(--mono); color: var(--accent); font-weight: 600; }
+.topic-head p { color: var(--muted); }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; align-content: start; }
+.cols { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.cols3 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 7px 12px; font-size: .92rem; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 600; }
+.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+.remember { border-left: 4px solid var(--accent); background: var(--accent-soft); padding: 12px 14px; border-radius: 0 8px 8px 0; display: grid; gap: 6px; }
+.remember strong { color: var(--accent); }
+.remember ul { margin: 0; padding-left: 1.2em; }
+.note { font-size: .92rem; color: var(--muted); }
+.explain { min-height: 3.2em; font-size: .95rem; }
+.bad { color: var(--bad); font-weight: 600; }
+.ok { color: var(--accent); font-weight: 600; }
+.tag { display: inline-block; font-size: .78rem; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.tag.badtag { background: var(--bad-soft); color: var(--bad); }
+
+/* ---------- mini spreadsheet ---------- */
+.xl { font-family: var(--body); font-size: 14px; user-select: none; -webkit-user-select: none; overflow-x: auto; }
+.fbar { display: grid; grid-template-columns: 64px 28px 1fr; border: 1px solid var(--line); border-bottom: 0; border-radius: 6px 6px 0 0; background: var(--surface); }
+.fbar > div { padding: 4px 8px; border-right: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fbar > div:last-child { border-right: 0; font-family: var(--mono); font-size: 13px; }
+.fbar .fx { font-style: italic; color: var(--muted); text-align: center; padding: 4px 0; }
+.grid { display: grid; border-left: 1px solid var(--line); border-top: 1px solid var(--line); width: max-content; min-width: 100%; position: relative; background: var(--surface); }
+.grid .c { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); height: 28px; padding: 0 6px; display: flex; align-items: center; white-space: nowrap; overflow: hidden; position: relative; font-variant-numeric: tabular-nums; }
+.grid .h { background: var(--hdr); color: var(--muted); justify-content: center; font-size: 12px; padding: 0; }
+.grid .num { justify-content: flex-end; }
+.grid .b { font-weight: 700; }
+.grid .active { outline: 2px solid var(--accent); outline-offset: -2px; z-index: 2; }
+.grid .selc { background: var(--sel); }
+.grid .h.selh { background: color-mix(in srgb, var(--accent) 22%, var(--hdr)); color: var(--ink); font-weight: 700; }
+.grid .refA { box-shadow: inset 0 0 0 2px var(--ref-a); background: color-mix(in srgb, var(--ref-a) 10%, transparent); }
+.grid .refB { box-shadow: inset 0 0 0 2px var(--ref-b); background: color-mix(in srgb, var(--ref-b) 10%, transparent); }
+.grid .err { color: var(--bad); font-weight: 700; }
+.grid .wrongval { background: var(--bad-soft); }
+.grid .clickable { cursor: pointer; }
+.grid .flash { animation: flash .6s ease; }
+@keyframes flash { from { background: color-mix(in srgb, var(--accent) 40%, transparent); } }
+.handle { position: absolute; width: 10px; height: 10px; background: var(--accent); border: 1px solid var(--surface); cursor: crosshair; z-index: 5; touch-action: none; }
+.colresize { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 4; touch-action: none; }
+.colresize:hover { background: color-mix(in srgb, var(--accent) 50%, transparent); }
+.f-ref-a { color: var(--ref-a); font-weight: 700; }
+.f-ref-b { color: var(--ref-b); font-weight: 700; }
+
+/* $ explorer */
+.dollar-table { border-collapse: collapse; font-family: var(--mono); font-size: 14px; width: 100%; }
+.dollar-table th, .dollar-table td { border: 1px solid var(--line); padding: 6px 8px; text-align: center; }
+.dollar-table th { background: var(--hdr); font-family: var(--body); font-size: 12px; color: var(--muted); font-weight: 600; }
+.dollar-table td.origin { background: var(--accent-soft); font-weight: 700; }
+.lock { color: var(--ref-b); font-weight: 700; }
+.chg { color: var(--ref-a); }
+
+/* compare table */
+.cmp { width: 100%; border-collapse: collapse; font-size: .93rem; background: var(--surface); border-radius: 12px; overflow: hidden; }
+.cmp th, .cmp td { padding: 10px 12px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+.cmp thead th { background: var(--hdr); font-size: .85rem; color: var(--muted); }
+.cmp tbody th { font-weight: 700; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; }
+
+/* cursors illustrations */
+.cursor-ic { width: 26px; height: 26px; vertical-align: middle; }
+
+/* ---------- colors section ---------- */
+.ribbon { display: flex; gap: 16px; flex-wrap: wrap; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--hdr); }
+.rb-group { display: grid; gap: 6px; }
+.rb-group .lbl { font-size: 12px; color: var(--muted); font-weight: 600; }
+.rb-btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 4px 8px; }
+.rb-btn[aria-expanded="true"] { border-color: var(--accent); }
+.palette { display: grid; grid-template-columns: repeat(6, 26px); gap: 5px; }
+.sw { width: 26px; height: 26px; border-radius: 4px; border: 1px solid var(--line); padding: 0; }
+.sw[aria-pressed="true"] { outline: 3px solid var(--ref-a); outline-offset: 1px; }
+.sw.none { background: repeating-linear-gradient(45deg, var(--surface) 0 5px, var(--hdr) 5px 10px); font-size: 10px; }
+.preview-cell { height: 92px; border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; font-weight: 700; border-radius: 4px; position: relative; transition: background .25s, color .25s; }
+.preview-labels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: .9rem; }
+.legend-chip { display: flex; align-items: center; gap: 8px; }
+.legend-chip span.box { width: 18px; height: 18px; border-radius: 4px; border: 1px solid var(--line); flex: none; }
+.target { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: center; }
+.target .preview-cell { height: 60px; font-size: 1.2rem; }
+
+/* ---------- workbook section ---------- */
+.wb { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--surface); }
+.wb-title { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--accent); color: #fff; font-weight: 600; font-size: .92rem; }
+.wb-body { padding: 10px; display: grid; gap: 8px; }
+.tabs { display: flex; align-items: stretch; gap: 2px; border-top: 1px solid var(--line); background: var(--hdr); padding: 0 8px; overflow-x: auto; }
+.tab { padding: 6px 14px; font-size: .9rem; border: 0; background: transparent; border-bottom: 3px solid transparent; white-space: nowrap; }
+.tab[aria-selected="true"] { background: var(--surface); border-bottom-color: var(--accent); color: var(--accent); font-weight: 700; }
+.tab input { font: inherit; width: 9em; border: 1px solid var(--accent); border-radius: 4px; padding: 0 4px; background: var(--surface); color: var(--ink); }
+.tab.add { font-weight: 700; color: var(--accent); }
+.nest { display: grid; gap: 8px; }
+.nest .box { border: 2px solid var(--accent); border-radius: 10px; padding: 10px 12px; display: grid; gap: 8px; }
+.nest .box .box { border-color: var(--ref-a); }
+.nest .box .box .box { border-color: var(--ref-b); }
+.nest .ttl { font-weight: 700; font-size: .92rem; }
+.nest .ttl small { font-weight: 400; color: var(--muted); }
+
+/* ---------- quiz ---------- */
+.quiz { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; }
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
+.q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.q .opt { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 7px 12px; text-align: left; }
+.q .opt.right { border-color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+.q .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.q .fb { font-size: .92rem; }
+.q .fb:empty { display: none; }
+.qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.score { font-family: var(--mono); color: var(--accent); font-weight: 600; }
+
+footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="kicker">Β4.1 Υπολογιστικά Φύλλα · Επανάληψη για το διαγώνισμα</div>
+    <h1>Επανάληψη Excel: τέσσερις διαφορές που πρέπει να ξέρεις</h1>
+    <p>Κάθε ενότητα έχει ένα μικρό «Excel» για να δοκιμάσεις μόνος/η σου. Πάτησε κουμπιά, σύρε, κάνε κλικ. Στο τέλος κάθε ενότητας υπάρχουν ερωτήσεις για να ελέγξεις αν το κατάλαβες.</p>
+  </header>
+</div>
+
+<nav class="topics" aria-label="Ενότητες">
+  <div class="wrap">
+    <a href="#anafores"><b>1</b>Σχετική – Απόλυτη αναφορά</a>
+    <a href="#autofill"><b>2</b>Autofill – Επιλογή – AutoFit</a>
+    <a href="#xromata"><b>3</b>Χρώμα κειμένου – Χρώμα γεμίσματος</a>
+    <a href="#vivlio"><b>4</b>Φύλλο – Βιβλίο εργασίας</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ===================== 1 ===================== -->
+<section class="topic" id="anafores">
+  <div class="topic-head">
+    <div class="num">01</div>
+    <h2>Σχετική και απόλυτη αναφορά κελιών</h2>
+    <p>Όταν αντιγράφεις έναν τύπο προς τα κάτω, το Excel αλλάζει μόνο του τις διευθύνσεις των κελιών. Αυτό είναι η <b>σχετική</b> αναφορά. Με το σύμβολο <code>$</code> «κλειδώνεις» ένα κελί ώστε να μην αλλάζει. Αυτό είναι η <b>απόλυτη</b> αναφορά.</p>
+  </div>
+
+  <div class="cols">
+    <div class="panel">
+      <h3>Δοκίμασε: ΦΠΑ σε τιμολόγιο</h3>
+      <p class="note">Το ποσοστό ΦΠΑ υπάρχει <b>μία φορά</b>, στο κελί B1. Διάλεξε τύπο για το C4 και αντίγραψέ τον στα C5:C7.</p>
+      <div class="row" role="group" aria-label="Τύπος στο C4">
+        <button class="btn" id="modeRel" aria-pressed="true">Σχετική: <code>=B4*B1</code></button>
+        <button class="btn" id="modeAbs" aria-pressed="false">Απόλυτη: <code>=B4*$B$1</code></button>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="copyDown">Αντιγραφή προς τα κάτω ▼</button>
+        <button class="btn" id="resetRef">Καθαρισμός</button>
+      </div>
+      <div class="xl">
+        <div class="fbar"><div id="refName">C4</div><div class="fx">fx</div><div id="refFormula"></div></div>
+        <div class="grid" id="refGrid"></div>
+      </div>
+      <p class="explain" id="refExplain" aria-live="polite"></p>
+      <p class="note">Κάνε κλικ σε οποιοδήποτε κελί της στήλης C για να δεις τον τύπο του. Τα χρωματιστά πλαίσια δείχνουν σε ποια κελιά «κοιτάζει» ο τύπος, όπως ακριβώς στο Excel.</p>
+    </div>
+
+    <div class="panel">
+      <h3>Πού μπαίνει το $; (και το πλήκτρο F4)</h3>
+      <p class="note">Ο τύπος γράφεται στο κελί D4 και αντιγράφεται δεξιά και κάτω. Διάλεξε μορφή αναφοράς και δες τι γίνεται σε κάθε κελί.</p>
+      <div class="row" role="group" aria-label="Μορφή αναφοράς">
+        <button class="btn" data-dref="B1" aria-pressed="true"><code>B1</code></button>
+        <button class="btn" data-dref="$B$1" aria-pressed="false"><code>$B$1</code></button>
+        <button class="btn" data-dref="B$1" aria-pressed="false"><code>B$1</code></button>
+        <button class="btn" data-dref="$B1" aria-pressed="false"><code>$B1</code></button>
+        <button class="btn primary" id="f4">Πάτα F4</button>
+      </div>
+      <div class="tablewrap" style="border:0">
+        <table class="dollar-table" id="dollarTable"></table>
+      </div>
+      <p class="explain" id="dollarExplain" aria-live="polite"></p>
+      <p class="note"><span class="lock">Πορτοκαλί</span> = κλειδωμένο (δεν αλλάζει) · <span class="chg">Μπλε</span> = αλλάζει στην αντιγραφή.</p>
+    </div>
+  </div>
+
+  <div class="remember" style="margin-top:16px">
+    <strong>Θυμήσου</strong>
+    <ul>
+      <li><b>Σχετική</b> (<code>B1</code>): αλλάζει όταν αντιγράφεται. Κατάλληλη για τα δεδομένα κάθε γραμμής (π.χ. το κόστος κάθε είδους).</li>
+      <li><b>Απόλυτη</b> (<code>$B$1</code>): δεν αλλάζει ποτέ. Κατάλληλη για μια σταθερή τιμή που χρησιμοποιούν όλοι οι τύποι (ΦΠΑ, έκπτωση, ισοτιμία).</li>
+      <li><b>Μικτή</b>: <code>$B1</code> κλειδώνει μόνο τη <b>στήλη</b>, <code>B$1</code> κλειδώνει μόνο τη <b>γραμμή</b>.</li>
+      <li>Το <b>F4</b> αλλάζει γρήγορα τη μορφή: <code>B1 → $B$1 → B$1 → $B1 → B1</code>.</li>
+    </ul>
+  </div>
+  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="1"></span></div>
+  <div class="quiz" data-quiz="1"></div>
+</section>
+
+<!-- ===================== 2 ===================== -->
+<section class="topic" id="autofill">
+  <div class="topic-head">
+    <div class="num">02</div>
+    <h2>Αυτόματη συμπλήρωση, επιλογή κελιών και αυτόματη προσαρμογή</h2>
+    <p>Τρία διαφορετικά πράγματα που μοιάζουν γιατί όλα γίνονται με το ποντίκι. Η διαφορά φαίνεται από το <b>σχήμα του δείκτη</b> και από το <b>πού</b> κάνεις κλικ.</p>
+  </div>
+
+  <div class="cols3">
+    <div class="panel">
+      <div class="row"><svg class="cursor-ic" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 3v20M3 13h20" stroke="currentColor" stroke-width="2.4"/></svg><h3>Autofill · Αυτόματη συμπλήρωση</h3></div>
+      <p class="note">Σύρε το μικρό πράσινο τετράγωνο (<b>λαβή συμπλήρωσης</b>) κάτω δεξιά στην επιλογή προς τα κάτω. Ο δείκτης γίνεται <b>λεπτός μαύρος σταυρός</b>.</p>
+      <div class="xl">
+        <div class="fbar"><div id="afName">A1:D2</div><div class="fx">fx</div><div id="afFormula">Δευτέρα</div></div>
+        <div class="grid" id="afGrid"></div>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="afBtn">Σύρε μέχρι τη γραμμή 8</button>
+        <button class="btn" id="afReset">Καθαρισμός</button>
+      </div>
+      <p class="explain" id="afExplain" aria-live="polite">Το Excel συνεχίζει μόνο του: ημέρες, μήνες, αριθμούς με το ίδιο βήμα (5, 10 → 15, 20…) και αντιγράφει τύπους.</p>
+      <p class="note"><b>Αλλάζει τα δεδομένα:</b> ναι, γράφει καινούργιο περιεχόμενο στα κελιά.</p>
+    </div>
+
+    <div class="panel">
+      <div class="row"><svg class="cursor-ic" viewBox="0 0 26 26" aria-hidden="true"><path d="M10 3h6v7h7v6h-7v7h-6v-7H3v-6h7z" fill="var(--surface)" stroke="currentColor" stroke-width="1.6"/></svg><h3>Επιλογή κελιών</h3></div>
+      <p class="note">Πάτησε και σύρε <b>μέσα</b> στα κελιά. Ο δείκτης είναι <b>χοντρός λευκός σταυρός</b>. Κλικ σε γράμμα στήλης ή αριθμό γραμμής επιλέγει ολόκληρη στήλη ή γραμμή.</p>
+      <div class="xl">
+        <div class="fbar"><div id="selName">B2</div><div class="fx">fx</div><div id="selInfo">1 κελί</div></div>
+        <div class="grid" id="selGrid"></div>
+      </div>
+      <div class="row">
+        <button class="btn" id="ctrlBtn" aria-pressed="false">Ctrl πατημένο</button>
+        <button class="btn" id="selAll">Όλο το φύλλο</button>
+      </div>
+      <p class="explain" id="selExplain" aria-live="polite">Κράτα <b>Ctrl</b> (ή πάτα το κουμπί) για να επιλέξεις κελιά που <b>δεν είναι δίπλα-δίπλα</b>.</p>
+      <p class="note"><b>Αλλάζει τα δεδομένα:</b> όχι, απλώς διαλέγει σε ποια κελιά θα κάνεις την επόμενη ενέργεια.</p>
+    </div>
+
+    <div class="panel">
+      <div class="row"><svg class="cursor-ic" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 4v18M3 13h20M3 13l4-4M3 13l4 4M23 13l-4-4M23 13l-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg><h3>AutoFit · Αυτόματη προσαρμογή</h3></div>
+      <p class="note">Κάνε <b>διπλό κλικ στο δεξί όριο</b> της επικεφαλίδας μιας στήλης (ανάμεσα στο A και το B). Ο δείκτης γίνεται <b>διπλό βέλος ↔</b>. Μπορείς και να το σύρεις.</p>
+      <div class="xl">
+        <div class="fbar"><div>A1</div><div class="fx">fx</div><div id="fitInfo">Πλάτος A: 70px · B: 52px</div></div>
+        <div class="grid" id="fitGrid"></div>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="fitA">AutoFit στήλης A</button>
+        <button class="btn primary" id="fitB">AutoFit στήλης B</button>
+        <button class="btn" id="fitReset">Επαναφορά</button>
+      </div>
+      <p class="explain" id="fitExplain" aria-live="polite">Τα <b>####</b> σημαίνουν ότι ο αριθμός δεν χωράει. Το κείμενο κόβεται όταν το διπλανό κελί δεν είναι άδειο.</p>
+      <p class="note"><b>Αλλάζει τα δεδομένα:</b> όχι, αλλάζει μόνο το πλάτος της στήλης (ή το ύψος της γραμμής).</p>
+    </div>
+  </div>
+
+  <div class="tablewrap" style="margin-top:16px">
+    <table class="cmp">
+      <thead><tr><th></th><th>Autofill</th><th>Επιλογή κελιών</th><th>AutoFit</th></tr></thead>
+      <tbody>
+        <tr><th>Τι κάνει</th><td>Συνεχίζει μια σειρά ή αντιγράφει τύπο σε γειτονικά κελιά</td><td>Διαλέγει κελιά για να κάνεις κάτι σε αυτά</td><td>Αλλάζει πλάτος στήλης/ύψος γραμμής ώστε να χωράει το περιεχόμενο</td></tr>
+        <tr><th>Πού κάνω κλικ</th><td>Στη λαβή συμπλήρωσης (μικρό τετράγωνο κάτω δεξιά)</td><td>Μέσα στα κελιά ή στις επικεφαλίδες</td><td>Διπλό κλικ στο όριο της επικεφαλίδας</td></tr>
+        <tr><th>Δείκτης</th><td>Λεπτός μαύρος σταυρός <b>+</b></td><td>Χοντρός λευκός σταυρός</td><td>Διπλό βέλος <b>↔</b></td></tr>
+        <tr><th>Από το μενού</th><td>Home → Editing → Fill</td><td>Name Box ή Ctrl+A για όλα</td><td>Home → Cells → Format → AutoFit Column Width / AutoFit Row Height</td></tr>
+        <tr><th>Αλλάζει δεδομένα;</th><td><span class="tag badtag">Ναι</span></td><td><span class="tag">Όχι</span></td><td><span class="tag">Όχι</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="2"></span></div>
+  <div class="quiz" data-quiz="2"></div>
+</section>
+
+<!-- ===================== 3 ===================== -->
+<section class="topic" id="xromata">
+  <div class="topic-head">
+    <div class="num">03</div>
+    <h2>Χρώμα κειμένου (Font Color) και χρώμα γεμίσματος (Fill Color)</h2>
+    <p>Και τα δύο κουμπιά βρίσκονται δίπλα-δίπλα στην καρτέλα <b>Home</b>, ομάδα <b>Font</b>. Το ένα βάφει τα <b>γράμματα</b>, το άλλο το <b>φόντο του κελιού</b>.</p>
+  </div>
+
+  <div class="cols">
+    <div class="panel">
+      <h3>Δοκίμασε τα δύο κουμπιά</h3>
+      <div class="ribbon">
+        <div class="rb-group">
+          <span class="lbl">Font Color · Χρώμα κειμένου</span>
+          <div class="row" style="gap:6px">
+            <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><text x="15" y="19" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="19" fill="currentColor">A</text><rect id="fontBar" x="4" y="23" width="22" height="5" fill="#FF0000"/></svg>
+            <div class="palette" id="fontPal" role="group" aria-label="Χρώμα κειμένου"></div>
+          </div>
+        </div>
+        <div class="rb-group">
+          <span class="lbl">Fill Color · Χρώμα γεμίσματος</span>
+          <div class="row" style="gap:6px">
+            <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M7 12l7-7 8 8-7 7z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M22 13c2 3 2 5 0 5s-2-2 0-5z" fill="currentColor"/><rect id="fillBar" x="4" y="23" width="22" height="5" fill="#FFFF00"/></svg>
+            <div class="palette" id="fillPal" role="group" aria-label="Χρώμα γεμίσματος"></div>
+          </div>
+        </div>
+      </div>
+      <div class="preview-cell" id="prevCell">Βαθμολογία</div>
+      <div class="preview-labels">
+        <div class="legend-chip"><span class="box" id="lgFont"></span><span>Γράμματα = <b>Font Color</b> <span id="lgFontName" class="note"></span></span></div>
+        <div class="legend-chip"><span class="box" id="lgFill"></span><span>Φόντο κελιού = <b>Fill Color</b> <span id="lgFillName" class="note"></span></span></div>
+      </div>
+      <p class="explain" id="colExplain" aria-live="polite"></p>
+    </div>
+
+    <div class="panel">
+      <h3>Πρόκληση: φτιάξε το ίδιο κελί</h3>
+      <p class="note">Χρησιμοποίησε τα δύο κουμπιά αριστερά ώστε το κελί σου να γίνει ίδιο με τον στόχο.</p>
+      <div class="target">
+        <div><div class="note">Στόχος</div><div class="preview-cell" id="tgtCell">Σύνολο</div></div>
+        <div><div class="note">Το δικό σου</div><div class="preview-cell" id="mineCell">Σύνολο</div></div>
+      </div>
+      <p class="explain" id="tgtExplain" aria-live="polite"></p>
+      <div class="row"><button class="btn" id="newTarget">Νέος στόχος</button></div>
+      <div class="remember">
+        <strong>Θυμήσου</strong>
+        <ul>
+          <li><b>A</b> με χρωματιστή γραμμή από κάτω → <b>Font Color</b> → αλλάζει τα <b>γράμματα</b>.</li>
+          <li><b>Κουβαδάκι</b> μπογιάς → <b>Fill Color</b> → αλλάζει το <b>φόντο</b> του κελιού. Στο Format Cells είναι η καρτέλα <b>Fill</b>.</li>
+          <li>Η χρωματιστή γραμμή κάτω από κάθε κουμπί δείχνει το τελευταίο χρώμα που χρησιμοποίησες.</li>
+          <li>Αφαιρείς το φόντο με <b>No Fill</b>, το χρώμα γραμμάτων με <b>Automatic</b>.</li>
+          <li>Πρόσεξε: ίδιο χρώμα γραμμάτων και φόντου = το κείμενο δεν φαίνεται, αλλά υπάρχει!</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="3"></span></div>
+  <div class="quiz" data-quiz="3"></div>
+</section>
+
+<!-- ===================== 4 ===================== -->
+<section class="topic" id="vivlio">
+  <div class="topic-head">
+    <div class="num">04</div>
+    <h2>Φύλλο εργασίας (Sheet) και βιβλίο εργασίας (Workbook)</h2>
+    <p>Σκέψου ένα <b>τετράδιο</b>: το τετράδιο είναι το <b>βιβλίο εργασίας</b> (όλο το αρχείο .xlsx) και οι σελίδες του είναι τα <b>φύλλα εργασίας</b>. Τα ονόματα των φύλλων φαίνονται στις καρτέλες στο κάτω μέρος.</p>
+  </div>
+
+  <div class="cols">
+    <div class="panel">
+      <h3>Ένα βιβλίο εργασίας, πολλά φύλλα</h3>
+      <div class="wb">
+        <div class="wb-title">
+          <svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true"><path d="M2 1h9l5 5v13H2z" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M11 1v5h5" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
+          <span>Maria_Georgiou_B2.xlsx</span><span style="opacity:.75;font-weight:400">· Βιβλίο εργασίας</span>
+        </div>
+        <div class="wb-body">
+          <div class="xl"><div class="grid" id="wbGrid"></div></div>
+        </div>
+        <div class="tabs" id="wbTabs" role="tablist" aria-label="Φύλλα εργασίας"></div>
+      </div>
+      <div class="row">
+        <button class="btn" id="wbRename">Μετονομασία</button>
+        <button class="btn" id="wbDelete">Διαγραφή</button>
+        <button class="btn" id="wbLeft">◀ Μετακίνηση</button>
+        <button class="btn" id="wbRight">Μετακίνηση ▶</button>
+        <button class="btn" id="wbCopy">Αντιγραφή φύλλου</button>
+      </div>
+      <p class="explain" id="wbExplain" aria-live="polite"></p>
+      <p class="note">Κάνε κλικ σε μια καρτέλα για να αλλάξεις φύλλο, διπλό κλικ για μετονομασία, ή πάτα <b>+</b> για νέο φύλλο.</p>
+    </div>
+
+    <div class="panel">
+      <h3>Τι περιέχει τι</h3>
+      <div class="nest">
+        <div class="box"><div class="ttl">Βιβλίο εργασίας · Workbook <small>= ολόκληρο το αρχείο, π.χ. Maria_Georgiou_B2.xlsx</small></div>
+          <div class="box"><div class="ttl">Φύλλο εργασίας · Worksheet <small>= μία καρτέλα, π.χ. ΒΑΘΜΟΛΟΓΙΑ</small></div>
+            <div class="box"><div class="ttl">Στήλες (A, B, C…) και γραμμές (1, 2, 3…)</div>
+              <div class="box" style="border-color:var(--muted)"><div class="ttl">Κελί · Cell <small>= τομή στήλης και γραμμής, π.χ. B3</small></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tablewrap">
+        <table class="cmp">
+          <thead><tr><th></th><th>Βιβλίο εργασίας</th><th>Φύλλο εργασίας</th></tr></thead>
+          <tbody>
+            <tr><th>Τι είναι</th><td>Το αρχείο του Excel</td><td>Μία σελίδα-πλέγμα μέσα στο αρχείο</td></tr>
+            <tr><th>Πού φαίνεται το όνομα</th><td>Στη γραμμή τίτλου, πάνω</td><td>Στην καρτέλα, κάτω αριστερά</td></tr>
+            <tr><th>Πόσα</th><td>Ένα ανά αρχείο</td><td>Ένα ή περισσότερα μέσα σε κάθε βιβλίο</td></tr>
+            <tr><th>Ενέργειες</th><td>Άνοιγμα, Αποθήκευση (Save / Save As), Κλείσιμο</td><td>Εισαγωγή, Μετονομασία, Διαγραφή, Μετακίνηση, Αντιγραφή</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="remember">
+        <strong>Θυμήσου</strong>
+        <ul>
+          <li>Όταν πατάς <b>Save</b>, αποθηκεύεται <b>όλο το βιβλίο</b> με όλα τα φύλλα του.</li>
+          <li>Καλή πρακτική: δίνουμε στα φύλλα ονόματα που λένε τι περιέχουν, όχι Sheet1, Sheet2.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="4"></span></div>
+  <div class="quiz" data-quiz="4"></div>
+</section>
+
+</main>
+<footer class="wrap">Βασισμένο στα Φύλλα Εργασίας Β.4.1.Μ1–Μ14 του βιβλίου Πληροφορικής Β΄ Γυμνασίου.</footer>
+
+<script>
+(function () {
+"use strict";
+var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var $ = function (s, r) { return (r || document).querySelector(s); };
+var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+var COLS = "ABCDEFGHIJ";
+function fmtNum(n, d) { return n.toFixed(d).replace(".", ","); }
+function eur(n) { return fmtNum(n, 2) + " €"; }
+
+/* ---------- generic mini grid ---------- */
+function buildGrid(el, nCols, nRows, widths) {
+  el.innerHTML = "";
+  el.style.gridTemplateColumns = "34px " + widths.map(function (w) { return w + "px"; }).join(" ");
+  var cells = {};
+  var corner = document.createElement("div"); corner.className = "c h"; corner.dataset.corner = "1"; el.appendChild(corner);
+  for (var c = 0; c < nCols; c++) {
+    var h = document.createElement("div"); h.className = "c h"; h.textContent = COLS[c]; h.dataset.col = c; el.appendChild(h);
+  }
+  for (var r = 1; r <= nRows; r++) {
+    var rh = document.createElement("div"); rh.className = "c h"; rh.textContent = r; rh.dataset.row = r; el.appendChild(rh);
+    for (var c2 = 0; c2 < nCols; c2++) {
+      var d = document.createElement("div"); d.className = "c"; d.dataset.addr = COLS[c2] + r; d.dataset.r = r; d.dataset.c = c2;
+      el.appendChild(d); cells[COLS[c2] + r] = d;
+    }
+  }
+  return cells;
+}
+
+/* =========================================================
+   1. Relative / absolute
+   ========================================================= */
+var refData = { A1: "ΦΠΑ", B1: 0.19, A3: "Είδος", B3: "Κόστος", C3: "ΦΠΑ", A4: "Τσάντα", B4: 20, A5: "Αθλητικά", B5: 35, A6: "Βιβλίο", B6: 12, A7: "Μπλούζα", B7: 18 };
+var refCells = buildGrid($("#refGrid"), 3, 7, [92, 92, 120]);
+var refMode = "rel", refCopied = 0, refFormulas = {}, refTimer = null;
+var REF_RE = /(\$?)([A-J])(\$?)(\d+)/g;
+
+function shiftFormula(f, dr, dc) {
+  return f.replace(REF_RE, function (m, dc1, col, dr1, row) {
+    var ci = COLS.indexOf(col), ri = parseInt(row, 10);
+    if (!dc1) ci += dc; if (!dr1) ri += dr;
+    if (ci < 0 || ri < 1) return "#REF!";
+    return dc1 + COLS[ci] + dr1 + ri;
+  });
+}
+function evalFormula(f, data) {
+  var err = null;
+  var expr = f.slice(1).replace(REF_RE, function (m, a, col, b, row) {
+    var v = data[col + row];
+    if (v === undefined || v === "") return "0";
+    if (typeof v !== "number") { err = "#VALUE!"; return "0"; }
+    return String(v);
+  });
+  if (err) return err;
+  if (!/^[0-9+\-*/.() ]+$/.test(expr)) return "#NAME?";
+  try { return Function('"use strict";return (' + expr + ")")(); } catch (e) { return "#VALUE!"; }
+}
+function refsIn(f) { var out = []; f.replace(REF_RE, function (m, a, col, b, row) { out.push(col + row); }); return out; }
+function colorFormula(f) {
+  var i = 0;
+  return f.replace(REF_RE, function (m) { i++; return '<span class="' + (i === 1 ? "f-ref-a" : "f-ref-b") + '">' + m + "</span>"; });
+}
+
+function renderRef(active) {
+  Object.keys(refCells).forEach(function (a) {
+    var d = refCells[a]; d.className = "c"; d.textContent = "";
+    var v = refData[a];
+    if (a === "B1") { d.textContent = "19%"; d.classList.add("num"); }
+    else if (typeof v === "number") { d.textContent = eur(v); d.classList.add("num"); }
+    else if (v !== undefined) d.textContent = v;
+    if (a === "A3" || a === "B3" || a === "C3" || a === "A1") d.classList.add("b");
+    if (a[0] === "C" && +a.slice(1) >= 4) d.classList.add("clickable");
+  });
+  Object.keys(refFormulas).forEach(function (a) {
+    var d = refCells[a], res = evalFormula(refFormulas[a], refData);
+    d.classList.add("num");
+    if (typeof res === "string") { d.textContent = res; d.classList.add("err"); }
+    else {
+      d.textContent = eur(res);
+      var row = +a.slice(1), correct = refData["B" + row] * 0.19;
+      if (Math.abs(res - correct) > 0.001) d.classList.add("wrongval");
+    }
+  });
+  active = active || "C4";
+  refCells[active].classList.add("active");
+  $("#refName").textContent = active;
+  var f = refFormulas[active];
+  $("#refFormula").innerHTML = f ? colorFormula(f) : "";
+  if (f) {
+    refsIn(f).forEach(function (r, i) { if (refCells[r]) refCells[r].classList.add(i === 0 ? "refA" : "refB"); });
+    explainRef(active, f);
+  }
+}
+function explainRef(a, f) {
+  var row = +a.slice(1), res = evalFormula(f, refData), refs = refsIn(f), rate = refs[1];
+  var msg;
+  if (row === 4) {
+    msg = "Το C4 υπολογίζει σωστά: " + eur(20) + " × 19% = <span class=\"ok\">" + eur(3.8) + "</span>. " + (refMode === "rel" ? "Πάτα «Αντιγραφή προς τα κάτω» για να δεις τι παθαίνει το <b>B1</b>." : "Το <b>$B$1</b> είναι κλειδωμένο.");
+  } else if (rate === "B1") {
+    msg = "Στο " + a + " το <b>$B$1</b> έμεινε ίδιο, ενώ το B4 έγινε <b>B" + row + "</b>. <span class=\"ok\">Σωστό: " + eur(res) + "</span>";
+  } else {
+    var v = refData[rate], why = v === undefined ? "είναι <b>άδειο</b> (μετράει ως 0)" : typeof v === "number" ? "περιέχει το κόστος " + eur(v) + ", όχι το ΦΠΑ" : "περιέχει <b>κείμενο</b> («" + v + "»)";
+    msg = "Στο " + a + " το B1 κατέβηκε " + (row - 4) + " γραμμ" + (row - 4 === 1 ? "ή" : "ές") + " και έγινε <b>" + rate + "</b>, που " + why + ". <span class=\"bad\">Αποτέλεσμα: " + (typeof res === "string" ? res : eur(res)) + " – λάθος!</span>";
+  }
+  $("#refExplain").innerHTML = msg;
+}
+function setRefMode(m) {
+  refMode = m; clearInterval(refTimer); refCopied = 0;
+  refFormulas = { C4: m === "rel" ? "=B4*B1" : "=B4*$B$1" };
+  $("#modeRel").setAttribute("aria-pressed", m === "rel"); $("#modeAbs").setAttribute("aria-pressed", m === "abs");
+  renderRef("C4");
+}
+$("#modeRel").addEventListener("click", function () { setRefMode("rel"); });
+$("#modeAbs").addEventListener("click", function () { setRefMode("abs"); });
+$("#resetRef").addEventListener("click", function () { setRefMode(refMode); });
+$("#copyDown").addEventListener("click", function () {
+  clearInterval(refTimer);
+  var base = refFormulas.C4, row = 5;
+  function step() {
+    var a = "C" + row; refFormulas[a] = shiftFormula(base, row - 4, 0); renderRef(a);
+    refCells[a].classList.add("flash"); row++;
+    if (row > 7) clearInterval(refTimer);
+  }
+  if (reduce) { while (row <= 7) step(); } else { step(); refTimer = setInterval(step, 900); }
+});
+$("#refGrid").addEventListener("click", function (e) {
+  var d = e.target.closest(".c"); if (!d || !d.dataset.addr) return;
+  if (refFormulas[d.dataset.addr]) renderRef(d.dataset.addr);
+});
+setRefMode("rel");
+
+/* $ explorer */
+var dollarCycle = ["B1", "$B$1", "B$1", "$B1"], dollarCur = "B1";
+function renderDollar() {
+  $$("[data-dref]").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.dref === dollarCur); });
+  var lockC = dollarCur[0] === "$", lockR = /\$\d/.test(dollarCur);
+  var html = "<tr><th></th><th>Στήλη D<br>(εδώ γράφεται)</th><th>Στήλη E<br>(1 δεξιά)</th><th>Στήλη F<br>(2 δεξιά)</th></tr>";
+  for (var dr = 0; dr < 3; dr++) {
+    html += "<tr><th>Γραμμή " + (4 + dr) + (dr === 0 ? "" : "<br>(" + dr + " κάτω)") + "</th>";
+    for (var dc = 0; dc < 3; dc++) {
+      var col = lockC ? "B" : COLS[1 + dc], row = lockR ? 1 : 1 + dr;
+      var cTxt = (lockC ? '<span class="lock">$B</span>' : '<span class="' + (dc ? "chg" : "") + '">' + col + "</span>");
+      var rTxt = (lockR ? '<span class="lock">$1</span>' : '<span class="' + (dr ? "chg" : "") + '">' + row + "</span>");
+      html += '<td class="' + (dr === 0 && dc === 0 ? "origin" : "") + '">=' + cTxt + rTxt + "</td>";
+    }
+    html += "</tr>";
+  }
+  $("#dollarTable").innerHTML = html;
+  var t = {
+    "B1": "<b>Σχετική.</b> Αλλάζει και η στήλη (B → C → D) και η γραμμή (1 → 2 → 3).",
+    "$B$1": "<b>Απόλυτη.</b> Δείχνει πάντα στο B1, όπου κι αν αντιγραφεί. Αυτό θέλουμε για το ΦΠΑ.",
+    "B$1": "<b>Μικτή.</b> Η γραμμή 1 είναι κλειδωμένη, η στήλη αλλάζει όταν αντιγράφεις δεξιά.",
+    "$B1": "<b>Μικτή.</b> Η στήλη B είναι κλειδωμένη, η γραμμή αλλάζει όταν αντιγράφεις κάτω."
+  };
+  $("#dollarExplain").innerHTML = t[dollarCur];
+}
+$$("[data-dref]").forEach(function (b) { b.addEventListener("click", function () { dollarCur = b.dataset.dref; renderDollar(); }); });
+$("#f4").addEventListener("click", function () { dollarCur = dollarCycle[(dollarCycle.indexOf(dollarCur) + 1) % 4]; renderDollar(); });
+renderDollar();
+
+/* =========================================================
+   2a. Autofill
+   ========================================================= */
+var DAYS = ["Δευτέρα", "Τρίτη", "Τετάρτη", "Πέμπτη", "Παρασκευή", "Σάββατο", "Κυριακή"];
+var MONTHS = ["Ιανουάριος", "Φεβρουάριος", "Μάρτιος", "Απρίλιος", "Μάιος", "Ιούνιος", "Ιούλιος", "Αύγουστος", "Σεπτέμβριος", "Οκτώβριος"];
+var afGridEl = $("#afGrid"), afCells = buildGrid(afGridEl, 4, 8, [84, 100, 38, 52]);
+var afRows = 2, afHandle = document.createElement("div"); afHandle.className = "handle"; afHandle.setAttribute("aria-hidden", "true");
+var afActive = "A1";
+function afValue(addr) {
+  var c = addr[0], r = +addr.slice(1);
+  if (c === "A") return DAYS[(r - 1) % 7];
+  if (c === "B") return MONTHS[(r - 1) % 10];
+  if (c === "C") return 5 * r;
+  return { f: "=C" + r + "*2", v: 10 * r };
+}
+function renderAf(preview) {
+  var upto = preview || afRows;
+  Object.keys(afCells).forEach(function (a) {
+    var d = afCells[a], r = +a.slice(1); d.className = "c"; d.textContent = "";
+    if (r <= upto) {
+      var v = afValue(a); d.textContent = typeof v === "object" ? v.v : v;
+      if (a[0] === "C" || a[0] === "D") d.classList.add("num");
+      d.classList.add("selc");
+      if (r > afRows) d.style.opacity = ".55"; else d.style.opacity = "";
+    } else d.style.opacity = "";
+  });
+  afCells[afActive] && afCells[afActive].classList.add("active");
+  var dc = afCells["D" + upto];
+  if (afHandle.parentNode !== afGridEl) afGridEl.appendChild(afHandle);
+  afHandle.style.left = (dc.offsetLeft + dc.offsetWidth - 5) + "px";
+  afHandle.style.top = (dc.offsetTop + dc.offsetHeight - 5) + "px";
+  $("#afName").textContent = "A1:D" + upto;
+  var v = afValue(afActive); $("#afFormula").textContent = typeof v === "object" ? v.f : v;
+}
+function afRowFromY(y) {
+  var best = afRows;
+  for (var r = 1; r <= 8; r++) { var rect = afCells["A" + r].getBoundingClientRect(); if (y >= rect.top) best = r; }
+  return Math.max(2, best);
+}
+var afDragging = false;
+afHandle.addEventListener("pointerdown", function (e) { e.preventDefault(); afDragging = true; afHandle.setPointerCapture(e.pointerId); });
+afHandle.addEventListener("pointermove", function (e) { if (afDragging) renderAf(afRowFromY(e.clientY)); });
+afHandle.addEventListener("pointerup", function (e) { if (!afDragging) return; afDragging = false; afRows = afRowFromY(e.clientY); renderAf(); afMsg(); });
+function afMsg() {
+  if (afRows <= 2) { $("#afExplain").innerHTML = "Το Excel συνεχίζει μόνο του: ημέρες, μήνες, αριθμούς με το ίδιο βήμα (5, 10 → 15, 20…) και αντιγράφει τύπους."; return; }
+  $("#afExplain").innerHTML = "Συμπληρώθηκαν οι γραμμές 3–" + afRows + ": ημέρες έως <b>" + DAYS[(afRows - 1) % 7] + "</b>, μήνες έως <b>" + MONTHS[(afRows - 1) % 10] + "</b>, αριθμοί με βήμα 5 έως <b>" + 5 * afRows + "</b>. Στη στήλη D αντιγράφηκε ο τύπος: κάνε κλικ στο D" + afRows + " για να τον δεις (<code>=C" + afRows + "*2</code>, σχετική αναφορά!).";
+}
+$("#afBtn").addEventListener("click", function () {
+  var target = 8, r = afRows;
+  if (reduce) { afRows = target; renderAf(); afMsg(); return; }
+  var t = setInterval(function () { r++; afRows = r; renderAf(); afCells["A" + r].classList.add("flash"); if (r >= target) { clearInterval(t); afMsg(); } }, 180);
+});
+$("#afReset").addEventListener("click", function () { afRows = 2; afActive = "A1"; renderAf(); afMsg(); });
+$("#afGrid").addEventListener("click", function (e) {
+  var d = e.target.closest(".c"); if (!d || !d.dataset.addr || +d.dataset.r > afRows) return;
+  afActive = d.dataset.addr; renderAf();
+});
+renderAf();
+
+/* =========================================================
+   2b. Selection
+   ========================================================= */
+var selGridEl = $("#selGrid"), selCells = buildGrid(selGridEl, 6, 6, [52, 52, 52, 52, 52, 52]);
+var selRanges = [{ r1: 2, c1: 1, r2: 2, c2: 1 }], selDrag = null, ctrlSticky = false;
+function rangeName(g) {
+  var a = COLS[g.c1] + g.r1, b = COLS[g.c2] + g.r2;
+  if (g.r1 === 1 && g.r2 === 6 && g.c1 === 0 && g.c2 === 5) return "A1:F6";
+  if (g.r1 === 1 && g.r2 === 6 && g.c1 === g.c2) return COLS[g.c1] + ":" + COLS[g.c1];
+  if (g.c1 === 0 && g.c2 === 5 && g.r1 === g.r2) return g.r1 + ":" + g.r1;
+  return a === b ? a : a + ":" + b;
+}
+function norm(g) { return { r1: Math.min(g.r1, g.r2), r2: Math.max(g.r1, g.r2), c1: Math.min(g.c1, g.c2), c2: Math.max(g.c1, g.c2) }; }
+function renderSel() {
+  var set = {};
+  selRanges.map(norm).forEach(function (g) { for (var r = g.r1; r <= g.r2; r++) for (var c = g.c1; c <= g.c2; c++) set[COLS[c] + r] = 1; });
+  Object.keys(selCells).forEach(function (a) { selCells[a].className = "c" + (set[a] ? " selc" : ""); });
+  $$(".h", selGridEl).forEach(function (h) { h.classList.remove("selh"); });
+  Object.keys(set).forEach(function (a) {
+    var hc = selGridEl.querySelector('[data-col="' + COLS.indexOf(a[0]) + '"]'), hr = selGridEl.querySelector('[data-row="' + a.slice(1) + '"]');
+    hc && hc.classList.add("selh"); hr && hr.classList.add("selh");
+  });
+  var last = norm(selRanges[selRanges.length - 1]);
+  selCells[COLS[last.c1] + last.r1].classList.add("active");
+  var n = Object.keys(set).length;
+  $("#selName").textContent = rangeName(last);
+  $("#selInfo").textContent = n + (n === 1 ? " κελί" : " κελιά") + " · " + selRanges.map(function (g) { return rangeName(norm(g)); }).join(", ");
+  var msg = selRanges.length > 1
+    ? "Επέλεξες <b>" + selRanges.length + " ξεχωριστές περιοχές</b> (" + selRanges.map(function (g) { return rangeName(norm(g)); }).join(", ") + ") με το Ctrl. Μια μορφοποίηση τώρα θα εφαρμοστεί σε όλες."
+    : n > 1 ? "Περιοχή <b>" + rangeName(last) + "</b>: το πρώτο και το τελευταίο κελί χωρίζονται με <code>:</code>. Συνολικά " + n + " κελιά."
+    : "Κράτα <b>Ctrl</b> (ή πάτα το κουμπί) για να επιλέξεις κελιά που <b>δεν είναι δίπλα-δίπλα</b>.";
+  $("#selExplain").innerHTML = msg;
+}
+function addOrSet(g, e) {
+  if (e.ctrlKey || e.metaKey || ctrlSticky) selRanges.push(g); else selRanges = [g];
+}
+selGridEl.addEventListener("pointerdown", function (e) {
+  var d = e.target.closest(".c"); if (!d) return; e.preventDefault();
+  if (d.dataset.corner) { selRanges = [{ r1: 1, c1: 0, r2: 6, c2: 5 }]; renderSel(); return; }
+  if (d.dataset.col !== undefined) { addOrSet({ r1: 1, r2: 6, c1: +d.dataset.col, c2: +d.dataset.col }, e); renderSel(); return; }
+  if (d.dataset.row !== undefined) { addOrSet({ r1: +d.dataset.row, r2: +d.dataset.row, c1: 0, c2: 5 }, e); renderSel(); return; }
+  var g = { r1: +d.dataset.r, c1: +d.dataset.c, r2: +d.dataset.r, c2: +d.dataset.c };
+  addOrSet(g, e); selDrag = g; selGridEl.setPointerCapture(e.pointerId); renderSel();
+});
+selGridEl.addEventListener("pointermove", function (e) {
+  if (!selDrag) return;
+  var el = document.elementFromPoint(e.clientX, e.clientY); var d = el && el.closest && el.closest("#selGrid .c");
+  if (d && d.dataset.addr) { selDrag.r2 = +d.dataset.r; selDrag.c2 = +d.dataset.c; renderSel(); }
+});
+selGridEl.addEventListener("pointerup", function () { selDrag = null; });
+$("#ctrlBtn").addEventListener("click", function () { ctrlSticky = !ctrlSticky; this.setAttribute("aria-pressed", ctrlSticky); });
+$("#selAll").addEventListener("click", function () { selRanges = [{ r1: 1, c1: 0, r2: 6, c2: 5 }]; renderSel(); $("#selExplain").innerHTML = "Όλο το φύλλο: κλικ στο γωνιακό τετράγωνο πάνω αριστερά ή <b>Ctrl+A</b>."; });
+renderSel();
+
+/* =========================================================
+   2c. AutoFit
+   ========================================================= */
+var fitData = [["Παίκτης", "Έπαθλο"], ["Άννα Μαρνέρου", 12543.5], ["Παναγιώτα Νικολάου", 15671], ["Νίκος Οικονομόπουλος", 25578.25], ["Κώστας Μαρτάκης", 1234]];
+var fitW = [70, 52], fitGridEl = $("#fitGrid"), fitCells;
+var measureCtx = document.createElement("canvas").getContext("2d");
+function textW(t, bold) { measureCtx.font = (bold ? "700 " : "400 ") + "14px Commissioner, Segoe UI, Arial, sans-serif"; return Math.ceil(measureCtx.measureText(t).width) + 14; }
+function fitText(r, c) { var v = fitData[r][c]; return typeof v === "number" ? eur(v) : v; }
+function renderFit() {
+  fitCells = buildGrid(fitGridEl, 3, 5, [fitW[0], fitW[1], 60]);
+  fitData.forEach(function (row, r) {
+    row.forEach(function (v, c) {
+      var d = fitCells[COLS[c] + (r + 1)], t = fitText(r, c);
+      if (r === 0) d.classList.add("b");
+      if (typeof v === "number") { d.classList.add("num"); d.textContent = textW(t) > fitW[c] ? "#".repeat(Math.max(2, Math.floor((fitW[c] - 10) / 8))) : t; }
+      else d.textContent = t;
+      d.title = t;
+    });
+  });
+  [0, 1].forEach(function (c) {
+    var h = fitGridEl.querySelector('[data-col="' + c + '"]'); h.style.position = "relative";
+    var g = document.createElement("div"); g.className = "colresize"; g.title = "Διπλό κλικ: AutoFit · Σύρε: αλλαγή πλάτους"; h.appendChild(g);
+    g.addEventListener("dblclick", function () { autoFit(c); });
+    var startX = 0, startW = 0, drag = false;
+    g.addEventListener("pointerdown", function (e) { e.preventDefault(); drag = true; startX = e.clientX; startW = fitW[c]; g.setPointerCapture(e.pointerId); });
+    g.addEventListener("pointermove", function (e) {
+      if (!drag) return; fitW[c] = Math.max(24, Math.min(260, startW + e.clientX - startX));
+      fitGridEl.style.gridTemplateColumns = "34px " + fitW[0] + "px " + fitW[1] + "px 60px";
+    });
+    g.addEventListener("pointerup", function () { if (!drag) return; drag = false; renderFit(); fitMsg("Άλλαξες το πλάτος της στήλης " + COLS[c] + " με το χέρι (σύρσιμο)."); });
+  });
+  $("#fitInfo").textContent = "Πλάτος A: " + fitW[0] + "px · B: " + fitW[1] + "px";
+}
+function needW(c) { return Math.max.apply(null, fitData.map(function (row, r) { return textW(fitText(r, c), r === 0); })); }
+function fitMsg(m) { $("#fitExplain").innerHTML = m; }
+function autoFit(c) {
+  var from = fitW[c], to = needW(c);
+  fitW[c] = to; renderFit();
+  fitMsg("AutoFit στη στήλη <b>" + COLS[c] + "</b>: το πλάτος έγινε από " + from + "px σε <b>" + to + "px</b>, όσο χρειάζεται το μεγαλύτερο περιεχόμενο. " + (c === 1 ? "Τα #### έγιναν αριθμοί." : "Τα ονόματα φαίνονται ολόκληρα."));
+}
+$("#fitA").addEventListener("click", function () { autoFit(0); });
+$("#fitB").addEventListener("click", function () { autoFit(1); });
+$("#fitReset").addEventListener("click", function () { fitW = [70, 52]; renderFit(); fitMsg("Τα <b>####</b> σημαίνουν ότι ο αριθμός δεν χωράει. Το κείμενο κόβεται όταν το διπλανό κελί δεν είναι άδειο."); });
+renderFit();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { renderFit(); });
+
+/* =========================================================
+   3. Font vs fill color
+   ========================================================= */
+var XCOL = [
+  ["#C00000", "Σκούρο κόκκινο"], ["#FF0000", "Κόκκινο"], ["#FFC000", "Πορτοκαλί"], ["#FFFF00", "Κίτρινο"], ["#92D050", "Ανοιχτό πράσινο"], ["#00B050", "Πράσινο"],
+  ["#00B0F0", "Ανοιχτό μπλε"], ["#0070C0", "Μπλε"], ["#002060", "Σκούρο μπλε"], ["#7030A0", "Μωβ"], ["#000000", "Μαύρο"], ["#FFFFFF", "Λευκό"]
+];
+var fontC = "#000000", fillC = null;
+function lum(hex) { var n = parseInt(hex.slice(1), 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255; var f = function (x) { return x <= .03928 ? x / 12.92 : Math.pow((x + .055) / 1.055, 2.4); }; return .2126 * f(r) + .7152 * f(g) + .0722 * f(b); }
+function contrast(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+function nameOf(hex) { var f = XCOL.filter(function (c) { return c[0] === hex; })[0]; return f ? f[1] : ""; }
+function buildPal(el, kind) {
+  var list = kind === "fill" ? [[null, "No Fill"]].concat(XCOL) : [["#000000", "Automatic"]].concat(XCOL.filter(function (c) { return c[0] !== "#000000"; }));
+  list.forEach(function (c) {
+    var b = document.createElement("button"); b.className = "sw" + (c[0] ? "" : " none"); b.type = "button";
+    if (c[0]) b.style.background = c[0];
+    b.title = c[1]; b.setAttribute("aria-label", c[1]); b.dataset.hex = c[0] || "";
+    b.addEventListener("click", function () {
+      if (kind === "fill") fillC = c[0]; else fontC = c[0];
+      renderColors(kind);
+    });
+    el.appendChild(b);
+  });
+}
+buildPal($("#fontPal"), "font"); buildPal($("#fillPal"), "fill");
+var targets = [["#FFFFFF", "#002060"], ["#C00000", "#FFFF00"], ["#000000", "#92D050"], ["#FFFFFF", "#7030A0"], ["#0070C0", null], ["#002060", "#FFC000"]], tIdx = 0;
+function paint(el, f, bg) { el.style.color = f; el.style.background = bg || "#FFFFFF"; }
+function renderColors(changed) {
+  var cell = $("#prevCell"); paint(cell, fontC, fillC); paint($("#mineCell"), fontC, fillC);
+  $("#fontBar").setAttribute("fill", fontC); $("#fillBar").setAttribute("fill", fillC || "#FFFFFF");
+  $("#lgFont").style.background = fontC; $("#lgFill").style.background = fillC || "#FFFFFF";
+  $("#lgFontName").textContent = "(" + (fontC === "#000000" ? "Automatic" : nameOf(fontC)) + ")";
+  $("#lgFillName").textContent = "(" + (fillC ? nameOf(fillC) : "No Fill") + ")";
+  $$("#fontPal .sw").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.hex === fontC); });
+  $$("#fillPal .sw").forEach(function (b) { b.setAttribute("aria-pressed", (b.dataset.hex || null) === fillC); });
+  var c = contrast(fontC, fillC || "#FFFFFF"), msg;
+  if (c < 1.6) msg = '<span class="bad">Το κείμενο σχεδόν εξαφανίστηκε!</span> Γράμματα και φόντο έχουν ίδιο ή παρόμοιο χρώμα. Το κείμενο όμως είναι ακόμη μέσα στο κελί.';
+  else if (changed === "font") msg = "Άλλαξες το <b>Font Color</b> → άλλαξαν μόνο τα <b>γράμματα</b>. Το φόντο έμεινε ίδιο.";
+  else if (changed === "fill") msg = "Άλλαξες το <b>Fill Color</b> → άλλαξε μόνο το <b>φόντο</b> του κελιού. Τα γράμματα έμειναν ίδια.";
+  else msg = "Διάλεξε ένα χρώμα από κάθε παλέτα και δες ποιο μέρος του κελιού αλλάζει.";
+  $("#colExplain").innerHTML = msg;
+  var t = targets[tIdx];
+  var done = fontC === t[0] && fillC === t[1];
+  $("#tgtExplain").innerHTML = done ? '<span class="ok">Τέλεια! Ίδιο κελί.</span>' :
+    "Γράμματα: " + (fontC === t[0] ? '<span class="ok">σωστά ✓</span>' : "όχι ακόμη") + " · Φόντο: " + (fillC === t[1] ? '<span class="ok">σωστό ✓</span>' : "όχι ακόμη");
+}
+function setTarget() { var t = targets[tIdx]; paint($("#tgtCell"), t[0], t[1]); renderColors(); }
+$("#newTarget").addEventListener("click", function () { tIdx = (tIdx + 1) % targets.length; setTarget(); });
+setTarget();
+
+/* =========================================================
+   4. Workbook / sheets
+   ========================================================= */
+var sheets = [
+  { name: "ΒΑΘΜΟΛΟΓΙΑ", data: [["Μαθητής", "Μαθ.", "Φυσ."], ["Αντρέας", 14, 20], ["Ιωάννα", 13, 18], ["Γιάννης", 19, 14]] },
+  { name: "ΠΑΡΑΓΓΕΛΙΑ", data: [["Είδος", "Ποσ.", "Τιμή"], ["Τετράδια", 120, "1,35 €"], ["Στυλό", 250, "0,45 €"], ["Γόμες", 150, "0,25 €"]] },
+  { name: "ΓΡΑΦΗΜΑΤΑ", data: [["Μήνας", "2024-25", "2025-26"], ["Σεπτ.", 85, 102], ["Οκτ.", 140, 155], ["Νοέ.", 162, 171]] }
+];
+var wbActive = 0, wbEditing = false, newCount = 1;
+var wbCells = buildGrid($("#wbGrid"), 3, 4, [96, 72, 72]);
+function wbMsg(m) { $("#wbExplain").innerHTML = m; }
+function renderWb() {
+  var s = sheets[wbActive];
+  Object.keys(wbCells).forEach(function (a) {
+    var r = +a.slice(1) - 1, c = COLS.indexOf(a[0]), v = s.data[r] && s.data[r][c];
+    var d = wbCells[a]; d.className = "c" + (r === 0 ? " b" : "") + (typeof v === "number" ? " num" : ""); d.textContent = v === undefined ? "" : v;
+  });
+  var tabs = $("#wbTabs"); tabs.innerHTML = "";
+  sheets.forEach(function (sh, i) {
+    var b = document.createElement("button"); b.className = "tab"; b.setAttribute("role", "tab"); b.setAttribute("aria-selected", i === wbActive);
+    if (wbEditing && i === wbActive) {
+      var inp = document.createElement("input"); inp.id = "renameInput"; inp.value = sh.name; inp.setAttribute("aria-label", "Νέο όνομα φύλλου"); b.appendChild(inp);
+      setTimeout(function () { inp.focus(); inp.select(); }, 0);
+      var finish = function (save) {
+        if (!wbEditing) return; wbEditing = false;
+        var nv = inp.value.trim();
+        if (save && nv && nv !== sh.name) { wbMsg("Μετονόμασες το φύλλο <b>" + sh.name + "</b> σε <b>" + nv + "</b>. Το αρχείο (βιβλίο εργασίας) λέγεται ακόμη Maria_Georgiou_B2.xlsx."); sh.name = nv; }
+        renderWb();
+      };
+      inp.addEventListener("keydown", function (e) { if (e.key === "Enter") finish(true); if (e.key === "Escape") finish(false); });
+      inp.addEventListener("blur", function () { finish(true); });
+    } else b.textContent = sh.name;
+    b.addEventListener("click", function () { if (wbEditing) return; wbActive = i; renderWb(); wbMsg("Βλέπεις το φύλλο <b>" + sh.name + "</b>. Είναι ένα από τα " + sheets.length + " φύλλα του ίδιου βιβλίου εργασίας."); });
+    b.addEventListener("dblclick", function () { wbActive = i; wbEditing = true; renderWb(); });
+    tabs.appendChild(b);
+  });
+  var add = document.createElement("button"); add.className = "tab add"; add.textContent = "+"; add.title = "Νέο φύλλο (Insert Sheet)"; add.setAttribute("aria-label", "Νέο φύλλο");
+  add.addEventListener("click", function () {
+    var nm = "Φύλλο" + (sheets.length + newCount++);
+    sheets.push({ name: nm, data: [] }); wbActive = sheets.length - 1; renderWb();
+    wbMsg("Πρόσθεσες νέο κενό φύλλο <b>" + nm + "</b>. Το βιβλίο εργασίας έχει τώρα <b>" + sheets.length + " φύλλα</b>, αλλά είναι ακόμη <b>ένα αρχείο</b>.");
+  });
+  tabs.appendChild(add);
+  $("#wbDelete").disabled = sheets.length === 1;
+}
+$("#wbRename").addEventListener("click", function () { wbEditing = true; renderWb(); });
+$("#wbDelete").addEventListener("click", function () {
+  if (sheets.length === 1) return;
+  var nm = sheets[wbActive].name; sheets.splice(wbActive, 1); wbActive = Math.max(0, wbActive - 1); renderWb();
+  wbMsg("Διέγραψες το φύλλο <b>" + nm + "</b> και ό,τι περιείχε. Τα άλλα φύλλα και το αρχείο δεν επηρεάστηκαν. Ένα βιβλίο πρέπει να έχει πάντα τουλάχιστον ένα φύλλο.");
+});
+function move(d) {
+  var j = wbActive + d; if (j < 0 || j >= sheets.length) return;
+  var t = sheets[wbActive]; sheets[wbActive] = sheets[j]; sheets[j] = t; wbActive = j; renderWb();
+  wbMsg("Μετακίνησες το φύλλο <b>" + t.name + "</b> στη θέση " + (j + 1) + ". Άλλαξε μόνο η σειρά των καρτελών.");
+}
+$("#wbLeft").addEventListener("click", function () { move(-1); });
+$("#wbRight").addEventListener("click", function () { move(1); });
+$("#wbCopy").addEventListener("click", function () {
+  var s = sheets[wbActive], nm = s.name + " (2)";
+  sheets.splice(wbActive + 1, 0, { name: nm, data: JSON.parse(JSON.stringify(s.data)) }); wbActive++; renderWb();
+  wbMsg("Δημιούργησες αντίγραφο <b>" + nm + "</b> με τα ίδια δεδομένα (Move or Copy → Create a copy).");
+});
+renderWb();
+wbMsg("Το αρχείο <b>Maria_Georgiou_B2.xlsx</b> είναι <b>ένα</b> βιβλίο εργασίας με <b>3</b> φύλλα εργασίας.");
+
+/* =========================================================
+   Quizzes
+   ========================================================= */
+var QUIZ = {
+  1: [
+    { q: "Στο C4 γράφω =B4*$B$1 και το αντιγράφω στο C5. Τι θα γράφει το C5;", o: ["=B5*$B$2", "=B5*$B$1", "=B4*$B$1"], a: 1, e: "Το B4 είναι σχετικό, άρα γίνεται B5. Το $B$1 είναι απόλυτο, άρα μένει ίδιο." },
+    { q: "Ποια αναφορά κλειδώνει μόνο τη γραμμή;", o: ["$B1", "B$1", "$B$1"], a: 1, e: "Το $ μπαίνει μπροστά από αυτό που κλειδώνει. Στο B$1 είναι μπροστά από τον αριθμό της γραμμής." },
+    { q: "Αντιγράφω =B4*B1 (σχετική) στο C6. Γιατί βγαίνει #VALUE!;", o: ["Γιατί το B1 έγινε B3, που έχει κείμενο", "Γιατί ξέχασα το =", "Γιατί η στήλη C είναι γεμάτη"], a: 0, e: "Το B1 κατέβηκε 2 γραμμές και έγινε B3 («Κόστος»). Δεν γίνεται πολλαπλασιασμός με κείμενο." }
+  ],
+  2: [
+    { q: "Θέλω να γράψω γρήγορα Ιανουάριος έως Ιούνιος. Τι χρησιμοποιώ;", o: ["AutoFit", "Autofill (λαβή συμπλήρωσης)", "Επιλογή κελιών με Ctrl"], a: 1, e: "Γράφεις «Ιανουάριος» και σύρεις τη λαβή συμπλήρωσης προς τα κάτω." },
+    { q: "Μια στήλη δείχνει ######. Τι κάνω;", o: ["Διπλό κλικ στο δεξί όριο της επικεφαλίδας της στήλης", "Σύρω τη λαβή συμπλήρωσης", "Πατώ Ctrl+A"], a: 0, e: "Τα #### σημαίνουν ότι ο αριθμός δεν χωράει. Το AutoFit μεγαλώνει τη στήλη." },
+    { q: "Ποιο πλήκτρο κρατάω για να επιλέξω κελιά που δεν είναι δίπλα-δίπλα;", o: ["Alt", "Ctrl", "Tab"], a: 1, e: "Με πατημένο το Ctrl προσθέτεις κι άλλες περιοχές στην επιλογή." },
+    { q: "Ποια από τις τρεις ενέργειες γράφει νέα δεδομένα στα κελιά;", o: ["Autofill", "AutoFit", "Επιλογή κελιών"], a: 0, e: "Μόνο το Autofill γεμίζει κελιά. Τα άλλα δύο δεν αλλάζουν το περιεχόμενο." }
+  ],
+  3: [
+    { q: "Θέλω κίτρινο φόντο στο κελί. Ποιο κουμπί πατάω;", o: ["Το «A» με τη χρωματιστή γραμμή", "Το κουβαδάκι"], a: 1, e: "Το κουβαδάκι είναι το Fill Color (χρώμα γεμίσματος) και βάφει το φόντο." },
+    { q: "Το Font Color αλλάζει…", o: ["το φόντο του κελιού", "τα γράμματα", "το περίγραμμα"], a: 1, e: "Font = γραμματοσειρά. Αλλάζει το χρώμα των γραμμάτων." },
+    { q: "Έβαλα λευκά γράμματα σε λευκό φόντο. Τι έγινε το κείμενο;", o: ["Διαγράφηκε", "Υπάρχει, απλώς δεν φαίνεται"], a: 1, e: "Το κείμενο είναι ακόμη στο κελί και φαίνεται στη γραμμή τύπων." }
+  ],
+  4: [
+    { q: "Τι αποθηκεύεται όταν πατώ Save;", o: ["Μόνο το φύλλο που βλέπω", "Όλο το βιβλίο εργασίας με όλα τα φύλλα του"], a: 1, e: "Το αρχείο .xlsx είναι το βιβλίο εργασίας και περιέχει όλα τα φύλλα." },
+    { q: "Πού βλέπω τα ονόματα των φύλλων εργασίας;", o: ["Στη γραμμή τίτλου, πάνω", "Στις καρτέλες, κάτω αριστερά", "Στη γραμμή τύπων"], a: 1, e: "Κάθε φύλλο έχει μια καρτέλα στο κάτω μέρος. Πάνω, στη γραμμή τίτλου, φαίνεται το όνομα του αρχείου." },
+    { q: "Το «ΒΑΘΜΟΛΟΓΙΑ» στο διαγώνισμα είναι…", o: ["βιβλίο εργασίας", "φύλλο εργασίας", "κελί"], a: 1, e: "Είναι το όνομα μιας καρτέλας, άρα φύλλο εργασίας." }
+  ]
+};
+Object.keys(QUIZ).forEach(function (k) {
+  var box = $('[data-quiz="' + k + '"]'), score = 0, answered = 0, n = QUIZ[k].length;
+  var sc = $('[data-score="' + k + '"]');
+  function upd() { sc.textContent = answered ? "Σωστές: " + score + " / " + n : n + " ερωτήσεις"; }
+  QUIZ[k].forEach(function (item, qi) {
+    var d = document.createElement("div"); d.className = "q";
+    d.innerHTML = "<div><b>" + (qi + 1) + ".</b> " + item.q + '</div><div class="opts"></div><div class="fb" aria-live="polite"></div>';
+    var opts = $(".opts", d), fb = $(".fb", d), done = false;
+    item.o.forEach(function (o, oi) {
+      var b = document.createElement("button"); b.className = "opt"; b.type = "button"; b.textContent = o;
+      b.addEventListener("click", function () {
+        if (done) return;
+        if (oi === item.a) {
+          done = true; b.classList.add("right"); fb.innerHTML = '<span class="ok">Σωστά!</span> ' + item.e;
+          answered++; if (!d.dataset.miss) score++; upd();
+        } else {
+          b.classList.add("wrong"); d.dataset.miss = "1"; fb.innerHTML = '<span class="bad">Όχι ακόμη.</span> Δοκίμασε ξανά.';
+        }
+      });
+      opts.appendChild(b);
+    });
+    box.appendChild(d);
+  });
+  upd();
+});
+})();
+</script>
+</body>
+</html>
