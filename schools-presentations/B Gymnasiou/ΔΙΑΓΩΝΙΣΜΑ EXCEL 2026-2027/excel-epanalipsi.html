@@ -10,37 +10,24 @@
 <style>
 :root {
   /* Layout: one long revision sheet, sticky topic bar, each topic = explanation column + live mini-spreadsheet */
-  --paper: #f5f7f4;
+  --paper: #edf5fd;
+  --band: #edf5fd;
   --surface: #ffffff;
-  --ink: #18222b;
-  --muted: #5a6670;
-  --line: #d3dad4;
+  --ink: #0d1822;
+  --muted: #2e3c48;
+  --line: #d9e3ee;
   --accent: #1e6b45;
-  --accent-soft: #e3f0e8;
+  --accent-soft: #eef6f1;
   --ref-a: #2563d9;
   --ref-b: #d9531e;
   --bad: #b42318;
   --bad-soft: #fde8e6;
-  --hdr: #eef2ee;
+  --hdr: #f6f8f6;
   --sel: rgba(30,107,69,.14);
   --display: "Literata", Georgia, "Times New Roman", serif;
   --body: "Commissioner", "Segoe UI", Arial, sans-serif;
   --mono: "JetBrains Mono", Consolas, "Courier New", monospace;
   color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #11171a; --surface: #182024; --ink: #e6ece7; --muted: #9aa7a1; --line: #2e3b37;
-    --accent: #5cc38c; --accent-soft: #1d3329; --ref-a: #6c9bff; --ref-b: #ff8a57;
-    --bad: #ff7b6e; --bad-soft: #3a1f1d; --hdr: #1f2a2e; --sel: rgba(92,195,140,.18);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #11171a; --surface: #182024; --ink: #e6ece7; --muted: #9aa7a1; --line: #2e3b37;
-  --accent: #5cc38c; --accent-soft: #1d3329; --ref-a: #6c9bff; --ref-b: #ff8a57;
-  --bad: #ff7b6e; --bad-soft: #3a1f1d; --hdr: #1f2a2e; --sel: rgba(92,195,140,.18);
-  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
@@ -54,25 +41,41 @@ code, .mono { font-family: var(--mono); font-size: .92em; }
 button { font: inherit; color: inherit; cursor: pointer; }
 button:focus-visible, input:focus-visible, select:focus-visible, .tab:focus-visible { outline: 3px solid var(--ref-a); outline-offset: 2px; }
 
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
-header.top { padding: 32px 0 20px; display: grid; gap: 8px; }
-header.top .kicker { color: var(--accent); font-weight: 600; letter-spacing: .02em; }
-header.top p { color: var(--muted); }
 
-nav.topics { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+@media (max-width: 640px) { .wrap { padding: 0 16px; } }
+
+/* hero */
+header.top { min-height: 62vh; display: flex; align-items: center; padding: 64px 0; background: linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 60%, var(--paper)), var(--paper)); }
+header.top .wrap { display: grid; gap: 14px; width: 100%; }
+header.top .kicker { color: var(--accent); font-weight: 600; letter-spacing: .02em; }
+header.top h1 { font-size: clamp(2rem, 5vw, 3.2rem); max-width: 22ch; }
+header.top p { color: var(--muted); font-size: 1.1rem; }
+.hero-map { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 18px; }
+.hero-map a { display: grid; gap: 4px; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.hero-map a:hover { border-color: var(--accent); }
+.hero-map a span { font-family: var(--mono); color: var(--accent); font-weight: 600; font-size: .85rem; }
+
+nav.topics { position: sticky; top: 0; z-index: 20; background: var(--paper); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 nav.topics .wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; }
 nav.topics a { white-space: nowrap; text-decoration: none; color: var(--ink); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: .93rem; }
 nav.topics a b { color: var(--accent); margin-right: 4px; }
 nav.topics a:hover { border-color: var(--accent); }
+nav.topics a.current { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+nav.topics a.current b { color: var(--surface); }
 
-section.topic { padding: 40px 0 8px; scroll-margin-top: 64px; }
-.topic-head { display: grid; gap: 6px; margin-bottom: 20px; }
-.topic-head .num { font-family: var(--mono); color: var(--accent); font-weight: 600; }
-.topic-head p { color: var(--muted); }
+/* each topic = its own full-height band */
+section.topic { min-height: calc(100vh - 56px); padding: 80px 0; scroll-margin-top: 56px; display: flex; flex-direction: column; justify-content: center; background: var(--paper); border-top: 1px solid var(--line); }
+section.topic:nth-of-type(even) { background: var(--band); }
+section.topic > .wrap { width: 100%; }
+.topic-head { display: grid; gap: 10px; margin-bottom: 32px; }
+.topic-head .num { font-family: var(--mono); color: var(--accent); font-weight: 600; font-size: 1.1rem; }
+.topic-head h2 { font-size: clamp(1.6rem, 3.4vw, 2.3rem); }
+.topic-head p { color: var(--muted); font-size: 1.05rem; }
 
-.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; align-content: start; }
-.cols { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-.cols3 { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px; box-shadow: 0 1px 2px rgba(24,34,43,.04), 0 4px 16px rgba(24,34,43,.04); display: grid; gap: 14px; align-content: start; }
+.cols { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.cols3 { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); }
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .btn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 7px 12px; font-size: .92rem; }
 .btn:hover { border-color: var(--accent); }
@@ -110,7 +113,7 @@ section.topic { padding: 40px 0 8px; scroll-margin-top: 64px; }
 .grid .flash { animation: flash .6s ease; }
 @keyframes flash { from { background: color-mix(in srgb, var(--accent) 40%, transparent); } }
 .handle { position: absolute; width: 10px; height: 10px; background: var(--accent); border: 1px solid var(--surface); cursor: crosshair; z-index: 5; touch-action: none; }
-.colresize { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: col-resize; z-index: 4; touch-action: none; }
+.colresize { position: absolute; top: 0; right: 0; width: 12px; height: 100%; cursor: col-resize; z-index: 4; touch-action: none; }
 .colresize:hover { background: color-mix(in srgb, var(--accent) 50%, transparent); }
 .f-ref-a { color: var(--ref-a); font-weight: 700; }
 .f-ref-b { color: var(--ref-b); font-weight: 700; }
@@ -167,7 +170,7 @@ section.topic { padding: 40px 0 8px; scroll-margin-top: 64px; }
 .nest .ttl small { font-weight: 400; color: var(--muted); }
 
 /* ---------- quiz ---------- */
-.quiz { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; }
+.quiz { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); align-items: start; }
 .q { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
 .q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
 .q .opt { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 7px 12px; text-align: left; }
@@ -175,43 +178,106 @@ section.topic { padding: 40px 0 8px; scroll-margin-top: 64px; }
 .q .opt.wrong { border-color: var(--bad); background: var(--bad-soft); }
 .q .fb { font-size: .92rem; }
 .q .fb:empty { display: none; }
-.qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 36px; padding-top: 24px; border-top: 1px dashed var(--line); }
 .score { font-family: var(--mono); color: var(--accent); font-weight: 600; }
 
-footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
+footer { padding: 40px 0 60px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+
+/* ---------- slide deck ---------- */
+html, body { height: 100%; }
+body { display: flex; flex-direction: column; min-height: 100vh; }
+nav.topics { position: sticky; top: 0; }
+nav.topics button { white-space: nowrap; color: var(--ink); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: .93rem; }
+nav.topics button b { color: var(--accent); margin-right: 4px; }
+nav.topics button:hover { border-color: var(--accent); }
+nav.topics button.current { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+nav.topics button.current b { color: var(--surface); }
+.progress { height: 3px; background: var(--line); }
+.progress div { height: 100%; width: 0; background: var(--accent); transition: width .3s ease; }
+.deck { flex: 1; display: flex; }
+.slide { display: none; width: 100%; padding: 48px 0 56px; }
+.slide.active { display: flex; align-items: center; animation: slidein .35s ease; }
+.slide > .wrap { width: 100%; display: grid; gap: 24px; }
+@keyframes slidein { from { opacity: 0; transform: translateY(10px); } }
+.slide-kicker .kind { display: inline-block; font-family: var(--mono); font-size: .85rem; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.slide-kicker .kind-p { background: color-mix(in srgb, var(--ref-a) 10%, var(--surface)); color: var(--ref-a); }
+.slide-kicker .kind-q { background: color-mix(in srgb, var(--ref-b) 12%, var(--surface)); color: var(--ref-b); }
+.slide .topic-head { margin-bottom: 0; }
+.slide .topic-head .num { display: none; }
+.slide .topic-head h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); }
+.slide .topic-head p { font-size: 1.15rem; max-width: 70ch; }
+.slide .remember { font-size: 1.05rem; padding: 18px 22px; }
+.slide .remember ul { display: grid; gap: 6px; }
+.slide.single > .wrap { max-width: 980px; }
+.slide.single .panel { padding: 32px; font-size: 1.05rem; }
+.slide.single .panel h3 { font-size: 1.35rem; }
+.panel.theory { box-shadow: none; }
+.slide .qhead { margin-top: 0; padding-top: 0; border-top: 0; }
+.slide .qhead h3 { font-family: var(--display); font-size: clamp(1.5rem, 3vw, 2rem); }
+.slide.hero { background: var(--paper); }
+.slide.hero .kicker { color: var(--accent); font-weight: 600; letter-spacing: .02em; }
+.slide.hero h1 { font-size: clamp(2.2rem, 5.5vw, 3.6rem); max-width: 20ch; }
+.slide.hero p { color: var(--muted); font-size: 1.15rem; }
+.hero-map { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.hero-map button { display: grid; gap: 6px; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; font-size: 1.02rem; }
+.hero-map button:hover { border-color: var(--accent); }
+.hero-map button span { font-family: var(--mono); color: var(--accent); font-weight: 600; font-size: .85rem; }
+.controls { position: sticky; bottom: 0; z-index: 20; background: var(--paper); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
+.controls .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+.navbtn { padding: 10px 22px; font-size: 1rem; font-weight: 600; min-width: 130px; }
+.navbtn:disabled { opacity: .4; cursor: default; }
+.counter { font-family: var(--mono); color: var(--muted); font-size: .92rem; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <header class="top">
-    <div class="kicker">Β4.1 Υπολογιστικά Φύλλα · Επανάληψη για το διαγώνισμα</div>
-    <h1>Επανάληψη Excel: τέσσερις διαφορές που πρέπει να ξέρεις</h1>
-    <p>Κάθε ενότητα έχει ένα μικρό «Excel» για να δοκιμάσεις μόνος/η σου. Πάτησε κουμπιά, σύρε, κάνε κλικ. Στο τέλος κάθε ενότητας υπάρχουν ερωτήσεις για να ελέγξεις αν το κατάλαβες.</p>
-  </header>
-</div>
-
 <nav class="topics" aria-label="Ενότητες">
   <div class="wrap">
-    <a href="#anafores"><b>1</b>Σχετική – Απόλυτη αναφορά</a>
-    <a href="#autofill"><b>2</b>Autofill – Επιλογή – AutoFit</a>
-    <a href="#xromata"><b>3</b>Χρώμα κειμένου – Χρώμα γεμίσματος</a>
-    <a href="#vivlio"><b>4</b>Φύλλο – Βιβλίο εργασίας</a>
+    <button type="button" data-goto="1"><b>1</b>Σχετική – Απόλυτη αναφορά</button>
+    <button type="button" data-goto="2"><b>2</b>Autofill – Επιλογή – AutoFit</button>
+    <button type="button" data-goto="3"><b>3</b>Χρώμα κειμένου – Χρώμα γεμίσματος</button>
+    <button type="button" data-goto="4"><b>4</b>Φύλλο – Βιβλίο εργασίας</button>
   </div>
+  <div class="progress"><div id="progressBar"></div></div>
 </nav>
 
-<main class="wrap">
-
-<!-- ===================== 1 ===================== -->
-<section class="topic" id="anafores">
-  <div class="topic-head">
+<main class="deck">
+<section class="slide hero" data-topic="0" aria-label="Αρχή">
+  <div class="wrap">
+    <div class="kicker">Β4.1 Υπολογιστικά Φύλλα · Επανάληψη για το διαγώνισμα</div>
+    <h1>Επανάληψη Excel: τέσσερις διαφορές που πρέπει να ξέρεις</h1>
+    <p>Κάθε ενότητα ξεκινά με λίγη θεωρία, συνεχίζει με ένα μικρό «Excel» για να δοκιμάσεις μόνος/η σου και τελειώνει με ερωτήσεις. Προχώρα με το κουμπί <b>Συνέχεια</b> ή με τα βελάκια του πληκτρολογίου.</p>
+    <div class="hero-map">
+      <button type="button" data-goto="1"><span>01</span>Σχετική – Απόλυτη αναφορά</button>
+      <button type="button" data-goto="2"><span>02</span>Autofill – Επιλογή – AutoFit</button>
+      <button type="button" data-goto="3"><span>03</span>Χρώμα κειμένου – Χρώμα γεμίσματος</button>
+      <button type="button" data-goto="4"><span>04</span>Φύλλο – Βιβλίο εργασίας</button>
+    </div>
+  </div>
+</section>
+<section class="slide " data-topic="1" aria-label="01 · Θεωρία">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-t">01 · Θεωρία</span></div>
+<div class="topic-head">
     <div class="num">01</div>
     <h2>Σχετική και απόλυτη αναφορά κελιών</h2>
     <p>Όταν αντιγράφεις έναν τύπο προς τα κάτω, το Excel αλλάζει μόνο του τις διευθύνσεις των κελιών. Αυτό είναι η <b>σχετική</b> αναφορά. Με το σύμβολο <code>$</code> «κλειδώνεις» ένα κελί ώστε να μην αλλάζει. Αυτό είναι η <b>απόλυτη</b> αναφορά.</p>
   </div>
-
-  <div class="cols">
+<div class="remember">
+    <strong>Θυμήσου</strong>
+    <ul>
+      <li><b>Σχετική</b> (<code>B1</code>): αλλάζει όταν αντιγράφεται. Κατάλληλη για τα δεδομένα κάθε γραμμής (π.χ. το κόστος κάθε είδους).</li>
+      <li><b>Απόλυτη</b> (<code>$B$1</code>): δεν αλλάζει ποτέ. Κατάλληλη για μια σταθερή τιμή που χρησιμοποιούν όλοι οι τύποι (ΦΠΑ, έκπτωση, ισοτιμία).</li>
+      <li><b>Μικτή</b>: <code>$B1</code> κλειδώνει μόνο τη <b>στήλη</b>, <code>B$1</code> κλειδώνει μόνο τη <b>γραμμή</b>.</li>
+      <li>Το <b>F4</b> αλλάζει γρήγορα τη μορφή: <code>B1 → $B$1 → B$1 → $B1 → B1</code>.</li>
+    </ul>
+  </div>
+  </div>
+</section>
+<section class="slide single" data-topic="1" aria-label="01 · Εξάσκηση 1/2">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">01 · Εξάσκηση 1/2</span></div>
     <div class="panel">
       <h3>Δοκίμασε: ΦΠΑ σε τιμολόγιο</h3>
       <p class="note">Το ποσοστό ΦΠΑ υπάρχει <b>μία φορά</b>, στο κελί B1. Διάλεξε τύπο για το C4 και αντίγραψέ τον στα C5:C7.</p>
@@ -230,7 +296,11 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       <p class="explain" id="refExplain" aria-live="polite"></p>
       <p class="note">Κάνε κλικ σε οποιοδήποτε κελί της στήλης C για να δεις τον τύπο του. Τα χρωματιστά πλαίσια δείχνουν σε ποια κελιά «κοιτάζει» ο τύπος, όπως ακριβώς στο Excel.</p>
     </div>
-
+  </div>
+</section>
+<section class="slide single" data-topic="1" aria-label="01 · Εξάσκηση 2/2">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">01 · Εξάσκηση 2/2</span></div>
     <div class="panel">
       <h3>Πού μπαίνει το $; (και το πλήκτρο F4)</h3>
       <p class="note">Ο τύπος γράφεται στο κελί D4 και αντιγράφεται δεξιά και κάτω. Διάλεξε μορφή αναφοράς και δες τι γίνεται σε κάθε κελί.</p>
@@ -248,29 +318,39 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       <p class="note"><span class="lock">Πορτοκαλί</span> = κλειδωμένο (δεν αλλάζει) · <span class="chg">Μπλε</span> = αλλάζει στην αντιγραφή.</p>
     </div>
   </div>
-
-  <div class="remember" style="margin-top:16px">
-    <strong>Θυμήσου</strong>
-    <ul>
-      <li><b>Σχετική</b> (<code>B1</code>): αλλάζει όταν αντιγράφεται. Κατάλληλη για τα δεδομένα κάθε γραμμής (π.χ. το κόστος κάθε είδους).</li>
-      <li><b>Απόλυτη</b> (<code>$B$1</code>): δεν αλλάζει ποτέ. Κατάλληλη για μια σταθερή τιμή που χρησιμοποιούν όλοι οι τύποι (ΦΠΑ, έκπτωση, ισοτιμία).</li>
-      <li><b>Μικτή</b>: <code>$B1</code> κλειδώνει μόνο τη <b>στήλη</b>, <code>B$1</code> κλειδώνει μόνο τη <b>γραμμή</b>.</li>
-      <li>Το <b>F4</b> αλλάζει γρήγορα τη μορφή: <code>B1 → $B$1 → B$1 → $B1 → B1</code>.</li>
-    </ul>
-  </div>
-  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="1"></span></div>
-  <div class="quiz" data-quiz="1"></div>
 </section>
-
-<!-- ===================== 2 ===================== -->
-<section class="topic" id="autofill">
-  <div class="topic-head">
+<section class="slide " data-topic="1" aria-label="01 · Έλεγξε τον εαυτό σου">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-q">01 · Έλεγξε τον εαυτό σου</span></div>
+<div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="1"></span></div>
+  <div class="quiz" data-quiz="1"></div>
+  </div>
+</section>
+<section class="slide " data-topic="2" aria-label="02 · Θεωρία">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-t">02 · Θεωρία</span></div>
+<div class="topic-head">
     <div class="num">02</div>
     <h2>Αυτόματη συμπλήρωση, επιλογή κελιών και αυτόματη προσαρμογή</h2>
     <p>Τρία διαφορετικά πράγματα που μοιάζουν γιατί όλα γίνονται με το ποντίκι. Η διαφορά φαίνεται από το <b>σχήμα του δείκτη</b> και από το <b>πού</b> κάνεις κλικ.</p>
   </div>
-
-  <div class="cols3">
+<div class="tablewrap">
+    <table class="cmp">
+      <thead><tr><th></th><th>Autofill</th><th>Επιλογή κελιών</th><th>AutoFit</th></tr></thead>
+      <tbody>
+        <tr><th>Τι κάνει</th><td>Συνεχίζει μια σειρά ή αντιγράφει τύπο σε γειτονικά κελιά</td><td>Διαλέγει κελιά για να κάνεις κάτι σε αυτά</td><td>Αλλάζει πλάτος στήλης/ύψος γραμμής ώστε να χωράει το περιεχόμενο</td></tr>
+        <tr><th>Πού κάνω κλικ</th><td>Στη λαβή συμπλήρωσης (μικρό τετράγωνο κάτω δεξιά)</td><td>Μέσα στα κελιά ή στις επικεφαλίδες</td><td>Διπλό κλικ στο όριο της επικεφαλίδας</td></tr>
+        <tr><th>Δείκτης</th><td>Λεπτός μαύρος σταυρός <b>+</b></td><td>Χοντρός λευκός σταυρός</td><td>Διπλό βέλος <b>↔</b></td></tr>
+        <tr><th>Από το μενού</th><td>Home → Editing → Fill</td><td>Name Box ή Ctrl+A για όλα</td><td>Home → Cells → Format → AutoFit Column Width / AutoFit Row Height</td></tr>
+        <tr><th>Αλλάζει δεδομένα;</th><td><span class="tag badtag">Ναι</span></td><td><span class="tag">Όχι</span></td><td><span class="tag">Όχι</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</section>
+<section class="slide single" data-topic="2" aria-label="02 · Εξάσκηση 1/3">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">02 · Εξάσκηση 1/3</span></div>
     <div class="panel">
       <div class="row"><svg class="cursor-ic" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 3v20M3 13h20" stroke="currentColor" stroke-width="2.4"/></svg><h3>Autofill · Αυτόματη συμπλήρωση</h3></div>
       <p class="note">Σύρε το μικρό πράσινο τετράγωνο (<b>λαβή συμπλήρωσης</b>) κάτω δεξιά στην επιλογή προς τα κάτω. Ο δείκτης γίνεται <b>λεπτός μαύρος σταυρός</b>.</p>
@@ -285,7 +365,11 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       <p class="explain" id="afExplain" aria-live="polite">Το Excel συνεχίζει μόνο του: ημέρες, μήνες, αριθμούς με το ίδιο βήμα (5, 10 → 15, 20…) και αντιγράφει τύπους.</p>
       <p class="note"><b>Αλλάζει τα δεδομένα:</b> ναι, γράφει καινούργιο περιεχόμενο στα κελιά.</p>
     </div>
-
+  </div>
+</section>
+<section class="slide single" data-topic="2" aria-label="02 · Εξάσκηση 2/3">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">02 · Εξάσκηση 2/3</span></div>
     <div class="panel">
       <div class="row"><svg class="cursor-ic" viewBox="0 0 26 26" aria-hidden="true"><path d="M10 3h6v7h7v6h-7v7h-6v-7H3v-6h7z" fill="var(--surface)" stroke="currentColor" stroke-width="1.6"/></svg><h3>Επιλογή κελιών</h3></div>
       <p class="note">Πάτησε και σύρε <b>μέσα</b> στα κελιά. Ο δείκτης είναι <b>χοντρός λευκός σταυρός</b>. Κλικ σε γράμμα στήλης ή αριθμό γραμμής επιλέγει ολόκληρη στήλη ή γραμμή.</p>
@@ -300,7 +384,11 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       <p class="explain" id="selExplain" aria-live="polite">Κράτα <b>Ctrl</b> (ή πάτα το κουμπί) για να επιλέξεις κελιά που <b>δεν είναι δίπλα-δίπλα</b>.</p>
       <p class="note"><b>Αλλάζει τα δεδομένα:</b> όχι, απλώς διαλέγει σε ποια κελιά θα κάνεις την επόμενη ενέργεια.</p>
     </div>
-
+  </div>
+</section>
+<section class="slide single" data-topic="2" aria-label="02 · Εξάσκηση 3/3">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">02 · Εξάσκηση 3/3</span></div>
     <div class="panel">
       <div class="row"><svg class="cursor-ic" viewBox="0 0 26 26" aria-hidden="true"><path d="M13 4v18M3 13h20M3 13l4-4M3 13l4 4M23 13l-4-4M23 13l-4 4" fill="none" stroke="currentColor" stroke-width="2"/></svg><h3>AutoFit · Αυτόματη προσαρμογή</h3></div>
       <p class="note">Κάνε <b>διπλό κλικ στο δεξί όριο</b> της επικεφαλίδας μιας στήλης (ανάμεσα στο A και το B). Ο δείκτης γίνεται <b>διπλό βέλος ↔</b>. Μπορείς και να το σύρεις.</p>
@@ -317,32 +405,38 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       <p class="note"><b>Αλλάζει τα δεδομένα:</b> όχι, αλλάζει μόνο το πλάτος της στήλης (ή το ύψος της γραμμής).</p>
     </div>
   </div>
-
-  <div class="tablewrap" style="margin-top:16px">
-    <table class="cmp">
-      <thead><tr><th></th><th>Autofill</th><th>Επιλογή κελιών</th><th>AutoFit</th></tr></thead>
-      <tbody>
-        <tr><th>Τι κάνει</th><td>Συνεχίζει μια σειρά ή αντιγράφει τύπο σε γειτονικά κελιά</td><td>Διαλέγει κελιά για να κάνεις κάτι σε αυτά</td><td>Αλλάζει πλάτος στήλης/ύψος γραμμής ώστε να χωράει το περιεχόμενο</td></tr>
-        <tr><th>Πού κάνω κλικ</th><td>Στη λαβή συμπλήρωσης (μικρό τετράγωνο κάτω δεξιά)</td><td>Μέσα στα κελιά ή στις επικεφαλίδες</td><td>Διπλό κλικ στο όριο της επικεφαλίδας</td></tr>
-        <tr><th>Δείκτης</th><td>Λεπτός μαύρος σταυρός <b>+</b></td><td>Χοντρός λευκός σταυρός</td><td>Διπλό βέλος <b>↔</b></td></tr>
-        <tr><th>Από το μενού</th><td>Home → Editing → Fill</td><td>Name Box ή Ctrl+A για όλα</td><td>Home → Cells → Format → AutoFit Column Width / AutoFit Row Height</td></tr>
-        <tr><th>Αλλάζει δεδομένα;</th><td><span class="tag badtag">Ναι</span></td><td><span class="tag">Όχι</span></td><td><span class="tag">Όχι</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="2"></span></div>
-  <div class="quiz" data-quiz="2"></div>
 </section>
-
-<!-- ===================== 3 ===================== -->
-<section class="topic" id="xromata">
-  <div class="topic-head">
+<section class="slide " data-topic="2" aria-label="02 · Έλεγξε τον εαυτό σου">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-q">02 · Έλεγξε τον εαυτό σου</span></div>
+<div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="2"></span></div>
+  <div class="quiz" data-quiz="2"></div>
+  </div>
+</section>
+<section class="slide " data-topic="3" aria-label="03 · Θεωρία">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-t">03 · Θεωρία</span></div>
+<div class="topic-head">
     <div class="num">03</div>
     <h2>Χρώμα κειμένου (Font Color) και χρώμα γεμίσματος (Fill Color)</h2>
     <p>Και τα δύο κουμπιά βρίσκονται δίπλα-δίπλα στην καρτέλα <b>Home</b>, ομάδα <b>Font</b>. Το ένα βάφει τα <b>γράμματα</b>, το άλλο το <b>φόντο του κελιού</b>.</p>
   </div>
-
-  <div class="cols">
+      <div class="remember">
+    <strong>Θυμήσου</strong>
+    <ul>
+      <li><b>A</b> με χρωματιστή γραμμή από κάτω → <b>Font Color</b> → αλλάζει τα <b>γράμματα</b>.</li>
+      <li><b>Κουβαδάκι</b> μπογιάς → <b>Fill Color</b> → αλλάζει το <b>φόντο</b> του κελιού. Στο Format Cells είναι η καρτέλα <b>Fill</b>.</li>
+      <li>Η χρωματιστή γραμμή κάτω από κάθε κουμπί δείχνει το τελευταίο χρώμα που χρησιμοποίησες.</li>
+      <li>Αφαιρείς το φόντο με <b>No Fill</b>, το χρώμα γραμμάτων με <b>Automatic</b>.</li>
+      <li>Πρόσεξε: ίδιο χρώμα γραμμάτων και φόντου = το κείμενο δεν φαίνεται, αλλά υπάρχει!</li>
+    </ul>
+  </div>
+  </div>
+</section>
+<section class="slide wide" data-topic="3" aria-label="03 · Εξάσκηση 1/1">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">03 · Εξάσκηση 1/1</span></div>
+    <div class="cols">
     <div class="panel">
       <h3>Δοκίμασε τα δύο κουμπιά</h3>
       <div class="ribbon">
@@ -368,7 +462,6 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       </div>
       <p class="explain" id="colExplain" aria-live="polite"></p>
     </div>
-
     <div class="panel">
       <h3>Πρόκληση: φτιάξε το ίδιο κελί</h3>
       <p class="note">Χρησιμοποίησε τα δύο κουμπιά αριστερά ώστε το κελί σου να γίνει ίδιο με τον στόχο.</p>
@@ -378,55 +471,26 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       </div>
       <p class="explain" id="tgtExplain" aria-live="polite"></p>
       <div class="row"><button class="btn" id="newTarget">Νέος στόχος</button></div>
-      <div class="remember">
-        <strong>Θυμήσου</strong>
-        <ul>
-          <li><b>A</b> με χρωματιστή γραμμή από κάτω → <b>Font Color</b> → αλλάζει τα <b>γράμματα</b>.</li>
-          <li><b>Κουβαδάκι</b> μπογιάς → <b>Fill Color</b> → αλλάζει το <b>φόντο</b> του κελιού. Στο Format Cells είναι η καρτέλα <b>Fill</b>.</li>
-          <li>Η χρωματιστή γραμμή κάτω από κάθε κουμπί δείχνει το τελευταίο χρώμα που χρησιμοποίησες.</li>
-          <li>Αφαιρείς το φόντο με <b>No Fill</b>, το χρώμα γραμμάτων με <b>Automatic</b>.</li>
-          <li>Πρόσεξε: ίδιο χρώμα γραμμάτων και φόντου = το κείμενο δεν φαίνεται, αλλά υπάρχει!</li>
-        </ul>
-      </div>
+    </div>
     </div>
   </div>
-  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="3"></span></div>
-  <div class="quiz" data-quiz="3"></div>
 </section>
-
-<!-- ===================== 4 ===================== -->
-<section class="topic" id="vivlio">
-  <div class="topic-head">
+<section class="slide " data-topic="3" aria-label="03 · Έλεγξε τον εαυτό σου">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-q">03 · Έλεγξε τον εαυτό σου</span></div>
+<div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="3"></span></div>
+  <div class="quiz" data-quiz="3"></div>
+  </div>
+</section>
+<section class="slide " data-topic="4" aria-label="04 · Θεωρία">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-t">04 · Θεωρία</span></div>
+<div class="topic-head">
     <div class="num">04</div>
     <h2>Φύλλο εργασίας (Sheet) και βιβλίο εργασίας (Workbook)</h2>
     <p>Σκέψου ένα <b>τετράδιο</b>: το τετράδιο είναι το <b>βιβλίο εργασίας</b> (όλο το αρχείο .xlsx) και οι σελίδες του είναι τα <b>φύλλα εργασίας</b>. Τα ονόματα των φύλλων φαίνονται στις καρτέλες στο κάτω μέρος.</p>
   </div>
-
-  <div class="cols">
-    <div class="panel">
-      <h3>Ένα βιβλίο εργασίας, πολλά φύλλα</h3>
-      <div class="wb">
-        <div class="wb-title">
-          <svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true"><path d="M2 1h9l5 5v13H2z" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M11 1v5h5" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
-          <span>Maria_Georgiou_B2.xlsx</span><span style="opacity:.75;font-weight:400">· Βιβλίο εργασίας</span>
-        </div>
-        <div class="wb-body">
-          <div class="xl"><div class="grid" id="wbGrid"></div></div>
-        </div>
-        <div class="tabs" id="wbTabs" role="tablist" aria-label="Φύλλα εργασίας"></div>
-      </div>
-      <div class="row">
-        <button class="btn" id="wbRename">Μετονομασία</button>
-        <button class="btn" id="wbDelete">Διαγραφή</button>
-        <button class="btn" id="wbLeft">◀ Μετακίνηση</button>
-        <button class="btn" id="wbRight">Μετακίνηση ▶</button>
-        <button class="btn" id="wbCopy">Αντιγραφή φύλλου</button>
-      </div>
-      <p class="explain" id="wbExplain" aria-live="polite"></p>
-      <p class="note">Κάνε κλικ σε μια καρτέλα για να αλλάξεις φύλλο, διπλό κλικ για μετονομασία, ή πάτα <b>+</b> για νέο φύλλο.</p>
-    </div>
-
-    <div class="panel">
+    <div class="panel theory">
       <h3>Τι περιέχει τι</h3>
       <div class="nest">
         <div class="box"><div class="ttl">Βιβλίο εργασίας · Workbook <small>= ολόκληρο το αρχείο, π.χ. Maria_Georgiou_B2.xlsx</small></div>
@@ -457,12 +521,64 @@ footer { padding: 40px 0 60px; color: var(--muted); font-size: .9rem; }
       </div>
     </div>
   </div>
-  <div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="4"></span></div>
-  <div class="quiz" data-quiz="4"></div>
 </section>
-
+<section class="slide single" data-topic="4" aria-label="04 · Εξάσκηση 1/1">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-p">04 · Εξάσκηση 1/1</span></div>
+    <div class="panel">
+      <h3>Ένα βιβλίο εργασίας, πολλά φύλλα</h3>
+      <div class="wb">
+        <div class="wb-title">
+          <svg width="18" height="20" viewBox="0 0 18 20" aria-hidden="true"><path d="M2 1h9l5 5v13H2z" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M11 1v5h5" fill="none" stroke="#fff" stroke-width="1.6"/></svg>
+          <span>Maria_Georgiou_B2.xlsx</span><span style="opacity:.75;font-weight:400">· Βιβλίο εργασίας</span>
+        </div>
+        <div class="wb-body">
+          <div class="xl"><div class="grid" id="wbGrid"></div></div>
+        </div>
+        <div class="tabs" id="wbTabs" role="tablist" aria-label="Φύλλα εργασίας"></div>
+      </div>
+      <div class="row">
+        <button class="btn" id="wbRename">Μετονομασία</button>
+        <button class="btn" id="wbDelete">Διαγραφή</button>
+        <button class="btn" id="wbLeft">◀ Μετακίνηση</button>
+        <button class="btn" id="wbRight">Μετακίνηση ▶</button>
+        <button class="btn" id="wbCopy">Αντιγραφή φύλλου</button>
+      </div>
+      <p class="explain" id="wbExplain" aria-live="polite"></p>
+      <p class="note">Κάνε κλικ σε μια καρτέλα για να αλλάξεις φύλλο, διπλό κλικ για μετονομασία, ή πάτα <b>+</b> για νέο φύλλο.</p>
+    </div>
+  </div>
+</section>
+<section class="slide " data-topic="4" aria-label="04 · Έλεγξε τον εαυτό σου">
+  <div class="wrap">
+    <div class="slide-kicker"><span class="kind kind-q">04 · Έλεγξε τον εαυτό σου</span></div>
+<div class="qhead"><h3>Έλεγξε τον εαυτό σου</h3><span class="score" data-score="4"></span></div>
+  <div class="quiz" data-quiz="4"></div>
+  </div>
+</section>
+<section class="slide hero" data-topic="5" aria-label="Τέλος">
+  <div class="wrap">
+    <div class="kicker">Τέλος επανάληψης</div>
+    <h1>Μπράβο, τα πέρασες όλα!</h1>
+    <p id="finalScore"></p>
+    <div class="hero-map">
+      <button type="button" data-goto="1"><span>01</span>Σχετική – Απόλυτη αναφορά</button>
+      <button type="button" data-goto="2"><span>02</span>Autofill – Επιλογή – AutoFit</button>
+      <button type="button" data-goto="3"><span>03</span>Χρώμα κειμένου – Χρώμα γεμίσματος</button>
+      <button type="button" data-goto="4"><span>04</span>Φύλλο – Βιβλίο εργασίας</button>
+    </div>
+    <p class="note">Βασισμένο στα Φύλλα Εργασίας Β.4.1.Μ1–Μ14 του βιβλίου Πληροφορικής Β΄ Γυμνασίου.</p>
+  </div>
+</section>
 </main>
-<footer class="wrap">Βασισμένο στα Φύλλα Εργασίας Β.4.1.Μ1–Μ14 του βιβλίου Πληροφορικής Β΄ Γυμνασίου.</footer>
+
+<div class="controls" role="group" aria-label="Πλοήγηση">
+  <div class="wrap">
+    <button type="button" class="btn navbtn" id="prevBtn">◀ Πίσω</button>
+    <span class="counter" id="counter" aria-live="polite"></span>
+    <button type="button" class="btn primary navbtn" id="nextBtn">Συνέχεια ▶</button>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -741,7 +857,7 @@ renderSel();
    2c. AutoFit
    ========================================================= */
 var fitData = [["Παίκτης", "Έπαθλο"], ["Άννα Μαρνέρου", 12543.5], ["Παναγιώτα Νικολάου", 15671], ["Νίκος Οικονομόπουλος", 25578.25], ["Κώστας Μαρτάκης", 1234]];
-var fitW = [70, 52], fitGridEl = $("#fitGrid"), fitCells;
+var fitLastTap = [0, 0], fitW = [70, 52], fitGridEl = $("#fitGrid"), fitCells;
 var measureCtx = document.createElement("canvas").getContext("2d");
 function textW(t, bold) { measureCtx.font = (bold ? "700 " : "400 ") + "14px Commissioner, Segoe UI, Arial, sans-serif"; return Math.ceil(measureCtx.measureText(t).width) + 14; }
 function fitText(r, c) { var v = fitData[r][c]; return typeof v === "number" ? eur(v) : v; }
@@ -759,14 +875,22 @@ function renderFit() {
   [0, 1].forEach(function (c) {
     var h = fitGridEl.querySelector('[data-col="' + c + '"]'); h.style.position = "relative";
     var g = document.createElement("div"); g.className = "colresize"; g.title = "Διπλό κλικ: AutoFit · Σύρε: αλλαγή πλάτους"; h.appendChild(g);
-    g.addEventListener("dblclick", function () { autoFit(c); });
-    var startX = 0, startW = 0, drag = false;
-    g.addEventListener("pointerdown", function (e) { e.preventDefault(); drag = true; startX = e.clientX; startW = fitW[c]; g.setPointerCapture(e.pointerId); });
+    var startX = 0, startW = 0, drag = false, moved = false;
+    g.addEventListener("pointerdown", function (e) { e.preventDefault(); drag = true; moved = false; startX = e.clientX; startW = fitW[c]; g.setPointerCapture(e.pointerId); });
     g.addEventListener("pointermove", function (e) {
-      if (!drag) return; fitW[c] = Math.max(24, Math.min(260, startW + e.clientX - startX));
+      if (!drag) return;
+      if (Math.abs(e.clientX - startX) > 3) moved = true;
+      if (!moved) return;
+      fitW[c] = Math.max(24, Math.min(260, startW + e.clientX - startX));
       fitGridEl.style.gridTemplateColumns = "34px " + fitW[0] + "px " + fitW[1] + "px 60px";
     });
-    g.addEventListener("pointerup", function () { if (!drag) return; drag = false; renderFit(); fitMsg("Άλλαξες το πλάτος της στήλης " + COLS[c] + " με το χέρι (σύρσιμο)."); });
+    g.addEventListener("pointerup", function () {
+      if (!drag) return; drag = false;
+      if (moved) { fitLastTap[c] = 0; renderFit(); fitMsg("Άλλαξες το πλάτος της στήλης " + COLS[c] + " με το χέρι (σύρσιμο)."); return; }
+      var now = Date.now();
+      if (now - fitLastTap[c] < 450) { fitLastTap[c] = 0; autoFit(c); }
+      else { fitLastTap[c] = now; fitMsg("Τώρα κάνε <b>διπλό</b> κλικ στο ίδιο όριο για AutoFit, ή σύρε για να αλλάξεις το πλάτος με το χέρι."); }
+    });
   });
   $("#fitInfo").textContent = "Πλάτος A: " + fitW[0] + "px · B: " + fitW[1] + "px";
 }
@@ -950,6 +1074,42 @@ Object.keys(QUIZ).forEach(function (k) {
   });
   upd();
 });
+
+/* ---------- slide deck ---------- */
+var slides = $$(".slide"), cur = 0;
+function go(i, focus) {
+  cur = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach(function (s, k) { s.classList.toggle("active", k === cur); });
+  var topic = slides[cur].dataset.topic;
+  $$("nav.topics button").forEach(function (b) { b.classList.toggle("current", b.dataset.goto === topic); });
+  $("#prevBtn").disabled = cur === 0;
+  $("#nextBtn").textContent = cur === slides.length - 1 ? "Από την αρχή ↺" : "Συνέχεια ▶";
+  $("#counter").textContent = (cur + 1) + " / " + slides.length;
+  $("#progressBar").style.width = (cur / (slides.length - 1) * 100) + "%";
+  try { history.replaceState(null, "", "#" + (cur + 1)); } catch (err) {}
+  window.scrollTo(0, 0);
+  if (slides[cur].querySelector("#afGrid")) renderAf();
+  if (slides[cur].querySelector("#fitGrid")) renderFit();
+  if (slides[cur].querySelector("#finalScore")) {
+    var tot = 0, n = 0;
+    $$(".q").forEach(function (q) { n++; if (q.querySelector(".opt.right") && !q.dataset.miss) tot++; });
+    $("#finalScore").textContent = "Σωστές με την πρώτη προσπάθεια: " + tot + " από " + n + " ερωτήσεις.";
+  }
+  if (focus) slides[cur].focus({ preventScroll: true });
+}
+slides.forEach(function (s) { s.tabIndex = -1; });
+$("#prevBtn").addEventListener("click", function () { go(cur - 1); });
+$("#nextBtn").addEventListener("click", function () { go(cur === slides.length - 1 ? 0 : cur + 1); });
+$$("[data-goto]").forEach(function (b) {
+  b.addEventListener("click", function () { go(slides.findIndex(function (s) { return s.dataset.topic === b.dataset.goto; })); });
+});
+document.addEventListener("keydown", function (e) {
+  var t = e.target; if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+  if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); go(cur + 1); }
+  if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); go(cur - 1); }
+});
+var start = parseInt((location.hash || "").slice(1), 10);
+go(start > 0 ? start - 1 : 0);
 })();
 </script>
 </body>
