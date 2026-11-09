@@ -1,0 +1,14 @@
+Εικόνες για το Kahoot – ΤΝ Μάθημα 1 (A7M3)
+
+A7M3-a.png → Ερώτηση 1 (βασικό χαρακτηριστικό ΤΝ)
+A7M3-b.png → Ερώτηση 2 (Machine Learning με φωτογραφίες γάτας)
+A7M3-c.png → Ερώτηση 3 (ξεκλείδωμα κινητού με πρόσωπο)
+A7M3-d.png → Ερώτηση 4 (ποιο ΔΕΝ χρησιμοποιεί ΤΝ – τέσσερις συσκευές, χωρίς να φαίνεται η απάντηση)
+
+Οι εικόνες είναι πρωτότυπες εικονογραφήσεις (1280×720) – ελεύθερες για χρήση στην τάξη.
+
+Εναλλακτικές πραγματικές φωτογραφίες (ελεύθερης άδειας, για χειροκίνητη λήψη):
+Ερ. 1 – Pixabay, «Brain network» (δωρεάν): https://pixabay.com/illustrations/brain-network-5870352/
+Ερ. 2 – Wikimedia Commons, γάτα στο χιόνι (CC BY-SA 3.0, αναφορά δημιουργού): https://commons.wikimedia.org/wiki/File:Felis_catus-cat_on_snow.jpg
+Ερ. 4 – Wikimedia Commons, κατηγορία «Calculators»: https://commons.wikimedia.org/wiki/Category:Calculators
+(Για την Ερ. 4 προτιμήστε την εικονογράφηση A7M3-d: μια φωτογραφία μόνο αριθμομηχανής θα πρόδιδε την απάντηση.)
