@@ -20,6 +20,8 @@ STUDENTS/ASSESSMENT.HTML – Αξιολόγηση (10΄), 4 δραστηριότ
    2. ⚽ Τα τέρματα του αγώνα (M3_ask5.py)
    3. ✖️ Γινόμενο με ένα δεκαδικό ψηφίο
    4. 🔺 Εμβαδόν τριγώνου: 3 λάθη
+STUDENTS/PYTHON_IDLE.HTML – Προσομοιωτής Python (IDLE) μέσα στον browser: Editor + Shell, New/Open/Save .py, Run (F5), μηνύματα λάθους όπως της Python. Παραδείγματα: ex1.py, types.py, M3_ask3.py, M3_ask4.py, M3_ask5.py.
+   Οι αποστολές με κώδικα (ασκήσεις 3–5, σελ. 118) τρέχουν τον κώδικα των μαθητών στον ίδιο προσομοιωτή και τον ελέγχουν με τιμές.
    Ονοματεπώνυμο και τμήμα στην αρχή. Χωρίς άμεσο έλεγχο και χωρίς λύσεις· μία μικρή υπόδειξη ανά δραστηριότητα (καταγράφεται).
    Μετά την Υποβολή: βαθμολογία ανά δραστηριότητα και κουμπί «Αποθήκευση αποτελεσμάτων (HTML)» με όλες τις απαντήσεις (✓/✗). Αν τελειώσει ο χρόνος, γίνεται αυτόματη υποβολή.
 
@@ -29,11 +31,11 @@ STUDENTS/ASSESSMENT.HTML – Αξιολόγηση (10΄), 4 δραστηριότ
 1 ΝΑΙ: MyName, myName, NAME_SURNAME, Print, Num1, X, _number
 2 str · int · float · int · str
 3 onoma_sxoleiou · arithmos_tmimaton · mesos_oros · synolo_mathiton · fylo
-4 int · x * 10 · print → 70
+4 x=int(input('μήνυμα')) · x=x*10 · print('μήνυμα', x) → 70
 
 ΑΠΑΝΤΗΣΕΙΣ ΑΞΙΟΛΟΓΗΣΗΣ
-1 4 * plevra · perimetros → 25, 20
-2 γρ. 2 λογ. (int) · γρ. 3 λογ. (+) · γρ. 4 συντ. → 5
+1 P=2*(plevra+plevra) (ή 4*plevra) · print('%.1f' % P) → 25.0, 20.0
+2 total = team1+team2 (όχι *) → 5
 3 int → float → g = a*b → '%.1f' → 32.0
 4 float(input()) · λείπει ipsos · print
 
