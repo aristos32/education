@@ -1,0 +1,5 @@
+Kahoot image sources
+
+All images were drawn specially for this lesson (Python / matplotlib), based on the shapes and examples of the Α΄ Λυκείου Notes and Workbook. No images from the web were used, so there are no copyright restrictions.
+
+A7M1-a → Q 1, A7M1-b → Q 2, A7M1-c → Q 3, A7M1-d → Q 4
