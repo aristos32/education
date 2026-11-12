@@ -1,0 +1,621 @@
+<!doctype html><html lang="el" data-tel="Α.7.Μ4 · Python IDLE" data-ten="A.7.M4 · Python IDLE"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Α.7.Μ4 · Python IDLE</title><script>(function(){var l=null;try{l=localStorage.getItem('A7M1_lang')}catch(e){}var q=new URLSearchParams(location.search).get('lang');if(q==='el'||q==='en')l=q;if(l==='en')document.documentElement.classList.add('en');document.documentElement.lang=l==='en'?'en':'el'})()</script><style>
+*{box-sizing:border-box}
+:root{--navy:#213450;--teal:#146f86;--ink:#213450;--muted:#586a7d;--line:#c9d7e6;--bg:#edf3f8;--amber:#d9991a}
+.in{--c:#146f86;--t:#d9eff4}.out{--c:#5363b8;--t:#e3e7fa}.st{--c:#b47a0c;--t:#fbefd2}.main{--c:#c4533c;--t:#fbe3dc}.nv{--c:#213450;--t:#dde6f0}
+body{margin:0;background:var(--bg);color:var(--ink);font:19px/1.45 'Segoe UI',Inter,'Noto Sans',Arial,sans-serif;min-height:100dvh}
+svg.ic{display:block;width:100%;height:100%;color:var(--c,#213450);overflow:visible}
+button,a.button{font:inherit;cursor:pointer;border:1px solid #b9c8d9;border-radius:12px;padding:10px 18px;background:white;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:background .15s,border-color .15s,transform .1s}
+button:hover:not(:disabled),a.button:hover{border-color:var(--teal);background:#f3f9fb}
+button:active:not(:disabled){transform:translateY(1px)}
+button:disabled{opacity:.45;cursor:default}
+.primary{background:var(--teal)!important;color:white!important;border-color:var(--teal)!important;font-weight:600}
+.primary:hover:not(:disabled){background:#0f5d71!important}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+header.top{padding:10px 3vw;background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;gap:12px}
+header.top a{color:white}
+header.top .brand{display:flex;align-items:center;gap:12px;font-weight:600}
+header.top .badge{background:#a6dfeb;color:var(--navy);border-radius:8px;padding:2px 9px;font-size:15px;font-weight:800;letter-spacing:.04em}
+header.top button{background:transparent;color:white;border-color:#5d7593;padding:7px 14px;font-size:16px}
+header.top button:hover:not(:disabled){background:#2d4466}
+.timer{display:flex;align-items:center;gap:16px;padding:8px 3vw;background:#dcecf2;transition:background .3s}
+.timer b{font-size:28px;font-variant-numeric:tabular-nums;color:var(--teal);min-width:80px}
+.timer .bar{flex:1;height:8px;border-radius:6px;background:#c3dbe4;overflow:hidden;max-width:420px}
+.timer .bar i{display:block;height:100%;background:var(--teal);border-radius:6px;transition:width .3s}
+.timer.warn{background:#fff0bb}.timer.warn b{color:#8a5b00}.timer.warn .bar i{background:var(--amber)}
+.timer.expired{background:#f7ddd7}.timer.expired b{color:#ae2d28}.timer.expired .bar i{background:#ae2d28}
+main{max-width:1180px;margin:0 auto;padding:20px 24px 40px}
+.paper{padding:24px 28px;border-radius:20px;background:white;margin-bottom:14px;box-shadow:0 2px 0 var(--line)}
+h1{font-size:clamp(26px,3.2vw,40px);line-height:1.18;margin:4px 0 14px}
+h2{font-size:clamp(21px,2vw,27px);line-height:1.25;margin:0 0 10px}
+h3{font-size:20px;margin:6px 0}
+p{margin:7px 0 12px}
+.label{font-size:14px;color:#376878;letter-spacing:.1em;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.muted{font-size:16px;color:var(--muted)}
+.error{color:#ae2d28;font-weight:600;min-height:1em}
+.notice{background:#fff4d2;border-left:6px solid var(--amber);border-radius:12px;padding:12px 18px;margin:14px 0}
+.notice p{margin:4px 0}
+.feedback{padding:12px 16px;background:#eef2fc;border-left:5px solid #5363b8;border-radius:10px;margin:10px 0}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+@keyframes arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+#app.enter>*{animation:arrive .3s ease both}
+@media(prefers-reduced-motion:reduce){#app.enter>*{animation:none}}
+
+.missions{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.missions button{border-radius:999px;padding:8px 16px;font-size:16px;font-weight:600}
+.missions button.now{background:var(--navy);color:white;border-color:var(--navy)}
+.missions button.done{background:#e6f6ec;border-color:#2f9a5c;color:#16703a}
+.hero{display:grid;grid-template-columns:1.2fr 1fr;gap:26px;align-items:center}
+.heroart{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.heroart i{display:block;height:90px;background:var(--t);border-radius:16px;padding:10px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.rules.five{grid-template-columns:repeat(5,1fr)}.rules.five div{font-size:15px}.rules.five b{font-size:18px}.rules div{background:#f1f6fa;border-radius:14px;padding:12px 14px;font-size:17px}.rules b{display:block;font-size:22px;margin-bottom:2px}
+.mhead{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;margin-bottom:6px}
+.mhead .mi{width:84px;height:64px;background:var(--t);border-radius:16px;padding:8px}
+.mhead h1{margin:0}.mhead p{margin:2px 0 0}
+.pool{display:flex;flex-wrap:wrap;gap:10px;min-height:118px;padding:12px;border:2px dashed var(--line);border-radius:16px;background:#f8fbfd;align-items:center}
+.pool:empty::after{content:'✓ Όλα τοποθετήθηκαν';color:var(--muted);font-size:16px;margin:auto}
+.chip{background:white;border:2px solid var(--line);border-radius:14px;padding:6px;cursor:grab;display:flex;flex-direction:column;align-items:center;gap:2px;user-select:none;transition:transform .12s,box-shadow .12s,border-color .12s}
+.chip:hover{transform:translateY(-2px);box-shadow:0 4px 0 var(--line)}
+.chip.sel{border-color:var(--amber);box-shadow:0 0 0 4px #ffe3a3}
+.chip .pet{width:84px;height:78px}
+.chip i{display:block;width:84px;height:62px}
+.chip span{font-size:14px;font-weight:600;text-align:center;max-width:120px;line-height:1.2}
+.chip.ok{border-color:#2f9a5c;background:#e6f6ec}.chip.bad{border-color:#d0675f;background:#fdeceb}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.bins.four{grid-template-columns:repeat(4,1fr);gap:10px}.bins.four .bin{min-height:170px}.bins.four h3{font-size:17px}.chip.wide span{max-width:150px;font-size:13px}.task{background:#eef2fc;border-left:6px solid #5363b8;border-radius:12px;padding:12px 16px;margin:12px 0}.task p{margin:4px 0}textarea{font:inherit;width:100%;border:1px solid #b9c8d9;border-radius:10px;padding:10px 12px;font-size:18px;resize:vertical}label{display:block;margin-top:12px;font-size:17px;font-weight:600}
+.bin{border-radius:18px;border:3px solid var(--c);background:var(--t);min-height:150px;padding:10px 12px;transition:box-shadow .15s}
+.bin.over{box-shadow:0 0 0 5px #ffe3a3}
+.bin h3{margin:0 0 8px;color:var(--c);display:flex;align-items:center;gap:8px;font-size:22px}
+.bin .items{display:flex;flex-wrap:wrap;gap:8px}
+.brain{margin-top:14px;border-radius:18px;background:var(--navy);color:white;padding:16px 20px;display:grid;grid-template-columns:90px 1fr;gap:16px;align-items:center}
+.brain i{display:block;width:90px;height:68px;--c:#a6dfeb;--t:#2d4466}
+.brain .rule{font-size:22px;font-weight:800;color:#ffd27a}
+.brain p{margin:4px 0}
+.tests{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.test{background:white;border-radius:14px;border:2px solid var(--line);padding:8px;text-align:center}
+.test .pet{width:90px;height:82px}
+.test b{display:block;font-size:17px}.test.ok{border-color:#2f9a5c;background:#e6f6ec}.test.bad{border-color:#d0675f;background:#fdeceb}
+.meter{height:14px;border-radius:8px;background:#dfe7ef;overflow:hidden;margin:6px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#c4533c,#d9991a,#2f9a5c);transition:width .6s}
+.lesson{background:#fff4d2;border-left:6px solid var(--amber);border-radius:12px;padding:12px 16px;margin-top:12px;font-size:18px}
+.timeline{display:grid;gap:10px;margin-top:10px}
+.ev{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;background:white;border:2px solid var(--line);border-radius:14px;padding:10px 14px}
+.ev .yr{font-weight:800;color:var(--teal);font-size:18px;text-align:center}
+.ev .arr{display:flex;gap:6px}.ev .arr button{padding:6px 12px;font-size:18px}
+.ev.ok{border-color:#2f9a5c;background:#e6f6ec}.ev.bad{border-color:#d0675f;background:#fdeceb}
+.ev i{display:inline-block;width:40px;height:30px;vertical-align:middle;margin-right:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.stats div{background:#f1f6fa;border-radius:14px;padding:14px;text-align:center}.stats b{display:block;font-size:32px;color:var(--teal)}.stats span{font-size:16px;color:var(--muted)}
+.next-stage{border-top:4px solid var(--teal);margin-top:24px;padding-top:18px}.next-stage .button{font-size:22px;padding:14px 22px}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:9}
+.confetti i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media(max-width:820px){.hero,.rules,.rules.five,.stats,.bins,.bins.four{grid-template-columns:1fr}.heroart{display:none}.tests{grid-template-columns:1fr 1fr}}
+
+.rules.five{grid-template-columns:repeat(5,1fr)}.rules.five div{font-size:15px}.rules.five b{font-size:18px}
+.chip.wide{width:150px}.chip.wide span{max-width:140px;font-size:14px}
+.bins.four h3{font-size:16px}.bins.four h3 small{display:block;font-size:12px;font-weight:600;opacity:.8}
+.house{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.room{background:#f6f9fc;border:2px solid var(--line);border-radius:16px;padding:10px}
+.room h3{margin:0 0 8px;font-size:18px}
+.obj{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:8px;text-align:left;border-radius:14px;padding:8px 10px;font-size:16px;font-weight:600;background:white}
+.obj .em{font-size:30px;line-height:1}.obj.ai{background:#e6f6ec;border-color:#2f9a5c}.obj.no{background:#f1f1f1;border-color:#c9c9c9;color:#777}.obj.now{border-color:var(--amber);box-shadow:0 0 0 3px #ffd27a}
+.ask{background:#fff8e5;border:2px solid var(--amber);border-radius:16px;padding:12px 16px;margin-top:12px}
+.ask .opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.ask .opts button{font-weight:700}
+.found{font-size:19px;font-weight:800;margin:6px 0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.slot{min-height:120px;border:3px dashed #9fb3c8;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;font-weight:700;font-size:16px;color:var(--muted)}
+.slot.ok{border-style:solid;border-color:#2f9a5c;background:#e6f6ec;color:var(--ink)}.slot .em{font-size:34px}
+.cards4{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.cards4 button{flex-direction:column;width:200px;font-size:16px;font-weight:700;padding:12px}.cards4 .em{font-size:34px}
+.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.cols2{display:grid;grid-template-columns:.7fr 1.3fr;gap:16px}.colL,.colR{display:grid;gap:8px}
+.mi{position:relative;width:100%;text-align:left;justify-content:flex-start;font-size:17px;font-weight:700;padding:12px 14px;border-radius:14px;background:#f6f9fc;min-height:54px}
+.mi.ex2{font-weight:600;font-size:16px}.mi.sel{border-color:var(--amber);background:#fff4d2;box-shadow:0 0 0 3px #ffd27a}
+.mi.ok{border-color:#2f9a5c;background:#e6f6ec;color:var(--ink);opacity:1}.mi .pair{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#2f9a5c;color:white;align-items:center;justify-content:center;font-size:14px;margin-right:8px;flex:none}
+.match{display:grid;gap:8px}
+.mrow{display:grid;grid-template-columns:170px 1fr;gap:10px;align-items:center;background:#f6f9fc;border-radius:12px;padding:8px 12px;border:2px solid transparent}
+.mrow b{font-size:18px}.mrow select{font:inherit;font-size:16px;border:2px solid var(--line);border-radius:10px;padding:6px 8px;width:100%}
+.mrow.ok{border-color:#2f9a5c;background:#e6f6ec}.mrow.bad{border-color:#d0675f;background:#fdeceb}
+.task{background:#eef2fc;border-left:6px solid #5363b8;border-radius:12px;padding:12px 16px;margin:12px 0}.task p{margin:4px 0}
+textarea{font:inherit;width:100%;border:1px solid #b9c8d9;border-radius:10px;padding:10px 12px;font-size:18px;resize:vertical}label{display:block;margin-top:12px;font-size:17px;font-weight:600}
+@media(max-width:820px){.rules.five,.house,.steps{grid-template-columns:1fr}.mrow{grid-template-columns:1fr}}
+.pyide{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:12px;margin:10px 0}
+.pyed,.pysh{border:2px solid #c9d7e6;border-radius:12px;overflow:hidden;background:white;display:flex;flex-direction:column;min-width:0}
+.pytb{background:#dfe7ef;padding:5px 10px;font-size:14px;font-weight:700;color:#586a7d;display:flex;gap:7px;align-items:center}
+.pytb i{width:10px;height:10px;border-radius:50%;background:#c4533c;display:inline-block}.pytb i+i{background:#d9991a}.pytb i+i+i{background:#2f9a5c}
+.pymenu{display:flex;gap:14px;padding:3px 12px;font-size:14px;border-bottom:1px solid #dfe7ef;color:#213450}
+.pymenu .pyrun{background:#146f86;color:white;border-radius:5px;padding:0 8px;cursor:pointer}
+.pywrap{display:flex;min-height:230px;flex:1}
+.pygut{margin:0;padding:10px 6px;background:#f1f5f9;color:#8fa1b3;font:600 17px/1.5 Consolas,'Courier New',monospace;text-align:right;user-select:none;overflow:hidden;min-width:34px}
+.pycode{flex:1;border:0;outline:0;resize:vertical;padding:10px 12px;font:600 17px/1.5 Consolas,'Courier New',monospace;color:#213450;white-space:pre;overflow:auto;min-height:230px;tab-size:4}
+.pyout{flex:1;min-height:230px;max-height:340px;overflow:auto;padding:10px 12px;font:600 16px/1.5 Consolas,'Courier New',monospace;white-space:pre-wrap;color:#213450;background:#fbfdff}
+.pyout .pyrs{color:#8fa1b3}.pyout .pyerr{color:#c4302b}.pyout .pyuser{color:#1368ce}.pyout .pyps{color:#8fa1b3}
+.pyin{font:600 16px Consolas,monospace;border:0;border-bottom:2px solid #1368ce;outline:0;background:#eef5ff;color:#1368ce;width:12em;padding:0 4px}
+.pybtns{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+.ctest{width:100%;border-collapse:separate;border-spacing:0 5px;font-size:16px}
+.ctest th{font-size:14px;color:#376878;text-align:left;padding:2px 8px}.ctest td{background:#f6f9fc;padding:6px 8px;font-family:Consolas,monospace;vertical-align:top;white-space:pre-wrap}
+.ctest td.ok{background:#e6f6ec;color:#16703a;font-weight:800}.ctest td.bad{background:#fdeceb;color:#ae2d28;font-weight:800}
+
+.plist{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.pcard{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;text-align:left;background:white;border:2px solid var(--line);border-radius:18px;padding:16px;cursor:pointer;font:inherit;color:inherit;box-shadow:0 3px 0 var(--line);transition:transform .12s,border-color .12s}
+.pcard:hover,.pcard:focus-visible{transform:translateY(-2px);border-color:var(--teal);outline:none}
+.pcard .no{width:44px;height:44px;border-radius:50%;background:var(--c);color:white;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:20px}
+.pcard h2{margin:0 0 4px;font-size:20px;color:var(--ink)}.pcard p{margin:0;font-size:15px;color:#4a5d72;line-height:1.4}
+.pcard .tag{display:inline-block;margin-top:8px;font-size:13px;font-weight:800;border-radius:999px;padding:2px 10px;background:var(--t);color:var(--c)}
+.pcard.solved{border-color:#2f9a5c}.pcard.solved .no{background:#2f9a5c}
+.pnav{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.pnav .dots{display:flex;gap:6px;margin-left:auto}.pnav .dots button{width:38px;height:38px;min-width:38px;border-radius:50%;padding:0;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center;line-height:1}
+.pnav .dots button.now{background:var(--navy);color:white}.pnav .dots button.ok{background:#2f9a5c;color:white;border-color:#2f9a5c}
+.prob{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;margin-bottom:12px}
+.pdesc h1{margin:4px 0 8px;font-size:clamp(24px,2.4vw,32px)}
+.pdesc .goal{font-size:19px;line-height:1.5;margin:0 0 10px}
+.pdesc ol{margin:0 0 6px;padding-left:24px;font-size:17px;line-height:1.55}
+.pdesc .src{font-size:14px;color:var(--muted)}
+.pex{background:var(--navy);color:white;border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.pex h3{margin:0;font-size:16px;color:#a6dfeb;letter-spacing:.04em;text-transform:uppercase}
+.pex pre{margin:0;background:#152238;border-radius:10px;padding:10px 12px;font:600 16px/1.55 Consolas,'Courier New',monospace;white-space:pre-wrap;color:#e8eef6}
+.pex pre .u{color:#7fd1ff}.pex pre .o{color:#ffd27a}
+.pex small{color:#bcd0e6;font-size:14px}
+.phint{margin-top:2px}.phint summary{cursor:pointer;font-weight:700;color:var(--teal)}.phint p{margin:6px 0 0;font-size:16px}
+.pbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 10px}
+.pbar .sp{flex:1}
+.pres{margin-top:10px}
+.pres .ok{color:#16703a}.pres .bad{color:#ae2d28}
+.free{--c:#586a7d;--t:#eef2f6}
+@media(max-width:900px){.plist,.prob{grid-template-columns:1fr}.pnav .dots{margin-left:0}}
+
+html.en .le{display:none!important}html:not(.en) .ln{display:none!important}
+.langs{display:inline-flex;gap:4px;margin-left:6px}
+header.top .langs button{padding:5px 11px;font-size:15px;font-weight:700}
+header.top .langs button[aria-pressed=true]{background:#a6dfeb;color:#213450;border-color:#a6dfeb}
+header.top .right{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+</style></head><body><svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-keyboard" viewBox="0 0 120 90"><rect x="6" y="24" width="108" height="46" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><g fill="currentColor"><rect x="16" y="33" width="10" height="8" rx="2"/><rect x="30" y="33" width="10" height="8" rx="2"/><rect x="44" y="33" width="10" height="8" rx="2"/><rect x="58" y="33" width="10" height="8" rx="2"/><rect x="72" y="33" width="10" height="8" rx="2"/><rect x="86" y="33" width="18" height="8" rx="2"/><rect x="16" y="45" width="14" height="8" rx="2"/><rect x="34" y="45" width="10" height="8" rx="2"/><rect x="48" y="45" width="10" height="8" rx="2"/><rect x="62" y="45" width="10" height="8" rx="2"/><rect x="76" y="45" width="10" height="8" rx="2"/><rect x="90" y="45" width="14" height="8" rx="2"/><rect x="30" y="57" width="60" height="7" rx="2"/></g></symbol><symbol id="i-mouse" viewBox="0 0 120 90"><path d="M60 8v18" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><rect x="38" y="26" width="44" height="60" rx="22" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M38 50h44M60 26v24" stroke="currentColor" stroke-width="4"/></symbol><symbol id="i-scanner" viewBox="0 0 120 90"><path d="M12 40 L100 18 L104 30 L16 52Z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="10" y="52" width="100" height="28" rx="6" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M22 62h76" stroke="#d9991a" stroke-width="5" stroke-linecap="round"/><circle cx="96" cy="72" r="3" fill="currentColor"/></symbol><symbol id="i-microphone" viewBox="0 0 120 90"><rect x="46" y="4" width="28" height="46" rx="14" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M36 36v6a24 24 0 0 0 48 0v-6M60 66v14M44 82h32" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-webcam" viewBox="0 0 120 90"><circle cx="60" cy="38" r="30" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="60" cy="38" r="13" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="60" cy="38" r="5" fill="currentColor"/><path d="M44 82h32M60 68v14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-monitor" viewBox="0 0 120 90"><rect x="8" y="6" width="104" height="62" rx="6" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="17" y="15" width="86" height="44" rx="2" fill="white"/><path d="M27 48l18-16 14 12 12-9 20 13" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M60 68v12M40 84h40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-printer" viewBox="0 0 120 90"><rect x="32" y="4" width="56" height="24" fill="white" stroke="currentColor" stroke-width="4"/><rect x="8" y="26" width="104" height="38" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="30" y="54" width="60" height="32" fill="white" stroke="currentColor" stroke-width="4"/><path d="M40 66h40M40 76h28" stroke="currentColor" stroke-width="3"/><circle cx="97" cy="38" r="4" fill="#d9991a"/></symbol><symbol id="i-speakers" viewBox="0 0 120 90"><rect x="10" y="10" width="40" height="72" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="70" y="10" width="40" height="72" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="30" cy="56" r="12" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="90" cy="56" r="12" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="30" cy="27" r="6" fill="currentColor"/><circle cx="90" cy="27" r="6" fill="currentColor"/></symbol><symbol id="i-harddisk" viewBox="0 0 120 90"><rect x="14" y="6" width="92" height="78" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="56" cy="40" r="24" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="56" cy="40" r="5" fill="currentColor"/><path d="M94 72 L66 46" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="94" cy="72" r="5" fill="currentColor"/></symbol><symbol id="i-cd" viewBox="0 0 120 90"><circle cx="60" cy="45" r="40" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="60" cy="45" r="12" fill="white" stroke="currentColor" stroke-width="4"/><path d="M34 26a32 32 0 0 1 22-10M86 64a32 32 0 0 1-22 10" fill="none" stroke="#d9991a" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-usb" viewBox="0 0 120 90"><rect x="8" y="28" width="74" height="34" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="82" y="34" width="28" height="22" fill="white" stroke="currentColor" stroke-width="4"/><rect x="90" y="40" width="6" height="5" fill="currentColor"/><rect x="99" y="40" width="6" height="5" fill="currentColor"/><path d="M22 45h40" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-cpu" viewBox="0 0 120 90"><g stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M45 6v10M60 6v10M75 6v10M45 74v10M60 74v10M75 74v10M22 30h10M22 45h10M22 60h10M88 30h10M88 45h10M88 60h10"/></g><rect x="32" y="16" width="56" height="58" rx="6" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="46" y="31" width="28" height="28" rx="3" fill="currentColor"/></symbol><symbol id="i-ram" viewBox="0 0 120 90"><path d="M6 28h108v32H64v-6h-8v6H6z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><g fill="currentColor"><rect x="14" y="34" width="16" height="14" rx="2"/><rect x="36" y="34" width="16" height="14" rx="2"/><rect x="68" y="34" width="16" height="14" rx="2"/><rect x="90" y="34" width="16" height="14" rx="2"/></g><path d="M12 66v8M22 66v8M32 66v8M42 66v8M76 66v8M86 66v8M96 66v8M106 66v8" stroke="currentColor" stroke-width="3"/></symbol><symbol id="i-io" viewBox="0 0 120 90"><rect x="34" y="18" width="52" height="54" rx="6" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M4 32h24M20 24l8 8-8 8M92 58h24M100 50l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><g fill="currentColor"><rect x="44" y="28" width="32" height="8" rx="2"/><rect x="44" y="42" width="14" height="8" rx="2"/><rect x="62" y="42" width="14" height="8" rx="2"/><rect x="44" y="56" width="32" height="6" rx="2"/></g></symbol><symbol id="i-tower" viewBox="0 0 120 90"><rect x="34" y="4" width="52" height="82" rx="6" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M44 18h32M44 28h32" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="70" r="6" fill="currentColor"/></symbol><symbol id="i-pc" viewBox="0 0 120 90"><rect x="4" y="12" width="32" height="74" rx="5" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M11 24h18M11 32h18" stroke="currentColor" stroke-width="3"/><circle cx="20" cy="72" r="4" fill="currentColor"/><rect x="44" y="12" width="72" height="52" rx="5" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M80 64v10M66 78h28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-tablet" viewBox="0 0 120 90"><rect x="22" y="4" width="76" height="82" rx="10" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="30" y="13" width="60" height="58" rx="3" fill="white"/><circle cx="60" cy="78" r="3.5" fill="currentColor"/><path d="M40 52l12-12 9 8 9-7 10 11" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><circle cx="72" cy="27" r="5" fill="#d9991a"/></symbol><symbol id="i-window" viewBox="0 0 120 90"><rect x="8" y="10" width="104" height="72" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M8 28h104" stroke="currentColor" stroke-width="4"/><circle cx="20" cy="19" r="3" fill="currentColor"/><circle cx="30" cy="19" r="3" fill="currentColor"/><circle cx="40" cy="19" r="3" fill="currentColor"/><path d="M22 44h60M22 56h76M22 68h44" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".6"/></symbol><symbol id="i-save" viewBox="0 0 120 90"><path d="M24 6h60l14 14v64H24z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="38" y="6" width="38" height="24" fill="white" stroke="currentColor" stroke-width="4"/><rect x="36" y="50" width="48" height="34" fill="white" stroke="currentColor" stroke-width="4"/></symbol><symbol id="i-power" viewBox="0 0 120 90"><path d="M60 10v34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M38 24a32 32 0 1 0 44 0" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M18 84L102 6" stroke="#c4533c" stroke-width="6" stroke-linecap="round"/></symbol><symbol id="i-touch" viewBox="0 0 120 90"><path d="M50 44V16a8 8 0 0 1 16 0v30l20 4c6 1 9 6 8 12l-4 24H52L32 62c-4-4-3-10 2-12 4-2 8 0 11 3l5 5" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M40 14a20 20 0 0 1 36 0" fill="none" stroke="#d9991a" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-person" viewBox="0 0 120 90"><circle cx="60" cy="26" r="16" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M26 86c0-20 16-34 34-34s34 14 34 34z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></symbol><symbol id="i-mfp" viewBox="0 0 120 90"><rect x="12" y="8" width="96" height="16" rx="4" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="8" y="26" width="104" height="40" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="30" y="56" width="60" height="28" fill="white" stroke="currentColor" stroke-width="4"/><path d="M40 66h40M40 75h26" stroke="currentColor" stroke-width="3"/><path d="M20 16h80" stroke="#d9991a" stroke-width="3"/></symbol><symbol id="i-robot" viewBox="0 0 120 90"><path d="M60 4v10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="5" r="4" fill="#d9991a"/><rect x="24" y="14" width="72" height="54" rx="14" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="46" cy="38" r="8" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="74" cy="38" r="8" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="46" cy="38" r="3" fill="currentColor"/><circle cx="74" cy="38" r="3" fill="currentColor"/><path d="M46 56h28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M16 34v16M104 34v16" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M42 68v10h36V68" fill="var(--t)" stroke="currentColor" stroke-width="4"/></symbol><symbol id="i-brain" viewBox="0 0 120 90"><path d="M58 14c-6-8-22-6-24 6-10 0-16 10-12 18-8 6-6 20 4 22 0 10 12 16 20 10 4 6 12 4 12-4z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M62 14c6-8 22-6 24 6 10 0 16 10 12 18 8 6 6 20-4 22 0 10-12 16-20 10-4 6-12 4-12-4z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M38 34c6 0 10 4 10 10M82 34c-6 0-10 4-10 10M40 58c4-4 10-4 14 0M80 58c-4-4-10-4-14 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></symbol><symbol id="i-faceid" viewBox="0 0 120 90"><rect x="34" y="2" width="52" height="86" rx="10" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M44 22v-6h8M76 16h-8M44 58v6h8M76 64h-8M76 22v-6M76 58v6" fill="none" stroke="#d9991a" stroke-width="3.5" stroke-linecap="round"/><circle cx="60" cy="40" r="13" fill="white" stroke="currentColor" stroke-width="3.5"/><circle cx="55" cy="37" r="2" fill="currentColor"/><circle cx="65" cy="37" r="2" fill="currentColor"/><path d="M54 45q6 5 12 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M52 80h16" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-search" viewBox="0 0 120 90"><rect x="6" y="10" width="108" height="26" rx="13" fill="white" stroke="currentColor" stroke-width="4"/><path d="M20 23h50" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".5"/><circle cx="96" cy="23" r="6" fill="none" stroke="currentColor" stroke-width="3.5"/><path d="M100 27l5 5" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/><rect x="6" y="44" width="108" height="40" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M18 56h60M18 66h80M18 76h44" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".6"/></symbol><symbol id="i-voice" viewBox="0 0 120 90"><rect x="38" y="16" width="44" height="66" rx="18" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M48 30h24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><circle cx="60" cy="58" r="10" fill="white" stroke="currentColor" stroke-width="3.5"/><path d="M90 34q8 12 0 24M100 26q14 20 0 40M30 34q-8 12 0 24M20 26q-14 20 0 40" fill="none" stroke="#d9991a" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-gamepad" viewBox="0 0 120 90"><path d="M30 26h60c14 0 22 12 24 30 2 16-10 24-20 14l-10-10H36L26 70c-10 10-22 2-20-14 2-18 10-30 24-30z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M34 40v16M26 48h16" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="82" cy="42" r="4.5" fill="#c4533c"/><circle cx="92" cy="52" r="4.5" fill="#d9991a"/></symbol><symbol id="i-medical" viewBox="0 0 120 90"><rect x="10" y="8" width="100" height="74" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M18 48h20l8-18 12 34 10-24 6 8h28" fill="none" stroke="#c4533c" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/><path d="M86 18v14M79 25h14" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-car" viewBox="0 0 120 90"><path d="M14 58l8-22c2-6 6-10 14-10h48c8 0 12 4 14 10l8 22v14H14z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M28 44l6-12h52l6 12z" fill="white" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/><circle cx="36" cy="72" r="9" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="84" cy="72" r="9" fill="white" stroke="currentColor" stroke-width="4"/><path d="M10 30l8 4M110 30l-8 4" stroke="#d9991a" stroke-width="3.5" stroke-linecap="round"/></symbol><symbol id="i-chat" viewBox="0 0 120 90"><path d="M8 10h68a6 6 0 0 1 6 6v30a6 6 0 0 1-6 6H34l-14 12V52H8a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M16 24h50M16 36h36" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity=".6"/><path d="M56 58v6a6 6 0 0 0 6 6h34l12 10V70h4a6 6 0 0 0 6-6V36a6 6 0 0 0-6-6h-24" fill="white" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></symbol><symbol id="i-image" viewBox="0 0 120 90"><rect x="8" y="8" width="104" height="74" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="82" cy="28" r="9" fill="#d9991a"/><path d="M14 74l30-32 20 20 14-12 30 24z" fill="white" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></symbol><symbol id="i-rules" viewBox="0 0 120 90"><rect x="24" y="8" width="72" height="80" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="46" y="2" width="28" height="12" rx="4" fill="white" stroke="currentColor" stroke-width="4"/><path d="M36 32l5 5 9-9M36 52l5 5 9-9M36 72l5 5 9-9" fill="none" stroke="#2f9a5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M58 34h28M58 54h28M58 74h20" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-network" viewBox="0 0 120 90"><g stroke="currentColor" stroke-width="2.5" opacity=".7"><path d="M18 20L60 14M18 20L60 45M18 20L60 76M18 45L60 14M18 45L60 45M18 45L60 76M18 70L60 14M18 70L60 45M18 70L60 76M60 14L102 30M60 45L102 30M60 76L102 30M60 14L102 62M60 45L102 62M60 76L102 62"/></g><g fill="var(--t)" stroke="currentColor" stroke-width="4"><circle cx="18" cy="20" r="8"/><circle cx="18" cy="45" r="8"/><circle cx="18" cy="70" r="8"/><circle cx="60" cy="14" r="8"/><circle cx="60" cy="45" r="8"/><circle cx="60" cy="76" r="8"/><circle cx="102" cy="30" r="8"/><circle cx="102" cy="62" r="8"/></g></symbol><symbol id="i-data" viewBox="0 0 120 90"><ellipse cx="60" cy="16" rx="40" ry="10" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M20 16v56c0 6 18 10 40 10s40-4 40-10V16" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M20 34c0 6 18 10 40 10s40-4 40-10M20 53c0 6 18 10 40 10s40-4 40-10" fill="none" stroke="currentColor" stroke-width="4"/></symbol><symbol id="i-calculator" viewBox="0 0 120 90"><rect x="30" y="4" width="60" height="82" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="38" y="12" width="44" height="16" rx="3" fill="white" stroke="currentColor" stroke-width="3"/><g fill="currentColor"><rect x="38" y="36" width="10" height="9" rx="2"/><rect x="55" y="36" width="10" height="9" rx="2"/><rect x="72" y="36" width="10" height="9" rx="2"/><rect x="38" y="52" width="10" height="9" rx="2"/><rect x="55" y="52" width="10" height="9" rx="2"/><rect x="72" y="52" width="10" height="9" rx="2"/><rect x="38" y="68" width="10" height="9" rx="2"/><rect x="55" y="68" width="10" height="9" rx="2"/><rect x="72" y="68" width="10" height="9" rx="2"/></g></symbol><symbol id="i-clock" viewBox="0 0 120 90"><circle cx="60" cy="45" r="38" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M60 45V22M60 45l16 10" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="60" cy="45" r="4" fill="currentColor"/></symbol><symbol id="i-switch" viewBox="0 0 120 90"><rect x="34" y="6" width="52" height="78" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="48" y="20" width="24" height="50" rx="6" fill="white" stroke="currentColor" stroke-width="4"/><rect x="51" y="23" width="18" height="22" rx="4" fill="currentColor"/></symbol><symbol id="i-translate" viewBox="0 0 120 90"><rect x="6" y="8" width="62" height="50" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><text x="37" y="44" text-anchor="middle" font-size="30" font-weight="800" font-family="Segoe UI,Arial,sans-serif" fill="currentColor">A</text><rect x="52" y="32" width="62" height="50" rx="8" fill="white" stroke="currentColor" stroke-width="4"/><text x="83" y="68" text-anchor="middle" font-size="30" font-weight="800" font-family="Segoe UI,Arial,sans-serif" fill="#d9991a">Α</text></symbol><symbol id="i-question" viewBox="0 0 120 90"><circle cx="60" cy="45" r="38" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M48 34a12 12 0 1 1 18 10c-4 3-6 5-6 10" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><circle cx="60" cy="68" r="4.5" fill="currentColor"/></symbol><symbol id="i-turing" viewBox="0 0 120 90"><circle cx="30" cy="30" r="14" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M6 84c0-18 10-30 24-30s24 12 24 30z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="70" y="18" width="42" height="34" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="83" cy="34" r="4" fill="currentColor"/><circle cx="99" cy="34" r="4" fill="currentColor"/><path d="M91 18v-8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M68 84c0-14 10-24 23-24s23 10 23 24z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><text x="60" y="44" text-anchor="middle" font-size="26" font-weight="800" font-family="Segoe UI,Arial,sans-serif" fill="#d9991a">?</text></symbol><symbol id="i-growth" viewBox="0 0 120 90"><path d="M10 82h100" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><rect x="18" y="56" width="16" height="26" rx="3" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="44" y="42" width="16" height="40" rx="3" fill="var(--t)" stroke="currentColor" stroke-width="4"/><rect x="70" y="26" width="16" height="56" rx="3" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M20 40l26-16 18 8 34-24" fill="none" stroke="#2f9a5c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M86 8h14v14" fill="none" stroke="#2f9a5c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="i-gear" viewBox="0 0 120 90"><path d="M60 14l7 2 3 9 8 4 9-4 6 6-4 9 4 8 9 3 2 7-2 7-9 3-4 8 4 9-6 6-9-4-8 4-3 9-7 2-7-2-3-9-8-4-9 4-6-6 4-9-4-8-9-3-2-7 2-7 9-3 4-8-4-9 6-6 9 4 8-4 3-9z" transform="translate(0,-2) scale(1 .9) translate(0,8)" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="60" cy="46" r="13" fill="white" stroke="currentColor" stroke-width="4"/></symbol><symbol id="i-mail" viewBox="0 0 120 90"><rect x="10" y="16" width="100" height="62" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M12 20l48 34 48-34" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></symbol><symbol id="i-plant" viewBox="0 0 120 90"><path d="M36 60h48l-6 26H42z" fill="#d9991a" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M60 60V30" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M60 40c-16 0-26-10-26-24 16 0 26 10 26 24zM60 32c0-14 10-24 26-24 0 14-10 24-26 24z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></symbol><symbol id="i-penguin" viewBox="0 0 120 90"><ellipse cx="60" cy="50" rx="28" ry="36" fill="#2a2a33" stroke="currentColor" stroke-width="4"/><ellipse cx="60" cy="56" rx="18" ry="26" fill="white"/><circle cx="52" cy="32" r="4" fill="white"/><circle cx="68" cy="32" r="4" fill="white"/><circle cx="52" cy="32" r="2" fill="#2a2a33"/><circle cx="68" cy="32" r="2" fill="#2a2a33"/><path d="M54 40l6 6 6-6z" fill="#d9991a"/><path d="M46 86h10M64 86h10" stroke="#d9991a" stroke-width="5" stroke-linecap="round"/></symbol><symbol id="i-bird" viewBox="0 0 120 90"><ellipse cx="56" cy="50" rx="30" ry="22" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="80" cy="36" r="14" fill="var(--t)" stroke="currentColor" stroke-width="4"/><circle cx="84" cy="33" r="3" fill="currentColor"/><path d="M93 37l12 4-12 4z" fill="#d9991a"/><path d="M36 46c10-22 30-24 36-18-6 14-22 22-36 18z" fill="white" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M50 72v12M62 72v12" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-fish" viewBox="0 0 120 90"><path d="M14 45c16-24 58-28 76 0-18 28-60 24-76 0z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M90 45l20-18v36z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="34" cy="40" r="4" fill="currentColor"/><path d="M56 30q8 15 0 30" fill="none" stroke="currentColor" stroke-width="3"/></symbol><symbol id="i-eye" viewBox="0 0 120 90"><path d="M8 45C24 20 42 12 60 12s36 8 52 33C96 70 78 78 60 78S24 70 8 45z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="60" cy="45" r="20" fill="white" stroke="currentColor" stroke-width="4"/><circle cx="60" cy="45" r="9" fill="currentColor"/><circle cx="64" cy="41" r="3" fill="white"/></symbol><symbol id="i-palette" viewBox="0 0 120 90"><path d="M60 8C30 8 10 26 10 46c0 18 14 28 26 28 8 0 10-6 10-10 0-6 6-8 10-6 6 3 10 8 22 8 18 0 32-12 32-26C110 22 88 8 60 8z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><circle cx="34" cy="40" r="7" fill="#c4533c"/><circle cx="52" cy="24" r="7" fill="#d9991a"/><circle cx="76" cy="24" r="7" fill="#2f9a5c"/><circle cx="92" cy="42" r="7" fill="#5363b8"/><path d="M98 84l-26-26" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></symbol><symbol id="i-home" viewBox="0 0 120 90"><path d="M14 44L60 8l46 36" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 38v46h72V38" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><rect x="50" y="56" width="20" height="28" rx="2" fill="white" stroke="currentColor" stroke-width="4"/><rect x="30" y="48" width="14" height="12" rx="2" fill="white" stroke="currentColor" stroke-width="3"/><rect x="76" y="48" width="14" height="12" rx="2" fill="white" stroke="currentColor" stroke-width="3"/></symbol><symbol id="i-book" viewBox="0 0 120 90"><path d="M60 20C46 12 28 12 12 16v60c16-4 34-4 48 4 14-8 32-8 48-4V16c-16-4-34-4-48 4z" fill="var(--t)" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M60 20v60" stroke="currentColor" stroke-width="4"/><path d="M22 30h26M22 42h26M72 30h26M72 42h26" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".6"/></symbol><symbol id="i-tv" viewBox="0 0 120 90"><rect x="10" y="12" width="100" height="62" rx="8" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M52 32v22l20-11z" fill="currentColor"/><path d="M44 84h32M60 74v10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></symbol><symbol id="i-wave" viewBox="0 0 120 90"><rect x="8" y="10" width="104" height="70" rx="14" fill="var(--t)" stroke="currentColor" stroke-width="4"/><path d="M22 45h8M36 32v26M46 22v46M56 36v18M66 26v38M76 38v14M86 30v30M96 45h4" stroke="currentColor" stroke-width="5" stroke-linecap="round"/></symbol></defs></svg><header class="top"><div class="brand"><span class="badge">Α.7.Μ4</span><span>Python IDLE</span></div><div class="right"><button id="full">⛶ <span class="le">Πλήρης οθόνη</span><span class="ln">Full screen</span></button><span class="langs" role="group" aria-label="Language / Γλώσσα"><button data-l="el">ΕΛ</button><button data-l="en">EN</button></span></div></header><main id="app"></main><script>
+(function(){
+ var H=document.documentElement;
+ window.LANG=H.classList.contains('en')?'en':'el';
+ window.setLang=function(x){LANG=x;H.classList.toggle('en',x==='en');H.lang=x;
+  try{localStorage.setItem('A7M1_lang',x)}catch(e){}
+  document.querySelectorAll('.langs button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.l===x)});
+  document.querySelectorAll('a[data-keep]').forEach(function(a){a.href=a.dataset.keep+'?lang='+x});
+  document.title=H.getAttribute('data-t'+x)||document.title;
+  if(window.onLang)window.onLang(x)};
+ document.addEventListener('click',function(e){var b=e.target.closest('.langs button');if(b)setLang(b.dataset.l)});
+ setLang(LANG);
+})();
+</script><script>/* PY: a small Python-subset interpreter for the classroom (lesson A7.3 level).
+   Supports: assignment, expression statements, int/float/str/bool/None, tuples in % formatting,
+   + - * / // % ** (with precedence and brackets), comparisons, unary -, string concat/repeat,
+   '%.nf' % x formatting, builtins print/input/int/float/str/round/abs/len/type.
+   Errors use CPython's wording: SyntaxError, IndentationError, NameError, TypeError, ValueError, ZeroDivisionError. */
+const PY = (() => {
+  class PyErr extends Error { constructor(type, msg, line) { super(msg); this.type = type; this.line = line; } }
+  class Stop extends Error {}
+  const V = (t, v) => ({ t, v });
+  const NONE = V('none', null);
+  const KW = new Set(['if', 'else', 'elif', 'for', 'while', 'def', 'return', 'import', 'from', 'class', 'and', 'or', 'not', 'in', 'is', 'pass', 'break', 'continue', 'lambda', 'with', 'try', 'except', 'global']);
+  const tname = x => ({ int: 'int', float: 'float', str: 'str', bool: 'bool', none: 'NoneType', tuple: 'tuple', func: 'builtin_function_or_method', type: 'type' })[x.t];
+  function fmtFloat(v) {
+    if (!isFinite(v)) return isNaN(v) ? 'nan' : (v > 0 ? 'inf' : '-inf');
+    if (Number.isInteger(v) && Math.abs(v) < 1e16) return v.toFixed(1);
+    let s = (Math.abs(v) >= 1e16 || (v !== 0 && Math.abs(v) < 1e-4)) ? v.toExponential() : String(v);
+    if (s.includes('e')) s = s.replace(/e([+-])(\d)$/, 'e$10$2');
+    return s;
+  }
+  function repr(x) {
+    switch (x.t) {
+      case 'int': return String(x.v);
+      case 'float': return fmtFloat(x.v);
+      case 'str': return x.v.includes("'") && !x.v.includes('"') ? '"' + x.v + '"' : "'" + x.v.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n') + "'";
+      case 'bool': return x.v ? 'True' : 'False';
+      case 'none': return 'None';
+      case 'tuple': return '(' + x.v.map(repr).join(', ') + (x.v.length === 1 ? ',' : '') + ')';
+      case 'func': return '<built-in function ' + x.name + '>';
+      case 'type': return "<class '" + x.v + "'>";
+    }
+  }
+  const str = x => x.t === 'str' ? x.v : repr(x);
+  const isNum = x => x.t === 'int' || x.t === 'float' || x.t === 'bool';
+  const num = x => x.t === 'bool' ? (x.v ? 1 : 0) : x.v;
+
+  /* ---------------- lexer (one logical line) ---------------- */
+  function lex(src, ln) {
+    const toks = []; let i = 0; const n = src.length;
+    while (i < n) {
+      const c = src[i];
+      if (c === ' ' || c === '\t') { i++; continue; }
+      if (c === '#') break;
+      if (/[0-9]/.test(c) || (c === '.' && /[0-9]/.test(src[i + 1] || ''))) {
+        const m = /^(\d+\.\d*|\.\d+|\d+)([eE][+-]?\d+)?/.exec(src.slice(i)); const s = m[0]; i += s.length;
+        if (/[\p{L}_]/u.test(src[i] || '')) throw new PyErr('SyntaxError', 'invalid decimal literal', ln);
+        toks.push({ k: 'num', v: s, f: /[.eE]/.test(s) }); continue;
+      }
+      if (/[\p{L}_]/u.test(c)) {
+        const m = /^[\p{L}_][\p{L}\p{N}_]*/u.exec(src.slice(i)); i += m[0].length; toks.push({ k: 'name', v: m[0] }); continue;
+      }
+      if (c === '"' || c === "'") {
+        let j = i + 1, s = '';
+        while (j < n && src[j] !== c) {
+          if (src[j] === '\\' && j + 1 < n) { const e = src[j + 1]; s += e === 'n' ? '\n' : e === 't' ? '\t' : e; j += 2; } else s += src[j++];
+        }
+        if (j >= n) throw new PyErr('SyntaxError', 'unterminated string literal (detected at line ' + ln + ')', ln);
+        toks.push({ k: 'str', v: s }); i = j + 1; continue;
+      }
+      const two = src.substr(i, 2);
+      if (['**', '//', '==', '!=', '<=', '>='].includes(two)) { toks.push({ k: 'op', v: two }); i += 2; continue; }
+      if ('+-*/%(),=<>'.includes(c)) { toks.push({ k: 'op', v: c }); i++; continue; }
+      if (c === '[' || c === ']' || c === '{' || c === '}' || c === ':' || c === '.' || c === ';') throw new PyErr('SyntaxError', 'invalid syntax', ln);
+      throw new PyErr('SyntaxError', "invalid character '" + c + "' (U+" + c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0') + ')', ln);
+    }
+    return toks;
+  }
+
+  /* ---------------- parser (Pratt) ---------------- */
+  const BP = { '==': 5, '!=': 5, '<': 5, '>': 5, '<=': 5, '>=': 5, '+': 10, '-': 10, '*': 20, '/': 20, '//': 20, '%': 20, '**': 40 };
+  function parseLine(toks, ln) {
+    let p = 0;
+    const peek = () => toks[p], next = () => toks[p++];
+    const err = m => { throw new PyErr('SyntaxError', m || 'invalid syntax', ln); };
+    const isOp = (t, v) => t && t.k === 'op' && t.v === v;
+    function primary() {
+      const t = next(); if (!t) err();
+      let node;
+      if (t.k === 'num') node = { n: 'num', v: t.v, f: t.f };
+      else if (t.k === 'str') { let s = t.v; while (peek() && peek().k === 'str') s += next().v; node = { n: 'str', v: s }; }
+      else if (t.k === 'name') {
+        if (KW.has(t.v)) err();
+        node = t.v === 'True' || t.v === 'False' ? { n: 'bool', v: t.v === 'True' } : t.v === 'None' ? { n: 'none' } : { n: 'name', v: t.v };
+      }
+      else if (isOp(t, '(')) {
+        if (isOp(peek(), ')')) { next(); node = { n: 'tuple', items: [] }; }
+        else {
+          if (!peek()) err("'(' was never closed");
+          const e = expr(0);
+          if (isOp(peek(), ',')) {
+            const items = [e];
+            while (isOp(peek(), ',')) { next(); if (isOp(peek(), ')')) break; if (!peek()) err("'(' was never closed"); items.push(expr(0)); }
+            node = { n: 'tuple', items };
+          } else node = e;
+          if (!peek()) err("'(' was never closed");
+          if (!isOp(peek(), ')')) err(peek().k !== 'op' ? 'invalid syntax. Perhaps you forgot a comma?' : undefined);
+          next();
+        }
+      }
+      else if (isOp(t, '-') || isOp(t, '+')) node = { n: 'un', op: t.v, a: expr(30) };
+      else if (isOp(t, ')')) err("unmatched ')'");
+      else err();
+      while (isOp(peek(), '(')) {
+        next(); const args = [], kw = {};
+        if (isOp(peek(), ')')) next();
+        else for (;;) {
+          if (!peek()) err("'(' was never closed");
+          if (peek().k === 'name' && isOp(toks[p + 1], '=')) { const k = next().v; next(); kw[k] = expr(0); }
+          else args.push(expr(0));
+          if (!peek()) err("'(' was never closed");
+          const s = next();
+          if (isOp(s, ')')) break;
+          if (!isOp(s, ',')) err(s.k !== 'op' ? 'invalid syntax. Perhaps you forgot a comma?' : undefined);
+          if (isOp(peek(), ')')) { next(); break; }
+        }
+        node = { n: 'call', f: node, args, kw };
+      }
+      return node;
+    }
+    function expr(minbp) {
+      let left = primary();
+      for (;;) {
+        const t = peek(); if (!t) break;
+        if (t.k !== 'op') err('invalid syntax. Perhaps you forgot a comma?');
+        const bp = BP[t.v]; if (bp === undefined || bp <= minbp) break;
+        next(); if (!peek()) err();
+        left = { n: 'bin', op: t.v, a: left, b: expr(t.v === '**' ? bp - 1 : bp) };
+      }
+      return left;
+    }
+    if (!toks.length) return null;
+    if (toks[0].k === 'name' && toks[0].v === 'print' && toks[1] && !(toks[1].k === 'op' && '(=+-*/%'.includes(toks[1].v)))
+      err("Missing parentheses in call to 'print'. Did you mean print(...)?");
+    let st;
+    const rhs = () => { const first = expr(0); if (!isOp(peek(), ',')) return first; const items = [first];
+      while (isOp(peek(), ',')) { next(); if (!peek()) break; items.push(expr(0)); } return { n: 'tuple', items }; };
+    let q = 0; const names = [];
+    while (toks[q] && toks[q].k === 'name' && isOp(toks[q + 1], ',')) { names.push(toks[q].v); q += 2; }
+    if (names.length && toks[q] && toks[q].k === 'name' && isOp(toks[q + 1], '=')) {
+      names.push(toks[q].v); if (names.some(x => KW.has(x))) err();
+      p = q + 2; if (!peek()) err(); st = { n: 'assign', names, e: rhs() };
+    } else if (toks[0].k === 'name' && isOp(toks[1], '=')) {
+      if (KW.has(toks[0].v)) err();
+      p = 2; if (!peek()) err(); st = { n: 'assign', name: toks[0].v, e: rhs() };
+    } else if (toks[0].k !== 'name' && isOp(toks[1], '=') && toks.length > 2) {
+      err(toks[0].k === 'num' ? 'cannot assign to literal here. Maybe you meant \'==\' instead of \'=\'?' : 'cannot assign to expression here. Maybe you meant \'==\' instead of \'=\'?');
+    } else {
+      const e = expr(0);
+      if (isOp(peek(), '=')) err("cannot assign to " + (e.n === 'call' ? 'function call' : 'expression') + " here. Maybe you meant '==' instead of '='?");
+      st = { n: 'expr', e };
+    }
+    if (p < toks.length) { if (isOp(peek(), ')')) err("unmatched ')'"); err(); }
+    return st;
+  }
+
+  /* ---------------- runtime ---------------- */
+  const E = (type, msg) => new PyErr(type, msg);
+  function pyformat(fmt, args) {
+    let k = 0;
+    const out = fmt.replace(/%([-+ 0#]*)(\d*)(?:\.(\d+))?([diouxXeEfFgGcrs%])/g, (m, flags, width, prec, conv) => {
+      if (conv === '%') return '%';
+      if (k >= args.length) throw E('TypeError', 'not enough arguments for format string');
+      const a = args[k++]; let s;
+      if ('fFeEgG'.includes(conv)) {
+        if (!isNum(a)) throw E('TypeError', 'must be real number, not ' + tname(a));
+        const pr = prec === undefined ? 6 : +prec, x = num(a);
+        s = conv === 'f' || conv === 'F' ? fixedPy(x, pr) : conv === 'e' || conv === 'E' ? x.toExponential(pr).replace(/e([+-])(\d)$/, 'e$10$2') : String(+x.toPrecision(pr || 1));
+      } else if ('diu'.includes(conv)) {
+        if (!isNum(a)) throw E('TypeError', '%' + conv + ' format: a real number is required, not ' + tname(a));
+        s = String(Math.trunc(num(a)));
+      } else if (conv === 's') s = str(a); else if (conv === 'r') s = repr(a); else s = str(a);
+      if (flags.includes('+') && !s.startsWith('-') && 'fFeEgGdiu'.includes(conv)) s = '+' + s;
+      if (width && s.length < +width) s = flags.includes('-') ? s.padEnd(+width) : (flags.includes('0') && 'fFdiu'.includes(conv) ? (s[0] === '-' ? '-' + s.slice(1).padStart(+width - 1, '0') : s.padStart(+width, '0')) : s.padStart(+width));
+      return s;
+    });
+    if (k < args.length) throw E('TypeError', 'not all arguments converted during string formatting');
+    return out;
+  }
+  function fixedPy(x, pr) {   /* like Python: exact binary ties round to even */
+    if (Number.isFinite(x) && pr <= 60) {
+      const ex = Math.abs(x).toFixed(Math.min(100, pr + 40)), dot = ex.indexOf('.');
+      const rest = ex.slice(dot + 1 + pr);
+      if (/^50*$/.test(rest)) {   /* a true tie */
+        const keep = ex.slice(0, dot + 1 + pr).replace(/\.$/, ''), lastDigit = +keep.replace('.', '').slice(-1);
+        const down = keep, up = (Math.abs(x) + 0.5 * 10 ** -pr).toFixed(pr);
+        const r = lastDigit % 2 === 0 ? down : up;
+        return (x < 0 && /[1-9]/.test(r) ? '-' : '') + r;
+      }
+    }
+    return x.toFixed(pr);
+  }
+  function compare(op, a, b) {
+    let x, y;
+    if (isNum(a) && isNum(b)) { x = num(a); y = num(b); }
+    else if (a.t === 'str' && b.t === 'str') { x = a.v; y = b.v; }
+    else {
+      if (op === '==') return V('bool', false); if (op === '!=') return V('bool', true);
+      throw E('TypeError', "'" + op + "' not supported between instances of '" + tname(a) + "' and '" + tname(b) + "'");
+    }
+    return V('bool', op === '==' ? x === y : op === '!=' ? x !== y : op === '<' ? x < y : op === '>' ? x > y : op === '<=' ? x <= y : x >= y);
+  }
+  function binop(op, a, b) {
+    if (BP[op] === 5) return compare(op, a, b);
+    if (isNum(a) && isNum(b)) {
+      const x = num(a), y = num(b), fl = a.t === 'float' || b.t === 'float', T = fl ? 'float' : 'int';
+      switch (op) {
+        case '+': return V(T, x + y);
+        case '-': return V(T, x - y);
+        case '*': return V(T, x * y);
+        case '/': if (y === 0) throw E('ZeroDivisionError', 'division by zero'); return V('float', x / y);
+        case '//': if (y === 0) throw E('ZeroDivisionError', fl ? 'float floor division by zero' : 'integer division or modulo by zero'); return V(T, Math.floor(x / y));
+        case '%': if (y === 0) throw E('ZeroDivisionError', fl ? 'float modulo' : 'integer modulo by zero'); return V(T, x - Math.floor(x / y) * y);
+        case '**': if (x === 0 && y < 0) throw E('ZeroDivisionError', '0.0 cannot be raised to a negative power'); return V(fl || y < 0 ? 'float' : 'int', Math.pow(x, y));
+      }
+    }
+    if (a.t === 'str' && b.t === 'str' && op === '+') return V('str', a.v + b.v);
+    if (op === '*' && a.t === 'str' && (b.t === 'int' || b.t === 'bool')) return V('str', a.v.repeat(Math.max(0, num(b))));
+    if (op === '*' && b.t === 'str' && (a.t === 'int' || a.t === 'bool')) return V('str', b.v.repeat(Math.max(0, num(a))));
+    if (op === '%' && a.t === 'str') return V('str', pyformat(a.v, b.t === 'tuple' ? b.v : [b]));
+    if (op === '*' && (a.t === 'str' || b.t === 'str')) throw E('TypeError', "can't multiply sequence by non-int of type '" + tname(a.t === 'str' ? b : a) + "'");
+    if (op === '+' && a.t === 'str') throw E('TypeError', 'can only concatenate str (not "' + tname(b) + '") to str');
+    throw E('TypeError', 'unsupported operand type(s) for ' + op + ": '" + tname(a) + "' and '" + tname(b) + "'");
+  }
+  function roundHalfEven(x) { const r = Math.round(x); return (Math.abs(x % 1) === 0.5 && r % 2 !== 0) ? r - 1 : r; }
+  function builtins() {
+    const F = (name, fn) => ({ t: 'func', name, fn });
+    const argc = (name, args, lo, hi) => {
+      if (args.length < lo || args.length > hi) throw E('TypeError', name + '() takes ' + (lo === hi ? 'exactly ' + lo + ' argument' + (lo === 1 ? '' : 's') : 'at most ' + hi + ' arguments') + ' (' + args.length + ' given)');
+    };
+    return {
+      print: F('print', async (args, kw, io) => {
+        const sep = kw.sep ? str(kw.sep) : ' ', end = kw.end ? str(kw.end) : '\n';
+        io.out(args.map(str).join(sep) + end, 'print'); return NONE;
+      }),
+      input: F('input', async (args, kw, io) => {
+        argc('input', args, 0, 1);
+        if (args.length) io.out(str(args[0]), 'prompt');
+        return V('str', await io.input());
+      }),
+      int: F('int', async args => {
+        if (!args.length) return V('int', 0); argc('int', args, 1, 1);
+        const a = args[0];
+        if (a.t === 'str') { const s = a.v.trim().replace(/_/g, ''); if (!/^[+-]?\d+$/.test(s)) throw E('ValueError', 'invalid literal for int() with base 10: ' + repr(a)); return V('int', parseInt(s, 10)); }
+        if (isNum(a)) return V('int', Math.trunc(num(a)));
+        throw E('TypeError', "int() argument must be a string, a bytes-like object or a real number, not '" + tname(a) + "'");
+      }),
+      float: F('float', async args => {
+        if (!args.length) return V('float', 0); argc('float', args, 1, 1);
+        const a = args[0];
+        if (a.t === 'str') {
+          const s = a.v.trim().toLowerCase();
+          if (/^[+-]?(\d+\.?\d*|\.\d+)(e[+-]?\d+)?$/.test(s)) return V('float', parseFloat(s));
+          if (/^[+-]?(inf|infinity)$/.test(s)) return V('float', s.startsWith('-') ? -Infinity : Infinity);
+          throw E('ValueError', 'could not convert string to float: ' + repr(a));
+        }
+        if (isNum(a)) return V('float', num(a));
+        throw E('TypeError', "float() argument must be a string or a real number, not '" + tname(a) + "'");
+      }),
+      str: F('str', async args => V('str', args.length ? str(args[0]) : '')),
+      abs: F('abs', async args => { argc('abs', args, 1, 1); const a = args[0]; if (!isNum(a)) throw E('TypeError', "bad operand type for abs(): '" + tname(a) + "'"); return V(a.t === 'float' ? 'float' : 'int', Math.abs(num(a))); }),
+      round: F('round', async args => {
+        argc('round', args, 1, 2); const a = args[0]; if (!isNum(a)) throw E('TypeError', "type " + tname(a) + " doesn't define __round__ method");
+        if (args.length === 1 || args[1].t === 'none') return V('int', roundHalfEven(num(a)));
+        const d = num(args[1]); const r = parseFloat(num(a).toFixed(Math.max(0, d)));
+        return V(a.t === 'float' ? 'float' : 'int', d >= 0 ? r : Math.round(num(a) / 10 ** -d) * 10 ** -d);
+      }),
+      len: F('len', async args => { argc('len', args, 1, 1); const a = args[0]; if (a.t === 'str' || a.t === 'tuple') return V('int', a.v.length); throw E('TypeError', "object of type '" + tname(a) + "' has no len()"); }),
+      type: F('type', async args => { argc('type', args, 1, 1); return V('type', tname(args[0])); }),
+    };
+  }
+  async function ev(node, env, io) {
+    switch (node.n) {
+      case 'num': return node.f ? V('float', parseFloat(node.v)) : V('int', parseInt(node.v, 10));
+      case 'str': return V('str', node.v);
+      case 'bool': return V('bool', node.v);
+      case 'none': return NONE;
+      case 'name':
+        if (Object.prototype.hasOwnProperty.call(env, node.v)) return env[node.v];
+        if (Object.prototype.hasOwnProperty.call(env.__b, node.v)) return env.__b[node.v];
+        throw E('NameError', "name '" + node.v + "' is not defined" + (env.__b[node.v.toLowerCase()] ? ". Did you mean: '" + node.v.toLowerCase() + "'?" : ''));
+      case 'tuple': { const v = []; for (const x of node.items) v.push(await ev(x, env, io)); return V('tuple', v); }
+      case 'un': {
+        const a = await ev(node.a, env, io);
+        if (!isNum(a)) throw E('TypeError', 'bad operand type for unary ' + node.op + ": '" + tname(a) + "'");
+        return V(a.t === 'float' ? 'float' : 'int', node.op === '-' ? -num(a) : num(a));
+      }
+      case 'bin': { const a = await ev(node.a, env, io), b = await ev(node.b, env, io); return binop(node.op, a, b); }
+      case 'call': {
+        const f = await ev(node.f, env, io); const args = [], kw = {};
+        for (const x of node.args) args.push(await ev(x, env, io));
+        for (const k in node.kw) kw[k] = await ev(node.kw[k], env, io);
+        if (f.t !== 'func') throw E('TypeError', "'" + tname(f) + "' object is not callable");
+        return await f.fn(args, kw, io);
+      }
+    }
+  }
+  /* run a whole program. io = {out(text, kind), input(): Promise<string>, err(text)} */
+  async function run(src, io, fname) {
+    fname = fname || 'program.py';
+    const lines = src.replace(/\r/g, '').split('\n'), prog = [];
+    for (let k = 0; k < lines.length; k++) {
+      const raw = lines[k]; if (!raw.trim() || raw.trim().startsWith('#')) continue;
+      try {
+        if (/^\s/.test(raw)) throw new PyErr('IndentationError', 'unexpected indent', k + 1);
+        const st = parseLine(lex(raw, k + 1), k + 1); if (st) prog.push([k + 1, st, raw]);
+      } catch (e) {
+        if (!(e instanceof PyErr)) throw e;
+        io.err('  File "' + fname + '", line ' + (k + 1) + '\n    ' + raw.trim() + '\n' + e.type + ': ' + e.message);
+        return { ok: false, type: e.type, line: k + 1 };
+      }
+    }
+    const env = { __b: builtins() };
+    for (const [ln, st, raw] of prog) {
+      try {
+        if (st.n === 'assign' && st.names) {
+          const v = await ev(st.e, env, io), k = st.names.length;
+          let items; if (v.t === 'tuple') items = v.v; else if (v.t === 'str') items = [...v.v].map(c => V('str', c));
+          else throw E('TypeError', 'cannot unpack non-iterable ' + tname(v) + ' object');
+          if (items.length > k) throw E('ValueError', 'too many values to unpack (expected ' + k + ')');
+          if (items.length < k) throw E('ValueError', 'not enough values to unpack (expected ' + k + ', got ' + items.length + ')');
+          st.names.forEach((nm, j) => { env[nm] = items[j]; });
+        } else if (st.n === 'assign') env[st.name] = await ev(st.e, env, io); else await ev(st.e, env, io);
+      } catch (e) {
+        if (e instanceof Stop) return { ok: false, type: 'Stopped', line: ln };
+        if (!(e instanceof PyErr)) throw e;
+        io.err('Traceback (most recent call last):\n  File "' + fname + '", line ' + ln + ', in <module>\n    ' + raw.trim() + '\n' + e.type + ': ' + e.message);
+        return { ok: false, type: e.type, line: ln };
+      }
+    }
+    return { ok: true };
+  }
+  /* headless run with a queue of inputs: returns printed text, prompts and error */
+  async function test(src, inputs) {
+    const q = inputs.map(String); let printed = '', all = '', err = '';
+    const res = await run(src, {
+      out: (t, kind) => { all += t; if (kind === 'print') printed += t; },
+      input: async () => { if (!q.length) throw new PyErr('EOFError', 'EOF when reading a line'); const v = q.shift(); all += v + '\n'; return v; },
+      err: t => { err = t; all += t + '\n'; },
+    }, 'test.py');
+    return { ok: res.ok, type: res.type, printed, all, err, unused: q.length };
+  }
+  return { run, test, Stop, PyErr };
+})();
+
+/* ---------------- IDLE-like widget: editor + shell ----------------
+   PYIDE.mount(container, {code, fname, onChange}) → {getCode, setCode, run, stop} */
+const PYIDE = (() => {
+  const escH = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  function mount(el, opt) {
+    el.classList.add('pyide');
+    el.innerHTML = '<div class="pyed"><div class="pytb"><i></i><i></i><i></i><span class="pyfn"></span></div>'
+      + '<div class="pymenu"><span>File</span><span>Edit</span><span>Format</span><span class="pyrun">Run</span><span>Options</span></div>'
+      + '<div class="pywrap"><pre class="pygut"></pre><textarea class="pycode" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea></div></div>'
+      + '<div class="pysh"><div class="pytb"><i></i><i></i><i></i><span>Python 3 Shell</span></div><div class="pyout" tabindex="0"></div></div>';
+    const ta = el.querySelector('.pycode'), gut = el.querySelector('.pygut'), out = el.querySelector('.pyout'), fn = el.querySelector('.pyfn');
+    fn.textContent = (opt.fname || 'program.py') + ' · Editor';
+    ta.value = opt.code || '';
+    if (opt.shell) out.innerHTML = opt.shell;
+    const sync = () => { const n = ta.value.split('\n').length; gut.textContent = Array.from({ length: n }, (_, i) => i + 1).join('\n'); gut.scrollTop = ta.scrollTop; };
+    ta.addEventListener('input', () => { sync(); opt.onChange && opt.onChange(ta.value); });
+    ta.addEventListener('scroll', () => { gut.scrollTop = ta.scrollTop; });
+    ta.addEventListener('keydown', e => {
+      if (e.key === 'Tab') { e.preventDefault(); const s = ta.selectionStart; ta.setRangeText('    ', s, ta.selectionEnd, 'end'); sync(); opt.onChange && opt.onChange(ta.value); }
+      if (e.key === 'F5') { e.preventDefault(); runIt(); }
+    });
+    el.querySelector('.pyrun').onclick = () => runIt();
+    sync();
+    let token = 0, pending = null;
+    const save = () => opt.onShell && opt.onShell(out.innerHTML);
+    const write = (t, cls) => { const s = document.createElement('span'); if (cls) s.className = cls; s.textContent = t; out.append(s); out.scrollTop = out.scrollHeight; save(); };
+    function stop() { token++; if (pending) { pending.reject(new PY.Stop()); pending = null; } out.querySelectorAll('input').forEach(i => i.remove()); }
+    async function runIt() {
+      stop(); const my = ++token;
+      write((out.textContent ? '\n' : '') + '======= RESTART: ' + (opt.fname || 'program.py') + ' =======\n', 'pyrs');
+      const io = {
+        out: (t) => { if (my === token) write(t); },
+        err: (t) => { if (my === token) write(t + '\n', 'pyerr'); },
+        input: () => new Promise((res, rej) => {
+          if (my !== token) return rej(new PY.Stop());
+          const inp = document.createElement('input'); inp.className = 'pyin'; inp.setAttribute('aria-label', 'input');
+          out.append(inp); inp.focus({ preventScroll: true }); out.scrollTop = out.scrollHeight;
+          pending = { reject: rej };
+          inp.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); const v = inp.value; inp.remove(); pending = null; write(v + '\n', 'pyuser'); res(v); }
+          });
+        }),
+      };
+      try { await PY.run(ta.value, io, opt.fname); } catch (e) { if (!(e instanceof PY.Stop)) write(String(e) + '\n', 'pyerr'); }
+      if (my === token) write('>>> ', 'pyps');
+    }
+    return { setName: n => { opt.fname = n; fn.textContent = n + ' · Editor'; }, getCode: () => ta.value, setCode: v => { ta.value = v; sync(); opt.onChange && opt.onChange(v); }, run: runIt, stop, clear: () => { out.innerHTML = ''; save(); } };
+  }
+  return { mount };
+})();
+</script><script>
+const T={"el": {"h": "🐍 Προσομοιωτής Python (IDLE)", "p": "Διάλεξε ένα πρόβλημα. Κάθε πρόβλημα έχει τη δική του οθόνη με την περιγραφή, ένα παράδειγμα εκτέλεσης και το Editor + Shell για να γράψεις και να τρέξεις τον κώδικα.", "list": "← Όλα τα προβλήματα", "prev": "← Προηγούμενο", "next": "Επόμενο →", "goal": "Τι πρέπει να κάνεις", "steps": "Βήματα", "example": "Παράδειγμα εκτέλεσης", "typed": "μπλε = τιμές που πληκτρολογεί ο χρήστης · κίτρινο = αποτέλεσμα", "hint": "💡 Χρειάζομαι βοήθεια", "run": "▶ Run Module (F5)", "check": "✓ Έλεγχος λύσης", "reset": "↺ Αρχικός κώδικας", "save": "💾 Save As (.py)", "open": "📂 Open…", "clear": "🧹 Καθάρισμα Shell", "solved": "✓ Λύθηκε", "todo": "Δεν λύθηκε ακόμα", "in": "Είσοδος", "expect": "Αναμένεται", "yours": "Το πρόγραμμά σου εμφάνισε", "allok": "🎉 Μπράβο! Το πρόγραμμα περνά όλους τους ελέγχους.", "some": "έλεγχοι πέτυχαν. Τρέξε το πρόγραμμα (▶) με τις τιμές του ελέγχου και δες τι εμφανίζει.", "progress": "Λυμένα προβλήματα", "confirm": "Να επανέλθει ο αρχικός κώδικας; Οι αλλαγές σου θα χαθούν.", "freeT": "Ελεύθερο πρόγραμμα", "freeP": "Γράψε και τρέξε ό,τι θέλεις.", "note": "Υποστηρίζονται όσα μαθαίνουμε στο Α.7.Μ2–Μ3: μεταβλητές, int/float/str, input(), print(), αριθμητικές πράξεις, '%.2f' %. Για if, for, while χρησιμοποιούμε το πραγματικό IDLE.", "prompt": "Κάθε input() έχει μήνυμα για τον χρήστη", "label": "Το print εμφανίζει και μήνυμα, όχι μόνο τον αριθμό", "fmt": "Το αποτέλεσμα τυπώνεται με N δεκαδικό ψηφίο (%.Nf)", "src": "Πηγή", "fixit": "Βρες και διόρθωσε", "write": "Γράψε", "complete": "Συμπλήρωσε", "free": "Ελεύθερο"}, "en": {"h": "🐍 Python simulator (IDLE)", "p": "Choose a problem. Each problem has its own screen with the description, an example run and the Editor + Shell to write and run your code.", "list": "← All problems", "prev": "← Previous", "next": "Next →", "goal": "What you have to do", "steps": "Steps", "example": "Example run", "typed": "blue = values the user types · yellow = result", "hint": "💡 I need help", "run": "▶ Run Module (F5)", "check": "✓ Check solution", "reset": "↺ Original code", "save": "💾 Save As (.py)", "open": "📂 Open…", "clear": "🧹 Clear Shell", "solved": "✓ Solved", "todo": "Not solved yet", "in": "Input", "expect": "Expected", "yours": "Your program displayed", "allok": "🎉 Well done! The program passes all the checks.", "some": "checks passed. Run the program (▶) with the check values and see what it displays.", "progress": "Problems solved", "confirm": "Restore the original code? Your changes will be lost.", "freeT": "Free program", "freeP": "Write and run anything you like.", "note": "Supports what we learn in A.7.M2–M3: variables, int/float/str, input(), print(), arithmetic, '%.2f' %. For if, for, while we use the real IDLE.", "prompt": "Every input() has a message for the user", "label": "print also shows a message, not just the number", "fmt": "The result is printed with N decimal place(s) (%.Nf)", "src": "Source", "fixit": "Find and fix", "write": "Write", "complete": "Complete", "free": "Free"}},P=[{"id": "ask1", "cls": "main", "kind": "write", "file": "M4_ask1.py", "tests": [[[18, 16, 18], [17.6]], [[20, 20, 20], [20]], [[10, 15, 12], [11.6]]], "req": ["prompt"], "start": "# M4_ask1.py\n", "title": {"el": "🎓 Ο βαθμός στο Λύκειο Hogwarts", "en": "🎓 The grade at Hogwarts Lyceum"}, "short": {"el": "Γράψε πρόγραμμα που υπολογίζει τον τελικό βαθμό: 50% διαγώνισμα, 20% ασκήσεις, 30% εργασία.", "en": "Write a program that calculates the final grade: 50% test, 20% homework, 30% project."}, "goal": {"el": "Ο καθηγητής πληροφορικής στο Λύκειο Hogwarts αξιολογεί: 50% ο βαθμός του διαγωνίσματος (test), 20% οι ασκήσεις για το σπίτι (hwork), 30% η τελική εργασία (project). Γράψε πρόγραμμα που δέχεται τους τρεις βαθμούς και τυπώνει τον τελικό βαθμό του μαθητή (grade).", "en": "The computer science teacher at Hogwarts Lyceum grades like this: 50% the test score (test), 20% homework (hwork), 30% the final project (project). Write a program that reads the three scores and prints the student's final grade."}, "steps": {"el": ["Δεδομένα: test, hwork, project · Πληροφορία: grade.", "Διάβασε τους τρεις βαθμούς με float(input('μήνυμα')).", "Υπολόγισε grade = test*0.5 + hwork*0.2 + project*0.3.", "Τύπωσε τον βαθμό και έλεγξε με 18, 16, 18: πρέπει να βγει 17.6 (η Python μπορεί να δείξει 17.599999999999998: είναι το ίδιο, με '%.1f' τυπώνεται 17.6)."], "en": ["Data: test, hwork, project · Information: grade.", "Read the three scores with float(input('message')).", "Calculate grade = test*0.5 + hwork*0.2 + project*0.3.", "Print the grade and check with 18, 16, 18: it must give 17.6 (Python may show 17.599999999999998: it is the same, and with '%.1f' it prints 17.6)."]}, "example": [[[["", {"el": "Διαγώνισμα: ", "en": "Test: "}], ["u", "18"]], [["", {"el": "Ασκήσεις: ", "en": "Homework: "}], ["u", "16"]], [["", {"el": "Εργασία: ", "en": "Project: "}], ["u", "18"]], [["o", {"el": "Τελικός βαθμός: 17.6", "en": "Final grade: 17.6"}]]]], "hint": {"el": "Τα ποσοστά γίνονται δεκαδικοί: 50% = 0.5, 20% = 0.2, 30% = 0.3.", "en": "Percentages become decimals: 50% = 0.5, 20% = 0.2, 30% = 0.3."}, "src": {"el": "Τετράδιο Α.7.Μ4, άσκηση 1 (σελ. 121)", "en": "Workbook A.7.M4, exercise 1 (p. 121)"}}, {"id": "ask2", "cls": "st", "kind": "write", "file": "M4_ask2.py", "tests": [[[4, 6, 5], [25]], [[3, 5, 4], [16]], [[2.5, 3.5, 4], [12]]], "req": ["prompt"], "start": "# M4_ask2.py\n", "title": {"el": "🔶 Εμβαδόν τραπεζίου", "en": "🔶 Area of a trapezium"}, "short": {"el": "Γράψε πρόγραμμα που δέχεται τις βάσεις και το ύψος ενός τραπεζίου και τυπώνει το εμβαδόν.", "en": "Write a program that reads the bases and the height of a trapezium and prints its area."}, "goal": {"el": "Το εμβαδόν τραπεζίου δίνεται από τον τύπο Ε = ((βάση1 + βάση2) * ύψος) / 2. Ακολούθησε τον κύκλο ανάπτυξης και γράψε πρόγραμμα που δέχεται τις βάσεις και το ύψος (με αυτή τη σειρά) και υπολογίζει και τυπώνει το εμβαδόν.", "en": "The area of a trapezium is given by E = ((base1 + base2) * height) / 2. Follow the development cycle and write a program that reads the bases and the height (in this order) and calculates and prints the area."}, "steps": {"el": ["Δεδομένα: βάση1, βάση2, ύψος · Πληροφορία: εμβαδόν.", "Διάβασε τις τρεις τιμές με float(input('μήνυμα')).", "Υπολόγισε το εμβαδόν (πρόσεξε τις παρενθέσεις!).", "Τύπωσε το εμβαδόν και έλεγξε με 4, 6, 5: πρέπει να βγει 25.0."], "en": ["Data: base1, base2, height · Information: area.", "Read the three values with float(input('message')).", "Calculate the area (watch the brackets!).", "Print the area and check with 4, 6, 5: it must give 25.0."]}, "example": [[[["", {"el": "Βάση 1: ", "en": "Base 1: "}], ["u", "4"]], [["", {"el": "Βάση 2: ", "en": "Base 2: "}], ["u", "6"]], [["", {"el": "Ύψος: ", "en": "Height: "}], ["u", "5"]], [["o", {"el": "Εμβαδόν: 25.0", "en": "Area: 25.0"}]]]], "hint": {"el": "E = (b1+b2)*u/2. Χωρίς τις παρενθέσεις θα πολλαπλασιαζόταν μόνο η δεύτερη βάση.", "en": "E = (b1+b2)*h/2. Without the brackets only the second base would be multiplied."}, "src": {"el": "Τετράδιο Α.7.Μ4, άσκηση 2 (σελ. 122)", "en": "Workbook A.7.M4, exercise 2 (p. 122)"}}, {"id": "ask3", "dec": 2, "cls": "out", "kind": "fixit", "file": "M4_ask3.py", "tests": [[[5, 3.5], [1.5]], [[10, 7.2], [2.8]], [[2, 2], [0]]], "start": "poso=float(input('poso: '))\ntimi=float(input('timi: '))\nresta=timi-poso\nprint('resta:', resta)\n", "title": {"el": "🪙 Τα ρέστα της Αριάδνης", "en": "🪙 Ariadne's change"}, "short": {"el": "Το πρόγραμμα πρέπει να τυπώνει τα ρέστα της Αριάδνης στην καντίνα, αλλά βγάζει λάθος αποτέλεσμα.", "en": "The program must print Ariadne's change at the canteen, but it gives a wrong result."}, "goal": {"el": "Η Αριάδνη είναι στην Α΄ Δημοτικού και δεν ξέρει ακόμη αφαιρέσεις. Το πρόγραμμα δέχεται το ποσό που δίνει στην καντίνα (poso) και την τιμή του προϊόντος (timi) και πρέπει να τυπώνει τα ρέστα. Υπάρχει λάθος: εντόπισέ το και διόρθωσέ το.", "en": "Ariadne is in Year 1 of primary school and can't do subtraction yet. The program reads the amount she gives at the canteen (poso) and the price of the product (timi) and must print her change. There is an error: find it and fix it."}, "steps": {"el": ["Τρέξε το πρόγραμμα με ποσό 5 και τιμή 3.5.", "Είναι σωστό το αποτέλεσμα; Τι είδους λάθος είναι;", "Διόρθωσε τη γραμμή με το λάθος.", "Ξανατρέξε το και πάτησε «Έλεγχος λύσης»."], "en": ["Run the program with amount 5 and price 3.5.", "Is the result correct? What kind of error is it?", "Fix the line with the error.", "Run it again and press “Check solution”."]}, "example": [[[["", "poso: "], ["u", "5"]], [["", "timi: "], ["u", "3.5"]], [["o", "resta: 1.5"]]]], "hint": {"el": "Το πρόγραμμα τρέχει χωρίς μήνυμα λάθους αλλά τυπώνει −1.5: η αφαίρεση γίνεται ανάποδα.", "en": "The program runs with no error message but prints −1.5: the subtraction is the wrong way round."}, "src": {"el": "Τετράδιο Α.7.Μ4, άσκηση 3 (σελ. 122)", "en": "Workbook A.7.M4, exercise 3 (p. 122)"}}, {"id": "ask4", "dec": 1, "cls": "nv", "kind": "write", "file": "M4_ask4.py", "tests": [[[12, 15, 20], [15.7]], [[10, 10, 11], [10.3]], [[5.5, 6, 7], [6.2]]], "req": ["fmt"], "start": "# M4_ask4.py\n", "title": {"el": "🚢 «Captain Pantelis»: μέσος όρος βάθους", "en": "🚢 “Captain Pantelis”: average depth"}, "short": {"el": "Γράψε πρόγραμμα που δέχεται 3 μετρήσεις βάθους και τυπώνει τον μέσο όρο με ένα δεκαδικό.", "en": "Write a program that reads 3 depth measurements and prints their average with one decimal."}, "goal": {"el": "Το ερευνητικό πλοίο «Captain Pantelis» ψάχνει το καλύτερο σημείο για να στηθεί η εξέδρα φυσικού αερίου. Έχει μετρήσει το βάθος της θάλασσας σε 3 σημεία. Γράψε πρόγραμμα που δέχεται τις μετρήσεις και τυπώνει τον μέσο όρο τους με ένα δεκαδικό ψηφίο.", "en": "The research ship “Captain Pantelis” is looking for the best spot for the natural gas platform. It has measured the sea depth at 3 points. Write a program that reads the measurements and prints their average with one decimal place."}, "steps": {"el": ["Διάβασε τις 3 μετρήσεις (με τρεις εντολές ή σε μία: v1, v2, v3 = …).", "Υπολόγισε τον μέσο όρο: προσοχή στις παρενθέσεις.", "Τύπωσε με ένα δεκαδικό: print('%.1f' % mo).", "Έλεγξε με 12, 15, 20: πρέπει να βγει 15.7."], "en": ["Read the 3 measurements (with three commands or in one: v1, v2, v3 = …).", "Calculate the average: watch the brackets.", "Print with one decimal: print('%.1f' % mo).", "Check with 12, 15, 20: it must give 15.7."]}, "example": [[[["u", "12"]], [["u", "15"]], [["u", "20"]], [["o", "15.7"]]]], "hint": {"el": "mo = (v1+v2+v3)/3 και μετά print('%.1f' % mo). Χωρίς '%.1f' θα τυπωνόταν 15.666666666666666.", "en": "mo = (v1+v2+v3)/3 and then print('%.1f' % mo). Without '%.1f' it would print 15.666666666666666."}, "src": {"el": "Τετράδιο Α.7.Μ4, άσκηση 4 (σελ. 122–123)", "en": "Workbook A.7.M4, exercise 4 (pp. 122–123)"}}, {"id": "ask5", "cls": "in", "kind": "write", "file": "M4_ask5.py", "tests": [[[7, 3], [40]], [[10, 4], [84]], [[5.5, 2], [26.25]]], "start": "# M4_ask5.py\n", "title": {"el": "⬛ Εμβαδόν σκιασμένου σχήματος", "en": "⬛ Area of the shaded shape"}, "short": {"el": "Γράψε πρόγραμμα που δέχεται τις πλευρές X και Y δύο τετραγώνων και τυπώνει Εσκ = X² − Y².", "en": "Write a program that reads the sides X and Y of two squares and prints Esk = X² − Y²."}, "goal": {"el": "Ένα μικρό τετράγωνο πλευράς Y βρίσκεται μέσα σε ένα μεγάλο τετράγωνο πλευράς X. Γράψε πρόγραμμα που δέχεται τις πλευρές X και Y και υπολογίζει και τυπώνει το εμβαδόν του σκιασμένου σχήματος Εσκ = X² − Y².", "en": "A small square of side Y sits inside a big square of side X. Write a program that reads the sides X and Y and calculates and prints the area of the shaded shape Esk = X² − Y²."}, "steps": {"el": ["Δεδομένα: X, Y · Πληροφορία: Εσκ.", "Διάβασε τις δύο πλευρές (X πρώτα, μετά Y).", "Υπολόγισε Esk = X**2 - Y**2.", "Τύπωσε το αποτέλεσμα και έλεγξε με X = 7, Y = 3: πρέπει να βγει 40."], "en": ["Data: X, Y · Information: Esk.", "Read the two sides (X first, then Y).", "Calculate Esk = X**2 - Y**2.", "Print the result and check with X = 7, Y = 3: it must give 40."]}, "example": [[[["u", "7"]], [["u", "3"]], [["o", "40.0"]]]], "hint": {"el": "Η δύναμη γράφεται με **: X**2 είναι το X².", "en": "The power is written with **: X**2 is X²."}, "src": {"el": "Τετράδιο Α.7.Μ4, άσκηση 5 (σελ. 123)", "en": "Workbook A.7.M4, exercise 5 (p. 123)"}}, {"id": "free", "cls": "free", "kind": "free", "title": {"el": "✎ Ελεύθερο πρόγραμμα", "en": "✎ Free program"}, "short": {"el": "Γράψε και τρέξε ό,τι θέλεις: δοκίμασε εντολές, μηνύματα λάθους, πράξεις.", "en": "Write and run anything you like: try commands, error messages, calculations."}, "goal": {"el": "Πειραματίσου ελεύθερα. Π.χ. τι δίνει το '2' + '3' και τι το int('2') + int('3');", "en": "Experiment freely. E.g. what does '2' + '3' give, and int('2') + int('3')?"}, "start": "a = input('a: ')\nb = input('b: ')\nprint(a + b)\nprint(int(a) + int(b))\n", "file": "program.py"}];
+
+const $=id=>document.getElementById(id),t=k=>T[window.LANG||'el'][k],tx=o=>o==null?'':(typeof o==='string'?o:(o[window.LANG||'el']??o.el));
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const KEY='A7_idle_v2';let S={code:{},solved:{}};try{S=Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let cur=-1,ide=null,shells={},res={},hintOpen={};
+const app=$('app');
+const numStr=s=>String(s).match(/-?\d+(?:\.\d+)?/g)||[];
+const numsOf=s=>(String(s).match(/-?\d+(?:\.\d+)?/g)||[]).map(Number);
+function subseq(have,want){let k=0;for(const x of have){if(k<want.length&&Math.abs(x-want[k])<0.051)k++}return k===want.length}
+async function runTests(p,src){const tests=[];for(const [inp,exp] of p.tests){const r=await PY.test(src,inp);tests.push({inputs:inp,expect:exp,printed:r.printed,err:r.err,pass:r.ok&&subseq(numsOf(r.printed),exp)})}
+ const reqs=(p.req||[]).map(q=>({label:q==='fmt'?t('fmt').replace(/N/g,p.dec):t(q),pass:q==='prompt'?!/input\(\s*\)/.test(src):q==='fmt'?tests.every(r=>r.expect.every(v=>numStr(r.printed).includes(Number(v).toFixed(p.dec)))):tests.some(r=>/\p{L}/u.test(r.printed))}));return {tests,reqs,ok:tests.every(r=>r.pass)&&reqs.every(r=>r.pass)}}
+const codeOf=i=>S.code[P[i].id]??P[i].start;
+function kindTag(p){return '<span class="tag">'+t(p.kind)+'</span>'}
+function home(){cur=-1;if(ide){ide.stop();ide=null}const n=P.filter(p=>p.tests).length,s=P.filter(p=>S.solved[p.id]).length;
+ app.innerHTML='<div class="paper"><h1>'+t('h')+'</h1><p>'+t('p')+'</p><p><b>'+t('progress')+': '+s+' / '+n+'</b></p><div class="plist">'+P.map((p,i)=>'<button class="pcard '+p.cls+(S.solved[p.id]?' solved':'')+'" data-i="'+i+'"><span class="no">'+(p.tests?(S.solved[p.id]?'✓':i+1):'✎')+'</span><span><h2>'+esc(tx(p.title))+'</h2><p>'+esc(tx(p.short))+'</p>'+kindTag(p)+(p.file?' <span class="tag" style="background:#eef2f6;color:#586a7d">'+p.file+'</span>':'')+'</span></button>').join('')+'</div><p class="muted" style="margin-top:14px">'+t('note')+'</p></div>';
+ app.querySelectorAll('.pcard').forEach(b=>b.onclick=()=>openP(+b.dataset.i));window.scrollTo(0,0)}
+function exampleHTML(p){return (p.example||[]).map(run=>'<pre>'+run.map(line=>line.map(([k,v])=>'<span class="'+k+'">'+esc(tx(v))+'</span>').join('')).join('\n')+'</pre>').join('')}
+function openP(i){cur=i;const p=P[i];if(ide){ide.stop();ide=null}
+ const steps=tx(p.steps)||[];
+ app.innerHTML='<div class="pnav"><button id="toList">'+t('list')+'</button><button id="pPrev" '+(i===0?'disabled':'')+'>'+t('prev')+'</button><button id="pNext" '+(i===P.length-1?'disabled':'')+'>'+t('next')+'</button><div class="dots">'+P.map((q,k)=>'<button class="'+(k===i?'now':S.solved[q.id]?'ok':'')+'" data-k="'+k+'" title="'+esc(tx(q.title))+'">'+(q.tests?k+1:'✎')+'</button>').join('')+'</div></div>'
+ +'<div class="paper"><div class="prob"><div class="pdesc"><div class="label">'+(p.tests?(S.solved[p.id]?t('solved'):t('todo')):t('free'))+(p.file?' · '+p.file:'')+'</div><h1>'+esc(tx(p.title))+'</h1>'
+ +'<p class="goal"><b>'+t('goal')+':</b> '+esc(tx(p.goal))+'</p>'+(steps.length?'<b>'+t('steps')+'</b><ol>'+steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>':'')
+ +(p.src?'<p class="src">'+t('src')+': '+esc(tx(p.src))+'</p>':'')+'</div>'
+ +(p.example?'<div class="pex"><h3>'+t('example')+'</h3>'+exampleHTML(p)+'<small>'+t('typed')+'</small>'+(p.hint?'<details class="phint" '+(hintOpen[i]?'open':'')+'><summary style="color:#a6dfeb">'+t('hint')+'</summary><p>'+esc(tx(p.hint))+'</p></details>':'')+'</div>':'<div></div>')+'</div>'
+ +'<div class="pbar"><button id="bRun" class="primary">'+t('run')+'</button>'+(p.tests?'<button id="bChk" class="primary" style="background:#2f9a5c;border-color:#2f9a5c">'+t('check')+'</button>':'')+'<span class="sp"></span><button id="bReset">'+t('reset')+'</button><button id="bOpen">'+t('open')+'</button><input type="file" id="file" accept=".py,.txt" hidden><button id="bSave">'+t('save')+'</button><button id="bClr">'+t('clear')+'</button></div>'
+ +'<div id="host"></div><div class="pres" id="pres"></div></div>';
+ ide=PYIDE.mount($('host'),{code:codeOf(i),fname:p.file||'program.py',shell:shells[i]||'',onChange:v=>{S.code[p.id]=v;save();res[i]=null;$('pres').innerHTML=''},onShell:h=>shells[i]=h});
+ $('toList').onclick=home;$('pPrev').onclick=()=>openP(i-1);$('pNext').onclick=()=>openP(i+1);app.querySelectorAll('.dots button').forEach(b=>b.onclick=()=>openP(+b.dataset.k));
+ $('bRun').onclick=()=>ide.run();$('bClr').onclick=()=>ide.clear();
+ $('bReset').onclick=()=>{if(confirm(t('confirm'))){ide.setCode(p.start);delete S.code[p.id];save()}};
+ $('bOpen').onclick=()=>$('file').click();$('file').onchange=async()=>{const f=$('file').files[0];if(f)ide.setCode(await f.text());$('file').value=''};
+ $('bSave').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([ide.getCode().replace(/\n/g,'\r\n')],{type:'text/x-python'}));a.download=p.file||'program.py';a.click()};
+ const det=app.querySelector('.phint');if(det)det.ontoggle=()=>hintOpen[i]=det.open;
+ if($('bChk'))$('bChk').onclick=async()=>{const R=await runTests(p,ide.getCode());res[i]=R;if(R.ok&&!S.solved[p.id]){S.solved[p.id]=true;save();confetti()}showRes(i);markDots()};
+ if(res[i])showRes(i);window.scrollTo(0,0)}
+function markDots(){app.querySelectorAll('.dots button').forEach(b=>{const k=+b.dataset.k;b.classList.toggle('ok',!!S.solved[P[k].id]&&k!==cur)});const l=app.querySelector('.pdesc .label');if(l&&P[cur].tests)l.textContent=(S.solved[P[cur].id]?t('solved'):t('todo'))+(P[cur].file?' · '+P[cur].file:'')}
+function showRes(i){const R=res[i];if(!R)return;const n=R.tests.length+R.reqs.length,ok=R.tests.filter(r=>r.pass).length+R.reqs.filter(r=>r.pass).length;
+ $('pres').innerHTML='<table class="ctest"><tr><th>'+t('in')+'</th><th>'+t('expect')+'</th><th>'+t('yours')+'</th><th></th></tr>'+R.tests.map(r=>'<tr><td>'+esc(r.inputs.join(', ')||'—')+'</td><td>'+esc(r.expect.map(v=>P[i].dec!=null?Number(v).toFixed(P[i].dec):v).join(', '))+'</td><td>'+esc((r.err?r.err.split('\n').pop():r.printed.trim())||'—')+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')
+ +R.reqs.map(r=>'<tr><td colspan="3">'+esc(r.label)+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')+'</table><div class="feedback'+(R.ok?' ok':'')+'">'+(R.ok?t('allok'):ok+'/'+n+' '+t('some'))+'</div>'}
+function confetti(){const c=document.createElement('div');c.className='confetti';const cols=['#146f86','#d9991a','#c4533c','#5363b8','#2f9a5c'];for(let k=0;k<60;k++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.background=cols[k%5];e.style.animationDelay=(Math.random()*.6)+'s';c.append(e)}document.body.append(c);setTimeout(()=>c.remove(),2600)}
+document.addEventListener('keydown',e=>{if(e.key==='F5'&&ide){e.preventDefault();ide.run()}});
+$('full').onclick=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen?.()};
+window.onLang=()=>{if(cur<0)home();else openP(cur)};
+home();
+</script></body></html>
