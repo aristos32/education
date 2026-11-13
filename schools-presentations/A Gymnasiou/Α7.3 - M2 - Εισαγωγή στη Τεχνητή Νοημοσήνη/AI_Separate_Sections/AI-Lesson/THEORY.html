@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Θεωρία · 10΄ · Α7.3 Μ2</title>
+<style>
+:root{--ink:#183a47;--muted:#526b75;--teal:#08776d;--paper:#f5f7f2;--line:#d7e1dd;--gold:#f5c45c;--blue:#3456a1;--red:#c4533c;--green:#2f9a5c;
+ --t-teal:#e1f2ee;--t-blue:#e6ecf8;--t-gold:#fdf2d6;--t-red:#fbe6e0}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:18px/1.45 'Segoe UI',Inter,Arial,sans-serif;display:flex;flex-direction:column;min-height:100vh}
+body.big{font-size:21px}
+button,.button{font:inherit;border:2px solid var(--line);border-radius:12px;padding:9px 16px;background:white;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;font-weight:700}
+button:hover,.button:hover{background:#e8f1eb}button:disabled{opacity:.35;cursor:default}
+button:focus-visible,a:focus-visible{outline:3px solid #ac6f00;outline-offset:3px}
+.primary{background:var(--teal);color:white;border-color:var(--teal)}.primary:hover{background:#075d56}
+header{background:var(--ink);color:white;padding:10px 3vw;display:flex;justify-content:space-between;gap:12px;align-items:center}
+header strong{font-size:22px}header small{color:#d2e3df;display:block;font-size:14px}
+header button{font-size:14px;background:transparent;color:white;border-color:#6c8a93}
+header button:hover{background:#244f5e}
+.bar{display:flex;gap:10px;align-items:center;padding:8px 3vw;background:white;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.bar .clock{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums;min-width:84px}
+.bar .meter{flex:1;min-width:120px;height:10px;background:#e6eeea;border-radius:5px;overflow:hidden}.bar .meter i{display:block;height:100%;background:var(--teal);transition:width .3s}
+.bar.warn .clock{color:#ac6f00}.bar.warn .meter i{background:var(--gold)}.bar.over .clock{color:var(--red)}
+.bar button{padding:6px 12px;font-size:15px}
+main{flex:1;width:100%;max-width:1240px;margin:auto;padding:16px 26px 8px;display:flex;flex-direction:column}
+.slide{display:none;flex:1;flex-direction:column;animation:in .35s ease}
+.slide.on{display:flex}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:14px;font-weight:800;color:var(--teal)}
+h1{font-size:clamp(30px,3.4vw,46px);line-height:1.1;margin:4px 0 6px}
+.lead{font-size:clamp(19px,1.8vw,24px);margin:0 0 14px;color:var(--ink)}
+.lead b{color:var(--teal)}
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px}
+.row{display:flex;gap:14px;align-items:stretch;justify-content:center}
+.card{background:white;border:2px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 4px 0 var(--line)}
+.arrow{align-self:center;font-size:42px;font-weight:900;color:var(--teal)}
+.pill{display:inline-block;border-radius:999px;padding:4px 14px;font-weight:800;font-size:17px}
+.note{border-radius:16px;padding:10px 16px;font-size:clamp(18px,1.7vw,22px);font-weight:600;text-align:center}
+.note.warn{background:var(--t-gold);border:2px solid var(--gold)}.note.ok{background:var(--t-teal);border:2px solid #9fd2c7}
+.emoji{font-size:clamp(48px,6vw,78px);line-height:1}
+footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 26px 14px;max-width:1240px;width:100%;margin:auto}
+.dots{display:flex;gap:8px}.dots i{width:13px;height:13px;border-radius:50%;background:var(--line);cursor:pointer}.dots i.on{background:var(--teal);transform:scale(1.25)}
+/* slide 1 */
+.jobs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.job{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.job h2{margin:0;font-size:clamp(24px,2.3vw,32px)}
+.job .demo{background:var(--paper);border-radius:14px;padding:10px 12px;font-size:clamp(17px,1.5vw,20px);font-weight:600;width:100%}
+.job.a{border-color:#9fd2c7}.job.a h2{color:var(--teal)}.job.b{border-color:#b8c6ea}.job.b h2{color:var(--blue)}.job.c{border-color:#f0c6b9}.job.c h2{color:var(--red)}
+/* slide 2 */
+.flow .card{flex:1;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}
+.flow h2{margin:0;font-size:clamp(22px,2.1vw,30px)}.flow small{font-size:clamp(16px,1.4vw,19px);color:var(--muted);font-weight:600}
+.flow .big{font-size:clamp(44px,5vw,70px)}
+.tags2{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* slide 3 */
+.expert{display:grid;grid-template-columns:1fr 1.1fr;gap:18px;align-items:stretch}
+.chain{display:flex;flex-direction:column;gap:8px;justify-content:center}
+.chain .card{display:flex;align-items:center;gap:14px;padding:12px 16px}
+.chain .card b{font-size:clamp(20px,1.9vw,26px)}.chain .card small{display:block;font-size:16px;color:var(--muted);font-weight:600}
+.chain .down{text-align:center;font-size:28px;color:var(--teal);font-weight:900;line-height:1}
+.rulebox{background:var(--t-gold);border:2px dashed #d9a63a;border-radius:14px;padding:8px 14px;font-size:clamp(18px,1.7vw,22px);font-weight:700}
+.rulebox span{color:var(--red);font-weight:900}
+.plantcard{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.plantcard svg{width:min(100%,240px);height:auto;max-height:26vh}
+.plantcard .q{font-size:clamp(20px,1.9vw,25px);font-weight:800}.plantcard{gap:6px;padding:12px}
+.choice{display:flex;gap:12px}.choice button{font-size:20px;padding:10px 20px}
+.answer{min-height:44px;font-size:clamp(19px,1.8vw,23px);font-weight:700;border-radius:14px;padding:8px 14px;width:100%}
+.answer.dry{background:var(--t-gold)}.answer.wet{background:var(--t-teal)}
+/* slide 4 */
+.ml{display:grid;grid-template-columns:1.25fr auto 1fr;gap:14px;align-items:center}
+.train h2,.test h2{margin:0 0 6px;font-size:clamp(20px,1.9vw,26px);text-align:center}
+.fr{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.fr div{background:var(--paper);border-radius:12px;text-align:center;padding:6px 2px}
+.fr svg{width:100%;max-width:70px;height:auto}.fr em{display:block;font-style:normal;font-weight:800;font-size:15px}
+.switch{display:flex;gap:8px;justify-content:center;margin-top:10px}.switch button{font-size:16px;padding:8px 12px}.switch button.on{background:var(--ink);color:white;border-color:var(--ink)}
+.robot{font-size:clamp(50px,6vw,84px);text-align:center}
+.test{text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
+.test svg{width:110px;height:auto}
+.verdict{min-height:64px;font-size:clamp(20px,1.9vw,25px);font-weight:800;border-radius:14px;padding:8px 12px;width:100%}
+.verdict.good{background:#e3f4e9;color:#1d6b3e}.verdict.bad{background:var(--t-red);color:#9e3423}
+/* slide 5 */
+.nnw{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;align-items:center}
+.nnw svg{width:100%;height:auto;max-height:40vh}
+.facts{display:flex;flex-direction:column;gap:10px}
+.facts .card{display:flex;gap:12px;align-items:center;padding:12px 14px;font-size:clamp(18px,1.6vw,22px);font-weight:600}
+.facts .card span{font-size:36px}
+.wire{stroke:#c9d7d2;stroke-width:3;transition:stroke .3s}.wire.on{stroke:var(--teal);stroke-width:5}
+.node{fill:white;stroke:var(--teal);stroke-width:4;transition:fill .3s}.node.on{fill:#9fd2c7}
+.outn{fill:white;stroke:var(--blue);stroke-width:5}.outn.on{fill:#b8c6ea}
+/* slide 6 */
+.rel{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;align-items:center}
+.rel svg{width:100%;height:auto;max-height:52vh}
+.mem{display:flex;flex-direction:column;gap:12px}
+.mem .card{display:flex;align-items:center;gap:14px;padding:12px 16px}
+.mem .card span{font-size:40px}.mem b{font-size:clamp(20px,1.9vw,26px);display:block}.mem small{font-size:clamp(17px,1.5vw,20px);font-weight:600;color:var(--muted)}
+/* slide 7 */
+.quiz{display:flex;flex-direction:column;gap:14px}
+.qrow{display:grid;grid-template-columns:1.2fr 2fr;gap:14px;align-items:center}
+.qrow .stmt{font-size:clamp(19px,1.8vw,24px);font-weight:700;display:flex;gap:12px;align-items:center}
+.qrow .stmt span{font-size:40px}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opts button{justify-content:center;flex-direction:column;gap:2px;padding:8px;font-size:clamp(15px,1.3vw,18px)}
+.opts button i{font-style:normal;font-size:28px}
+.opts button.right{background:#e3f4e9;border-color:var(--green)}.opts button.wrong{background:var(--t-red);border-color:var(--red)}
+.score{font-size:24px;font-weight:800;text-align:center}
+@media(max-width:900px){.jobs,.expert,.ml,.nnw,.rel,.qrow{grid-template-columns:1fr}.row.flow{flex-direction:column}.arrow{transform:rotate(90deg)}}
+@media screen and (max-height:740px) and (min-width:901px){main{padding-top:8px}h1{font-size:34px;margin:2px 0}.lead{margin-bottom:8px;font-size:19px}.stage{gap:10px}.card{padding:12px}.emoji{font-size:48px}.flow .big{font-size:46px}.plantcard svg{max-height:28vh}.nnw svg{max-height:36vh}.rel svg{max-height:46vh}}
+@media print{header,.bar,footer{display:none}.slide{display:flex!important;break-after:page;min-height:90vh}}
+</style>
+</head>
+<body>
+<header><div><strong>Α7.3 · Μ2 · Θεωρία · 10΄</strong><small>Α΄ Γυμνασίου · Άριστος Αρέστη · 16/11/2026</small></div><button id="bigText" aria-pressed="false">Μεγάλα γράμματα</button></header>
+<div class="bar" id="bar"><a class="button" href="index.html">← Αρχική</a><span class="clock" id="clock">10:00</span><div class="meter"><i id="fill" style="width:100%"></i></div><button id="startT" class="primary">▶ Έναρξη</button><button id="resetT">↺ Επαναφορά</button></div>
+<main>
+
+<!-- 1 -->
+<section class="slide on" aria-label="Διαφάνεια 1">
+ <div class="eyebrow">Ανακαλύπτω · 1 / 7</div>
+ <h1>🤖 Τι κάνει η Τεχνητή Νοημοσύνη;</h1>
+ <p class="lead">Είναι ένα <b>πρόγραμμα</b> που κάνει «έξυπνες» δουλειές.</p>
+ <div class="stage">
+  <div class="jobs">
+   <div class="card job a"><div class="emoji">👂</div><h2>Αναγνωρίζει</h2><div class="demo">🗣️ «καλημέρα» → ✏️ <b>καλημέρα</b></div></div>
+   <div class="card job b"><div class="emoji">🎵</div><h2>Προτείνει</h2><div class="demo">Σου άρεσε αυτό → 🎧 <b>θα σου αρέσει και αυτό</b></div></div>
+   <div class="card job c"><div class="emoji">✍️</div><h2>Δημιουργεί</h2><div class="demo">«Γράψε μια ιστορία» → 📖 <b>Μια φορά κι έναν καιρό…</b></div></div>
+  </div>
+  <div class="note ok">❗ Δεν είναι άνθρωπος. Δεν έχει συναισθήματα.</div>
+ </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" aria-label="Διαφάνεια 2">
+ <div class="eyebrow">Ανακαλύπτω · 2 / 7</div>
+ <h1>⚙️ Πώς δουλεύει;</h1>
+ <p class="lead">Τρία βήματα: <b>παίρνει → σκέφτεται → απαντά</b>.</p>
+ <div class="stage">
+  <div class="row flow">
+   <div class="card"><div class="big">📷🎙️⌨️</div><h2>1. Παίρνει</h2><small>εικόνα, φωνή, κείμενο</small></div>
+   <div class="arrow">→</div>
+   <div class="card"><div class="big">🧠</div><h2>2. Επεξεργάζεται</h2><small>με <b>κανόνες</b> ή με <b>μοτίβα</b><br>που έμαθε</small></div>
+   <div class="arrow">→</div>
+   <div class="card"><div class="big">💬</div><h2>3. Απαντά</h2><small>«Είναι γάτα!»</small></div>
+  </div>
+  <div class="tags2"><div class="note ok">📚 Κάποια συστήματα <b>μαθαίνουν</b> από παραδείγματα</div><div class="note warn">⚠️ Όλα κάνουν <b>λάθη</b> → ελέγχουμε!</div></div>
+ </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" aria-label="Διαφάνεια 3">
+ <div class="eyebrow">Ανακαλύπτω · 3 / 7 · Τρόπος 1</div>
+ <h1>📘 Έμπειρα συστήματα</h1>
+ <p class="lead">Ένας <b>ειδικός</b> γράφει τους κανόνες. Ο υπολογιστής τους ακολουθεί.</p>
+ <div class="stage">
+  <div class="expert">
+   <div class="chain">
+    <div class="card"><span class="emoji" style="font-size:46px">👩‍🌾</span><div><b>Η ειδικός</b><small>ξέρει από φυτά</small></div></div>
+    <div class="down">↓</div>
+    <div class="rulebox"><span>ΑΝ</span> το χώμα είναι στεγνό<br><span>ΤΟΤΕ</span> πότισε το φυτό 💧</div>
+    <div class="down">↓</div>
+    <div class="card"><span class="emoji" style="font-size:46px">💻</span><div><b>Ο υπολογιστής</b><small>ακολουθεί τον κανόνα</small></div></div>
+   </div>
+   <div class="card plantcard">
+    <div class="q">Δοκίμασε! Πώς είναι το χώμα;</div>
+    <svg id="plant" viewBox="0 0 200 200" aria-hidden="true">
+     <path d="M50 130h100l-12 60H62z" fill="#c4533c"/><rect x="44" y="122" width="112" height="14" rx="6" fill="#a8432f"/>
+     <ellipse id="soil" cx="100" cy="128" rx="50" ry="6" fill="#8a5a2b"/>
+     <g id="leaves"><path d="M100 124V70" stroke="#2f9a5c" stroke-width="6" stroke-linecap="round"/>
+      <path d="M100 96c-22-2-34-14-36-30 20 0 32 10 36 30z" fill="#3fae6a"/><path d="M100 84c20-4 30-18 30-34-18 2-28 14-30 34z" fill="#3fae6a"/>
+      <path d="M100 70c-10-10-10-24 0-34 10 10 10 24 0 34z" fill="#56c27e"/></g>
+    </svg>
+    <div class="choice"><button id="dry">🏜️ Στεγνό</button><button id="wet">💧 Υγρό</button></div>
+    <div class="answer" id="plantAns">👆 Διάλεξε…</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 4 -->
+<section class="slide" aria-label="Διαφάνεια 4">
+ <div class="eyebrow">Ανακαλύπτω · 4 / 7 · Τρόπος 2</div>
+ <h1>📚 Μηχανική μάθηση</h1>
+ <p class="lead">Δεν γράφουμε κανόνες. Δίνουμε <b>πολλά παραδείγματα</b> και βρίσκει μόνο του τα <b>μοτίβα</b>.</p>
+ <div class="stage">
+  <div class="ml">
+   <div class="card train"><h2>1. Παραδείγματα</h2><div class="fr" id="trainSet"></div>
+    <div class="switch"><button id="setMix" class="on">🍎🍏 Διαφορετικά μήλα</button><button id="setRed">🍎 Μόνο κόκκινα</button></div></div>
+   <div class="robot">→🤖→</div>
+   <div class="card test"><h2>2. Νέα εικόνα</h2><svg viewBox="0 0 100 100" aria-label="πράσινο μήλο"><use href="#apple-green"/></svg>
+    <button id="testBtn" class="primary">❓ Τι είναι;</button><div class="verdict" id="verdict"></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- 5 -->
+<section class="slide" aria-label="Διαφάνεια 5">
+ <div class="eyebrow">Ανακαλύπτω · 5 / 7 · Τρόπος 3</div>
+ <h1>🕸️ Τεχνητά νευρωνικά δίκτυα</h1>
+ <p class="lead">Πολλοί μικροί <b>«νευρώνες»</b> δουλεύουν μαζί για να βρουν μοτίβα.</p>
+ <div class="stage">
+  <div class="nnw">
+   <div class="card">
+    <svg id="net" viewBox="0 0 640 330" role="img" aria-label="Νευρωνικό δίκτυο: εικόνα γάτας, στρώματα νευρώνων, απάντηση γάτα">
+     <g id="wires"></g><g id="nodes"></g>
+     <g font-family="Segoe UI,Arial,sans-serif" font-weight="800" text-anchor="middle">
+      <text x="60" y="320" font-size="18" fill="#526b75">εικόνα</text><text x="250" y="320" font-size="18" fill="#526b75">νευρώνες</text><text x="420" y="320" font-size="18" fill="#526b75">νευρώνες</text><text x="575" y="320" font-size="18" fill="#526b75">απάντηση</text>
+      <text x="60" y="80" font-size="38">🐱</text><text x="60" y="110" font-size="15" fill="#183a47">αυτιά</text><text x="60" y="180" font-size="15" fill="#183a47">μουστάκια</text><text x="60" y="250" font-size="15" fill="#183a47">μάτια</text>
+      <text id="outTxt" x="575" y="172" font-size="22" fill="#3456a1">;</text>
+     </g>
+    </svg>
+    <div style="text-align:center;margin-top:6px"><button id="fire" class="primary">▶ Στείλε την εικόνα</button></div>
+   </div>
+   <div class="facts">
+    <div class="card"><span>🧠</span><div>Εμπνευσμένα από τον εγκέφαλο, αλλά <b>δεν</b> είναι εγκέφαλος</div></div>
+    <div class="card"><span>📚</span><div>Είναι ένας τρόπος <b>μηχανικής μάθησης</b></div></div>
+    <div class="card"><span>📱</span><div>Τα βρίσκεις σε αναγνώριση φωνής, εικόνας και σε chatbots</div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 6 -->
+<section class="slide" aria-label="Διαφάνεια 6">
+ <div class="eyebrow">Ανακαλύπτω · 6 / 7</div>
+ <h1>🪆 Πώς συνδέονται;</h1>
+ <p class="lead">Σαν κούκλες που μπαίνει η μία μέσα στην άλλη.</p>
+ <div class="stage">
+  <div class="rel">
+   <svg viewBox="0 0 520 380" role="img" aria-label="Η Τεχνητή Νοημοσύνη περιέχει τα έμπειρα συστήματα και τη μηχανική μάθηση· η μηχανική μάθηση περιέχει τα νευρωνικά δίκτυα">
+    <g font-family="Segoe UI,Arial,sans-serif" font-weight="800" text-anchor="middle">
+     <ellipse cx="260" cy="190" rx="252" ry="180" fill="#e1f2ee" stroke="#08776d" stroke-width="5"/><text x="260" y="62" font-size="24" fill="#08776d">🤖 Τεχνητή Νοημοσύνη</text>
+     <ellipse cx="112" cy="210" rx="84" ry="60" fill="#fdf2d6" stroke="#d9a63a" stroke-width="4"/><text x="112" y="205" font-size="19" fill="#8a5b00">📘 Έμπειρα</text><text x="112" y="230" font-size="19" fill="#8a5b00">συστήματα</text>
+     <ellipse cx="358" cy="215" rx="132" ry="122" fill="#e6ecf8" stroke="#3456a1" stroke-width="4"/><text x="358" y="140" font-size="20" fill="#3456a1">📚 Μηχανική</text><text x="358" y="164" font-size="20" fill="#3456a1">μάθηση</text>
+     <ellipse cx="358" cy="252" rx="86" ry="58" fill="#fbe6e0" stroke="#c4533c" stroke-width="4"/><text x="358" y="248" font-size="19" fill="#c4533c">🕸️ Νευρωνικά</text><text x="358" y="272" font-size="19" fill="#c4533c">δίκτυα</text>
+    </g>
+   </svg>
+   <div class="mem">
+    <div class="card"><span>📘</span><div><b>Έμπειρο σύστημα</b><small>κανόνες από ειδικό</small></div></div>
+    <div class="card"><span>📚</span><div><b>Μηχανική μάθηση</b><small>παραδείγματα → μοτίβα</small></div></div>
+    <div class="card"><span>🕸️</span><div><b>Νευρωνικό δίκτυο</b><small>πολλοί νευρώνες που μαθαίνουν</small></div></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- 7 -->
+<section class="slide" aria-label="Διαφάνεια 7">
+ <div class="eyebrow">Ανακαλύπτω · 7 / 7</div>
+ <h1>✅ Έλεγχος 1 λεπτού</h1>
+ <p class="lead">Πάτησε τον σωστό τρόπο.</p>
+ <div class="stage"><div class="quiz" id="quiz"></div><div class="score" id="score"></div></div>
+</section>
+
+</main>
+<footer><button id="prevSlide">← Προηγούμενο</button><div class="dots" id="dots"></div><button id="nextSlide" class="primary">Επόμενο →</button></footer>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <symbol id="apple-red" viewBox="0 0 100 100"><path d="M50 30c-14-10-38-6-38 22 0 22 16 40 28 40 5 0 7-3 10-3s5 3 10 3c12 0 28-18 28-40 0-28-24-32-38-22z" fill="#d9483b"/><path d="M50 30c0-10 4-18 10-22" stroke="#6b4423" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M54 20c8-8 20-8 24-4-6 8-16 10-24 4z" fill="#3fae6a"/><ellipse cx="32" cy="46" rx="6" ry="10" fill="#fff" opacity=".35"/></symbol>
+  <symbol id="apple-green" viewBox="0 0 100 100"><path d="M50 30c-14-10-38-6-38 22 0 22 16 40 28 40 5 0 7-3 10-3s5 3 10 3c12 0 28-18 28-40 0-28-24-32-38-22z" fill="#8cc63f"/><path d="M50 30c0-10 4-18 10-22" stroke="#6b4423" stroke-width="5" fill="none" stroke-linecap="round"/><path d="M54 20c8-8 20-8 24-4-6 8-16 10-24 4z" fill="#2f8a50"/><ellipse cx="32" cy="46" rx="6" ry="10" fill="#fff" opacity=".35"/></symbol>
+  <symbol id="banana" viewBox="0 0 100 100"><path d="M20 30c4 34 30 56 66 52 4-1 6-5 2-7-28 2-46-16-52-46-1-5-17-6-16 1z" fill="#f5c84c" stroke="#c99a1e" stroke-width="3"/><path d="M20 30l-6-8" stroke="#6b4423" stroke-width="5" stroke-linecap="round"/></symbol>
+ </defs>
+</svg>
+
+<script>
+const $=id=>document.getElementById(id);
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+const dots=$('dots');slides.forEach((_,k)=>{const d=document.createElement('i');d.title='Διαφάνεια '+(k+1);d.onclick=()=>go(k);dots.appendChild(d)});
+function go(k){cur=Math.max(0,Math.min(slides.length-1,k));slides.forEach((s,j)=>s.classList.toggle('on',j===cur));[...dots.children].forEach((d,j)=>d.classList.toggle('on',j===cur));
+ $('prevSlide').disabled=cur===0;$('nextSlide').textContent=cur===slides.length-1?'Πάμε στο εργαστήριο →':'Επόμενο →'}
+$('prevSlide').onclick=()=>go(cur-1);
+$('nextSlide').onclick=()=>{if(cur===slides.length-1)location.href='PRACTICE.html';else go(cur+1)};
+document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,select'))return;if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+go(0);
+/* big text */
+$('bigText').onclick=()=>{const on=document.body.classList.toggle('big');$('bigText').setAttribute('aria-pressed',on)};
+/* timer */
+const TOTAL=600;let left=TOTAL,run=null;
+function draw(){const m=Math.floor(Math.abs(left)/60),s=Math.abs(left)%60;$('clock').textContent=(left<0?'-':'')+m+':'+String(s).padStart(2,'0');$('fill').style.width=Math.max(0,left/TOTAL*100)+'%';$('bar').classList.toggle('warn',left<=120&&left>0);$('bar').classList.toggle('over',left<=0)}
+$('startT').onclick=()=>{if(run){clearInterval(run);run=null;$('startT').textContent='▶ Συνέχεια'}else{run=setInterval(()=>{left--;draw();if(left<=0){clearInterval(run);run=null;$('startT').textContent='▶ Έναρξη'}},1000);$('startT').textContent='⏸ Παύση'}};
+$('resetT').onclick=()=>{clearInterval(run);run=null;left=TOTAL;$('startT').textContent='▶ Έναρξη';draw()};draw();
+/* slide 3: plant */
+const leaves=$('leaves'),soil=$('soil');
+$('dry').onclick=()=>{soil.setAttribute('fill','#d8b27a');leaves.style.transform='rotate(-14deg)';leaves.style.transformOrigin='100px 124px';leaves.style.filter='saturate(.4) brightness(1.1)';
+ $('plantAns').className='answer dry';$('plantAns').innerHTML='✅ Ταιριάζει → <b>«Πότισε! 💧»</b>'};
+$('wet').onclick=()=>{soil.setAttribute('fill','#5b3a1c');leaves.style.transform='none';leaves.style.filter='none';
+ $('plantAns').className='answer wet';$('plantAns').innerHTML='🚫 Δεν ταιριάζει → <b>«Μην ποτίσεις»</b>'};
+/* slide 4: ML */
+const SETS={mix:[['apple-red','μήλο'],['apple-green','μήλο'],['apple-red','μήλο'],['apple-green','μήλο'],['banana','μπανάνα'],['banana','μπανάνα'],['banana','μπανάνα'],['apple-red','μήλο']],
+ red:[['apple-red','μήλο'],['apple-red','μήλο'],['apple-red','μήλο'],['apple-red','μήλο'],['banana','μπανάνα'],['banana','μπανάνα'],['banana','μπανάνα'],['apple-red','μήλο']]};
+let set='mix';
+function drawSet(){$('trainSet').innerHTML=SETS[set].map(([s,l])=>'<div><svg viewBox="0 0 100 100"><use href="#'+s+'"/></svg><em>'+l+'</em></div>').join('');$('setMix').classList.toggle('on',set==='mix');$('setRed').classList.toggle('on',set==='red');$('verdict').className='verdict';$('verdict').textContent=''}
+$('setMix').onclick=()=>{set='mix';drawSet()};$('setRed').onclick=()=>{set='red';drawSet()};drawSet();
+$('testBtn').onclick=()=>{const v=$('verdict');if(set==='mix'){v.className='verdict good';v.innerHTML='🤖 «Μήλο!» ✅<br><small>Είχε δει και πράσινα μήλα.</small>'}else{v.className='verdict bad';v.innerHTML='🤖 «Δεν ξέρω… μπανάνα;» ❌<br><small>Είχε δει μόνο κόκκινα μήλα!</small>'}};
+/* slide 5: network */
+const layers=[[115,185,255],[70,140,210,280],[90,175,260],[175]],X=[60,250,420,575];
+let wh='',nh='';
+for(let a=0;a<3;a++)for(let i=0;i<layers[a].length;i++)for(let j=0;j<layers[a+1].length;j++)wh+='<line class="wire" data-l="'+a+'" x1="'+X[a]+'" y1="'+layers[a][i]+'" x2="'+X[a+1]+'" y2="'+layers[a+1][j]+'"/>';
+layers.forEach((ys,a)=>ys.forEach(y=>{if(a===0)nh+='<circle class="node" data-l="0" cx="'+(X[0]+40)+'" cy="'+y+'" r="9"/>';else if(a===3)nh+='<circle class="outn" data-l="3" cx="'+X[3]+'" cy="'+y+'" r="46"/>';else nh+='<circle class="node" data-l="'+a+'" cx="'+X[a]+'" cy="'+y+'" r="20"/>'}));
+$('wires').innerHTML=wh.replaceAll('x1="60"','x1="100"');$('nodes').innerHTML=nh;
+$('fire').onclick=()=>{document.querySelectorAll('#net .on').forEach(e=>e.classList.remove('on'));$('outTxt').textContent=';';let t=0;
+ for(let a=0;a<4;a++){setTimeout(()=>{document.querySelectorAll('#net [data-l="'+a+'"]').forEach(e=>e.classList.add('on'));if(a===3)$('outTxt').textContent='Γάτα!'},t);t+=550}};
+/* slide 7: quiz */
+const OPT=[['📘','Έμπειρο σύστημα'],['📚','Μηχανική μάθηση'],['🕸️','Νευρωνικό δίκτυο']];
+const Q=[['👩‍⚕️','Ακολουθεί κανόνες που έγραψε ένας γιατρός.',0],['🍎','Είδε χιλιάδες φωτογραφίες με φρούτα και βρήκε μοτίβα.',1],['🧩','Πολλοί μικροί νευρώνες συνεργάζονται για να αναγνωρίσουν μια φωνή.',2]];
+const got=Q.map(()=>null);
+function drawQ(){$('quiz').innerHTML=Q.map((q,i)=>'<div class="qrow"><div class="stmt"><span>'+q[0]+'</span>'+q[1]+'</div><div class="opts">'+OPT.map((o,k)=>'<button data-q="'+i+'" data-k="'+k+'" class="'+(got[i]===k?(k===q[2]?'right':'wrong'):'')+'"><i>'+o[0]+'</i>'+o[1]+'</button>').join('')+'</div></div>').join('');
+ document.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{got[+b.dataset.q]=+b.dataset.k;drawQ()});
+ const ok=Q.filter((q,i)=>got[i]===q[2]).length;$('score').textContent=got.every(v=>v!==null)?(ok===3?'🎉 3 / 3 · Μπράβο!':'Σωστά: '+ok+' / 3 · Δοκίμασε ξανά τα κόκκινα'):''}
+drawQ();
+</script>
+</body>
+</html>
