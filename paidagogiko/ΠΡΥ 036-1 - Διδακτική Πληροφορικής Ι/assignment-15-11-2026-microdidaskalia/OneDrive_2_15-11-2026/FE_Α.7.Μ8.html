@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Φύλλο Εργασίας Α.7.Μ8 – Δομή Διακλάδωσης</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14213d; --muted:#5b6b82; --line:#d9e2ec; --bg:#eef3f8; --card:#ffffff;
+  --teal:#1c7293; --teal-soft:#e2f1f7; --orange:#b35a00; --orange-soft:#fff1e3;
+  --green:#2e7d4f; --green-soft:#e6f4ec; --code:#1e2a44; --ok:#1f8a4c; --bad:#c0392b; --warn:#9a6a00;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Commissioner","Segoe UI",Roboto,Arial,sans-serif;font-size:17px;line-height:1.55}
+.wrap{max-width:940px;margin:0 auto;padding:28px 18px 60px}
+header.top{background:linear-gradient(120deg,#14213d 0%,#1c4f7a 55%,#1c7293 100%);color:#fff;border-radius:22px;padding:28px 30px 24px;position:relative;overflow:hidden}
+header.top:after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.07)}
+header.top:before{content:"";position:absolute;right:70px;bottom:-90px;width:180px;height:180px;border-radius:50%;background:rgba(244,163,0,.22)}
+.kicker{font-size:14px;letter-spacing:.12em;text-transform:uppercase;opacity:.85;font-weight:600}
+h1{font-size:34px;line-height:1.15;margin:6px 0 4px;font-weight:800}
+.sub{font-size:19px;opacity:.95}
+.who{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-top:22px;position:relative;z-index:1}
+.who label{font-size:14px;font-weight:600;opacity:.9;display:block;margin-bottom:4px}
+.who input{width:100%;padding:10px 12px;border-radius:10px;border:0;font:inherit;font-size:17px;color:var(--ink)}
+.card{background:var(--card);border-radius:18px;padding:22px 24px;margin-top:18px;box-shadow:0 1px 2px rgba(20,33,61,.06),0 6px 20px rgba(20,33,61,.05)}
+.note{background:#fff8e6;border-left:6px solid #f4a300}
+.note b{color:#8a5a00}
+.band{margin-top:34px;border-radius:16px;padding:16px 22px;color:#fff;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.band h2{margin:0;font-size:22px;font-weight:800;letter-spacing:.02em}
+.band span{opacity:.95;font-size:16px}
+.band.teal{background:var(--teal)} .band.orange{background:var(--orange)} .band.green{background:var(--green)}
+.ex{border-top:6px solid var(--teal)}
+.ex.orange{border-top-color:var(--orange)} .ex.green{border-top-color:var(--green)}
+.exhead{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.num{flex:0 0 auto;width:42px;height:42px;border-radius:12px;background:var(--teal);color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px}
+.ex.orange .num{background:var(--orange)} .ex.green .num{background:var(--green)}
+.exhead h3{margin:0;font-size:21px}
+.exhead small{display:block;color:var(--muted);font-size:15px;font-weight:500}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0 6px}
+.roles label{font-size:14px;font-weight:700;color:var(--muted)}
+.roles input{width:100%;padding:9px 11px;border:1.5px solid var(--line);border-radius:10px;font:inherit}
+.tip{color:#8a5a00;font-style:italic;margin:8px 0}
+.rolesinfo p{margin:6px 0}
+.problem{background:#eef5f9;border-left:6px solid var(--teal);border-radius:10px;padding:12px 16px;margin:12px 0 6px}
+.problem h4{margin:0 0 4px;color:var(--teal);font-size:17px;letter-spacing:.03em}
+.problem p{margin:0}
+.problem.orange{background:#fff3e6;border-left-color:var(--orange)} .problem.orange h4{color:var(--orange)}
+.problem.green{background:#eaf5ee;border-left-color:var(--green)} .problem.green h4{color:var(--green)}
+.step{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.step:last-child{border-bottom:0}
+.step .lbl{font-weight:800;color:var(--teal);min-width:30px}
+.ex.orange .step .lbl{color:var(--orange)} .ex.green .step .lbl{color:var(--green)}
+.step .txt{flex:1}
+.step input[type=checkbox]{width:22px;height:22px;margin-top:3px;accent-color:var(--ok);cursor:pointer}
+.step.done .txt{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(91,107,130,.5)}
+pre.code{background:var(--code);color:#f2f2f2;font-family:"JetBrains Mono",Consolas,monospace;font-size:16px;line-height:1.6;padding:14px 18px;border-radius:12px;margin:10px 0 4px;overflow-x:auto}
+pre.code .gap{color:#f4a300}
+code{font-family:"JetBrains Mono",Consolas,monospace;font-size:.95em;background:#eef2f7;padding:1px 6px;border-radius:6px}
+table.out{border-collapse:separate;border-spacing:0;width:100%;max-width:560px;margin:10px 0 0;border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+table.out th{background:var(--teal);color:#fff;text-align:left;padding:9px 12px;font-size:16px}
+.ex.orange table.out th{background:var(--orange)}
+table.out td{padding:6px 10px;border-top:1px solid var(--line)}
+table.out td:first-child{width:130px;font-weight:600}
+table.out input{width:100%;padding:7px 9px;border:1.5px solid var(--line);border-radius:8px;font:inherit}
+/* Άσκηση 1 */
+.q{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin-top:12px;background:#fbfdff;transition:border-color .2s,background .2s}
+.q.ok{border-color:var(--ok);background:#f1fbf5}
+.q.bad{border-color:var(--bad);background:#fff6f5}
+.q .phrase{font-size:18px;margin-bottom:8px}
+.q .phrase b{font-family:"JetBrains Mono",Consolas,monospace;background:#e9eef6;padding:1px 7px;border-radius:6px}
+.q .row{display:flex;gap:10px;flex-wrap:wrap}
+.q input.ans{flex:1;min-width:220px;font-family:"JetBrains Mono",Consolas,monospace;font-size:18px;padding:10px 12px;border:2px solid #b8c6d6;border-radius:10px;background:#fff}
+.q input.ans:focus{outline:none;border-color:var(--teal)}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:10px 18px;cursor:pointer}
+.btn{background:var(--teal);color:#fff}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:#e7eef5;color:var(--ink)}
+.fb{margin-top:10px;font-size:16.5px}
+.fb .head{font-weight:800}
+.q.ok .fb .head{color:var(--ok)} .q.bad .fb .head{color:var(--bad)}
+.fb ul{margin:6px 0 0 0;padding-left:20px}
+.fb li{margin:4px 0}
+.fb .fix{color:var(--muted)}
+.example{background:#f2f6fa;border-style:dashed}
+.example .ans{color:var(--muted)}
+.score{display:flex;align-items:center;gap:12px;margin-top:16px;font-weight:700}
+.bar{flex:1;height:12px;background:#e3eaf2;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#1c7293,#2e9e5b);transition:width .4s}
+
+.savebtn{position:fixed;right:22px;bottom:22px;z-index:50;display:flex;align-items:center;gap:10px;background:#1f8a4c;color:#fff;border-radius:999px;padding:14px 22px;font-size:17px;box-shadow:0 8px 24px rgba(31,138,76,.4)}
+.savebtn:hover{background:#176e3c}
+.savebtn svg{width:22px;height:22px}
+.toast{position:fixed;right:22px;bottom:86px;z-index:50;max-width:380px;background:#fff;color:var(--ink);border-radius:14px;padding:14px 16px;box-shadow:0 8px 24px rgba(20,33,61,.25);border-left:6px solid var(--ok);display:none;font-size:16px}
+.toast.warn{border-left-color:#f4a300}
+.toast.show{display:block}
+.savedbanner{background:#14213d;color:#fff;border-radius:14px;padding:12px 18px;margin-bottom:14px;font-weight:600}
+.savedbanner span{font-weight:400;opacity:.9}
+footer{color:var(--muted);text-align:center;margin-top:36px;font-size:15px}
+@media (max-width:640px){.who{grid-template-columns:1fr}.roles{grid-template-columns:1fr}h1{font-size:27px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Πληροφορική Α' Λυκείου · Α.7 Αλγοριθμική Σκέψη και Προγραμματισμός</div>
+  <h1>Φύλλο Εργασίας Α.7.Μ8</h1>
+  <div class="sub">Δομή Διακλάδωσης: η εντολή if…else</div>
+  <div class="who">
+    <div><label for="name">Όνομα</label><input id="name" data-save autocomplete="off" placeholder="Γράψε το όνομά σου"></div>
+    <div><label for="class">Τμήμα</label><input id="class" data-save autocomplete="off" placeholder="π.χ. Α22.1"></div>
+    <div><label for="date">Ημερομηνία</label><input id="date" data-save readonly tabindex="-1" style="background:#e9eef6"></div>
+  </div>
+</header>
+
+<div class="card note">
+  <b>Πριν ξεκινήσεις.</b> Τα αρχεία <code>klimatistiko.py</code>, <code>kinito.py</code> και <code>anelkystiras.py</code> είναι στον φάκελο <b>Μ8</b> (This PC → Yliko → A Lykeiou → A7). Αποθηκεύεις τα προγράμματά σου στον <b>δικό σου φάκελο</b>. Αν κολλήσεις, χρησιμοποίησε τον σελιδοδείκτη-βοηθό.
+</div>
+
+<!-- ===================== ΕΜΠΕΔΩΣΗ ===================== -->
+<div class="band teal"><h2>ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ ΕΜΠΕΔΩΣΗΣ (ομαδικά)</h2><span>Ασκήσεις 1, 2 και 3</span></div>
+
+<div class="card rolesinfo">
+  <p><b>Δουλεύετε ομαδικά.</b></p>
+  <p><b>Χειριστής:</b> μόνο αυτός ή αυτή ακουμπά το πληκτρολόγιο και το ποντίκι. Γράφει, αποθηκεύει και εκτελεί.</p>
+  <p><b>Καθοδηγητής:</b> δεν ακουμπά πληκτρολόγιο και ποντίκι. Διαβάζει την άσκηση, λέει το επόμενο βήμα, ελέγχει για λάθη και συμπληρώνει το φύλλο εργασίας.</p>
+</div>
+
+<section class="card ex" id="ex1">
+  <div class="exhead"><div class="num">1</div><div><h3>Από τη φράση στη γραμμή if</h3><small>Ομαδικά, χωρίς να ανοίξετε την Python</small></div></div>
+  <p class="tip">Δουλεύετε μαζί και συμφωνείτε σε κάθε απάντηση. Η πρώτη γραμμή είναι λυμένη.</p>
+  <div class="problem"><h4>Πρόβλημα</h4><p>Η Python δεν καταλαβαίνει φράσεις όπως «η μπαταρία είναι κάτω από 20». Για να πάρει μια απόφαση, η φράση γράφεται ως η πρώτη γραμμή μιας εντολής if.</p></div>
+  <p>Γράψτε για κάθε φράση ολόκληρη την <b>πρώτη γραμμή του if</b>, δηλαδή <code>if</code>, τη συνθήκη και την άνω-κάτω τελεία. Χρησιμοποιήστε τη μεταβλητή που είναι γραμμένη με έντονα γράμματα. Πατήστε «Έλεγχος» για να δείτε αν είναι σωστή.</p>
+
+  <div class="q example">
+    <div class="phrase">Παράδειγμα. Τα <b>likes</b> είναι περισσότερα από 1000.</div>
+    <div class="row"><input class="ans" value="if likes > 1000:" readonly></div>
+  </div>
+  <div id="qs"></div>
+  <div class="score"><span id="scoreTxt">0 από 4 σωστές</span><div class="bar"><i id="scoreBar"></i></div></div>
+</section>
+
+<section class="card ex" id="ex2">
+  <div class="exhead"><div class="num">2</div><div><h3>Έξυπνο κλιματιστικό</h3><small>Συμπλήρωση της γραμμής if</small></div></div>
+  <div class="roles">
+    <div><label>Χειριστής</label><input data-save id="e2c" placeholder="Όνομα"></div>
+    <div><label>Καθοδηγητής</label><input data-save id="e2k" placeholder="Όνομα"></div>
+  </div>
+  <p class="tip">Μοιράστε τους ρόλους του Χειριστή και του Καθοδηγητή.</p>
+  <div class="problem"><h4>Πρόβλημα</h4><p>Ένα έξυπνο κλιματιστικό μετρά τη θερμοκρασία του δωματίου. Όταν η θερμοκρασία είναι <b>πάνω από 26 °C</b>, το κλιματιστικό ανάβει. Σε κάθε άλλη περίπτωση, το κλιματιστικό μένει κλειστό.</p></div>
+  <div class="step"><span class="lbl">(α)</span><div class="txt">Άνοιξε το <b>klimatistiko.py</b> από τον φάκελο Μ8 και αποθήκευσέ το στον φάκελό σου (<b>File → Save As</b>).
+<pre class="code">print("===== ΕΞΥΠΝΟ ΚΛΙΜΑΤΙΣΤΙΚΟ =====")
+thermokrasia = int(input("Θερμοκρασία δωματίου: "))
+<span class="gap">..............................</span>
+    print("Το κλιματιστικό ανάβει.")
+else:
+    print("Το κλιματιστικό μένει κλειστό.")</pre></div><input type="checkbox" data-save id="s2a"></div>
+  <div class="step"><span class="lbl">(β)</span><div class="txt">Στη θέση των τελειών γράψε την πρώτη γραμμή του if και αποθήκευσε το πρόγραμμα.</div><input type="checkbox" data-save id="s2b"></div>
+  <div class="step"><span class="lbl">(γ)</span><div class="txt">Εκτέλεσε το πρόγραμμα με θερμοκρασία 30 °C και μετά με 26 °C. Συμπλήρωσε τον πίνακα.
+    <table class="out"><tr><th>Θερμοκρασία</th><th>Τι εμφανίστηκε;</th></tr>
+    <tr><td>30</td><td><input data-save id="t2a"></td></tr>
+    <tr><td>26</td><td><input data-save id="t2b"></td></tr></table></div><input type="checkbox" data-save id="s2c"></div>
+</section>
+
+<section class="card ex" id="ex3">
+  <div class="exhead"><div class="num">3</div><div><h3>Ο ανελκυστήρας</h3><small>Συμπλήρωση της γραμμής if</small></div></div>
+  <div class="roles">
+    <div><label>Χειριστής</label><input data-save id="e3c" placeholder="Όνομα"></div>
+    <div><label>Καθοδηγητής</label><input data-save id="e3k" placeholder="Όνομα"></div>
+  </div>
+  <p class="tip">Αντιστρέψτε τους ρόλους από την Άσκηση 2.</p>
+  <div class="problem"><h4>Πρόβλημα</h4><p>Ένας ανελκυστήρας σηκώνει το πολύ <b>600 κιλά</b>. Αν το βάρος των επιβατών είναι μέχρι 600 κιλά, εμφανίζει «Ο ανελκυστήρας ξεκινά.», αλλιώς εμφανίζει «Υπέρβαση βάρους!».</p></div>
+  <div class="step"><span class="lbl">(α)</span><div class="txt">Άνοιξε το <b>anelkystiras.py</b> από τον φάκελο Μ8 και αποθήκευσέ το στον φάκελό σου (<b>File → Save As</b>).
+<pre class="code">print("===== ΑΝΕΛΚΥΣΤΗΡΑΣ =====")
+varos = int(input("Βάρος επιβατών: "))
+<span class="gap">..............................</span>
+    print("Ο ανελκυστήρας ξεκινά.")
+else:
+    print("Υπέρβαση βάρους!")</pre></div><input type="checkbox" data-save id="s3a"></div>
+  <div class="step"><span class="lbl">(β)</span><div class="txt">Στη θέση των τελειών γράψε την πρώτη γραμμή του if.</div><input type="checkbox" data-save id="s3b"></div>
+  <div class="step"><span class="lbl">(γ)</span><div class="txt">Αποθήκευσε το πρόγραμμα, δοκίμασέ το με 600 και με 720 κιλά και συμπλήρωσε τον πίνακα.
+    <table class="out"><tr><th>Βάρος</th><th>Τι εμφανίστηκε;</th></tr>
+    <tr><td>600</td><td><input data-save id="t3a"></td></tr>
+    <tr><td>720</td><td><input data-save id="t3b"></td></tr></table></div><input type="checkbox" data-save id="s3c"></div>
+</section>
+
+<!-- ===================== ΑΞΙΟΛΟΓΗΣΗ ===================== -->
+<div class="band orange"><h2>ΔΡΑΣΤΗΡΙΟΤΗΤΑ ΑΞΙΟΛΟΓΗΣΗΣ (ατομικά)</h2><span>Άσκηση 4</span></div>
+
+<section class="card ex orange" id="ex4">
+  <div class="exhead"><div class="num">4</div><div><h3>Ξεκλείδωσε το κινητό</h3><small>Συμπλήρωση του if, του else και των print, ατομικά</small></div></div>
+  <div class="problem orange"><h4>Πρόβλημα</h4><p>Η Ελένη κλειδώνει το κινητό της με το PIN <b>2580</b>. Όταν πληκτρολογεί το 2580, το κινητό ξεκλειδώνει και εμφανίζει «Το κινητό ξεκλείδωσε!». Όταν πληκτρολογεί οποιοδήποτε άλλο PIN, εμφανίζει «Λάθος PIN.».</p></div>
+  <div class="step"><span class="lbl">(α)</span><div class="txt">Άνοιξε το <b>kinito.py</b> από τον φάκελο Μ8 και αποθήκευσέ το στον φάκελό σου (<b>File → Save As</b>).
+<pre class="code">print("===== ΚΙΝΗΤΟ ΤΗΣ ΕΛΕΝΗΣ =====")
+pin = int(input("Δώσε το PIN: "))
+<span class="gap">..............................</span>
+    <span class="gap">..............................</span>
+<span class="gap">..............................</span>
+    <span class="gap">..............................</span></pre></div><input type="checkbox" data-save id="s4a"></div>
+  <div class="step"><span class="lbl">(β)</span><div class="txt">Στη θέση των τελειών γράψε την πρώτη γραμμή του if, το else και τις δύο εντολές print.</div><input type="checkbox" data-save id="s4b"></div>
+  <div class="step"><span class="lbl">(γ)</span><div class="txt">Αποθήκευσε το πρόγραμμα και δοκίμασέ το με τα PIN 2580 και 1234.</div><input type="checkbox" data-save id="s4c"></div>
+</section>
+
+<!-- ===================== ΕΠΙΠΡΟΣΘΕΤΕΣ ===================== -->
+<div class="band green"><h2>ΕΠΙΠΡΟΣΘΕΤΕΣ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</h2><span>Ασκήσεις 5 και 6, αν τελείωσες</span></div>
+
+<section class="card ex green" id="ex5">
+  <div class="exhead"><div class="num">5</div><div><h3>Μάντεψε τον αριθμό</h3><small>Ο τελεστής !=</small></div></div>
+  <div class="problem green"><h4>Πρόβλημα</h4><p>Η Αριάδνη σκέφτεται έναν αριθμό από το 1 μέχρι το 9 και η Νικόλ προσπαθεί να τον μαντέψει. Αν η Νικόλ δεν τον βρει, το πρόγραμμα εμφανίζει «Lose», αλλιώς εμφανίζει «Win».</p></div>
+  <div class="step"><span class="lbl">(α)</span><div class="txt">Γράψε το πρόγραμμα που λύνει το πρόβλημα. Χρησιμοποίησε τον τελεστή <code>!=</code>.</div><input type="checkbox" data-save id="s5a"></div>
+  <div class="step"><span class="lbl">(β)</span><div class="txt">Αποθήκευσε το πρόγραμμα ως <b>mantepse.py</b> και δοκίμασέ το με 7 και 7 και μετά με 7 και 3.</div><input type="checkbox" data-save id="s5b"></div>
+</section>
+
+<section class="card ex green" id="ex6">
+  <div class="exhead"><div class="num">6</div><div><h3>Ο μεγαλύτερος αριθμός</h3><small>Σκέψου τα όρια</small></div></div>
+  <div class="problem green"><h4>Πρόβλημα</h4><p>Ένα πρόγραμμα δέχεται δύο ακέραιους αριθμούς και εμφανίζει τον μεγαλύτερο.</p></div>
+  <div class="step"><span class="lbl">(α)</span><div class="txt">Γράψε το πρόγραμμα που λύνει το πρόβλημα.</div><input type="checkbox" data-save id="s6a"></div>
+  <div class="step"><span class="lbl">(β)</span><div class="txt">Αποθήκευσέ το ως <b>megalyteros.py</b> και δοκίμασέ το με 8 και 5, 4 και 9, 6 και 6.</div><input type="checkbox" data-save id="s6b"></div>
+</section>
+
+<footer>Αριστείδου Παναγιώτης, Αρέστη Άριστος · Φ.Ε. Α.7.Μ8</footer>
+<button class="savebtn" id="saveBtn" type="button" title="Αποθήκευση του φύλλου με ό,τι έχεις συμπληρώσει"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>Αποθήκευση φύλλου</button>
+<div class="toast" id="toast" role="status"></div>
+</div>
+
+<script>
+/* ---------- Αποθήκευση στοιχείων στον browser του μαθητή (αν επιτρέπεται) ---------- */
+const KEY='fe-a7-m8';
+let store={}; const SAVED=document.getElementById('saved-data'); const isSaved=!!SAVED;
+if(isSaved){try{store=JSON.parse(SAVED.textContent)}catch(e){store={}}}
+else{try{store=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){store={}}}
+function persist(){if(isSaved)return;try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+document.querySelectorAll('[data-save]').forEach(el=>{
+  const v=store[el.id];
+  if(el.type==='checkbox'){el.checked=!!v; mark(el); el.addEventListener('change',()=>{store[el.id]=el.checked;mark(el);persist()})}
+  else{ if(v!==undefined) el.value=v; el.addEventListener('input',()=>{store[el.id]=el.value;persist()})}
+});
+(function(){const d=document.getElementById('date');
+  if(!isSaved||!d.value){const t=new Date();d.value=String(t.getDate()).padStart(2,'0')+'/'+String(t.getMonth()+1).padStart(2,'0')+'/'+t.getFullYear();store.date=d.value;persist();}})();
+function mark(cb){const s=cb.closest('.step'); if(s) s.classList.toggle('done',cb.checked)}
+
+/* ---------- Άσκηση 1: έλεγχος της γραμμής if ---------- */
+const QUESTIONS=[
+  {id:'q1', phrase:'Η <b>mpataria</b> είναι κάτω από 20.', v:'mpataria', n:20, op:'<',
+   words:'«κάτω από 20»',
+   wrong:{'<=':'Το «κάτω από 20» δεν περιλαμβάνει το 20. Με <= η συνθήκη θα ίσχυε και όταν η μπαταρία είναι ακριβώς 20.',
+          '>':'Η σύγκριση είναι ανάποδα. «Κάτω από» σημαίνει μικρότερο, όχι μεγαλύτερο.',
+          '>=':'Η σύγκριση είναι ανάποδα. «Κάτω από» σημαίνει μικρότερο, όχι μεγαλύτερο ή ίσο.',
+          '==':'Το == ελέγχει αν η τιμή είναι ακριβώς 20. Η φράση όμως λέει «κάτω από 20».',
+          '!=':'Το != ελέγχει αν η τιμή είναι διαφορετική από 20, άρα ισχύει και για το 50. Η φράση λέει «κάτω από 20».'}},
+  {id:'q2', phrase:'Ο <b>vathmos</b> είναι τουλάχιστον 10.', v:'vathmos', n:10, op:'>=',
+   words:'«τουλάχιστον 10»',
+   wrong:{'>':'Το «τουλάχιστον 10» περιλαμβάνει και το 10. Με > ένας μαθητής με βαθμό ακριβώς 10 δεν θα μετρούσε.',
+          '<':'Η σύγκριση είναι ανάποδα. «Τουλάχιστον 10» σημαίνει 10 ή περισσότερο.',
+          '<=':'Η σύγκριση είναι ανάποδα. «Τουλάχιστον 10» σημαίνει 10 ή περισσότερο, όχι 10 ή λιγότερο.',
+          '==':'Το == ελέγχει αν ο βαθμός είναι ακριβώς 10. Η φράση λέει «τουλάχιστον 10», άρα και το 15 πρέπει να ισχύει.',
+          '!=':'Το != σημαίνει «διάφορο». Η φράση λέει «τουλάχιστον 10».'}},
+  {id:'q3', phrase:'Το <b>ypsos</b> είναι το πολύ 140.', v:'ypsos', n:140, op:'<=',
+   words:'«το πολύ 140»',
+   wrong:{'<':'Το «το πολύ 140» περιλαμβάνει και το 140. Με < ένα παιδί με ύψος ακριβώς 140 δεν θα μετρούσε.',
+          '>':'Η σύγκριση είναι ανάποδα. «Το πολύ 140» σημαίνει 140 ή λιγότερο.',
+          '>=':'Η σύγκριση είναι ανάποδα. «Το πολύ 140» σημαίνει 140 ή λιγότερο, όχι 140 ή περισσότερο.',
+          '==':'Το == ελέγχει αν το ύψος είναι ακριβώς 140. Η φράση λέει «το πολύ 140», άρα και το 120 πρέπει να ισχύει.',
+          '!=':'Το != σημαίνει «διάφορο». Η φράση λέει «το πολύ 140».'}},
+  {id:'q4', phrase:'Η <b>apantisi</b> δεν είναι 0.', v:'apantisi', n:0, op:'!=',
+   words:'«δεν είναι 0»',
+   wrong:{'==':'Το == ελέγχει αν η απάντηση είναι ίση με 0. Εδώ θέλουμε το αντίθετο, «δεν είναι 0».',
+          '>':'Με > η συνθήκη ισχύει μόνο για θετικούς αριθμούς. Το «δεν είναι 0» ισχύει και για αρνητικούς, π.χ. -5.',
+          '<':'Με < η συνθήκη ισχύει μόνο για αρνητικούς αριθμούς. Το «δεν είναι 0» ισχύει και για θετικούς.',
+          '>=':'Με >= η συνθήκη ισχύει και για το 0, που είναι ακριβώς αυτό που η φράση αποκλείει.',
+          '<=':'Με <= η συνθήκη ισχύει και για το 0, που είναι ακριβώς αυτό που η φράση αποκλείει.'}}
+];
+const FLIP={'<':'>','>':'<','<=':'>=','>=':'<=','==':'==','!=':'!='};
+const OPNAME={'<':'μικρότερο','>':'μεγαλύτερο','<=':'μικρότερο ή ίσο','>=':'μεγαλύτερο ή ίσο','==':'ίσο','!=':'διάφορο'};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function check(q,raw){
+  const issues=[]; // {msg, fix}
+  let s=raw.replace(/ /g,' ').trim();
+  if(!s) return {ok:false,issues:[{msg:'Δεν έγραψες ακόμα κάτι.',fix:'Γράψε ολόκληρη τη γραμμή, π.χ. όπως το παράδειγμα «if likes > 1000:».'}]};
+  // αντικατάσταση ειδικών χαρακτήρων
+  if(/[≥≤≠]/.test(s)){issues.push({msg:'Χρησιμοποίησες σύμβολο από τα μαθηματικά (≥, ≤ ή ≠).',fix:'Στην Python γράφουμε >=, <= και != με δύο χαρακτήρες από το πληκτρολόγιο.'});
+    s=s.replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/≠/g,'!=');}
+  // 1. η λέξη if
+  let rest;
+  const m=s.match(/^([A-Za-zΑ-Ωα-ωάέήίόύώΆΈΉΊΌΎΏ]+)(.*)$/);
+  const first=m?m[1]:'';
+  if(/^if$/.test(first)) rest=m[2];
+  else if(/^if/i.test(first) && first.length===2){issues.push({msg:'Έγραψες «'+esc(first)+'» με κεφαλαία γράμματα.',fix:'Η Python ξεχωρίζει τα κεφαλαία από τα μικρά. Η εντολή γράφεται πάντα <code>if</code>, με μικρά γράμματα.'}); rest=m[2];}
+  else if(/^(αν|εάν|εαν)$/i.test(first)){issues.push({msg:'Έγραψες «'+esc(first)+'» στα ελληνικά.',fix:'Στην Python η εντολή γράφεται <code>if</code>, με λατινικούς χαρακτήρες.'}); rest=m[2];}
+  else if(/^if/.test(s)){issues.push({msg:'Μετά το if δεν άφησες κενό.',fix:'Άφησε ένα κενό ανάμεσα στο <code>if</code> και στη συνθήκη, π.χ. <code>if '+q.v+'</code>.'}); rest=s.slice(2);}
+  else {issues.push({msg:'Η γραμμή δεν ξεκινά με τη λέξη if.',fix:'Κάθε γραμμή που ελέγχει μια συνθήκη ξεκινά με <code>if</code> και ένα κενό.'}); rest=s;}
+  rest=rest.trim();
+  // 2. άνω-κάτω τελεία
+  if(rest.endsWith(':')) rest=rest.slice(0,-1).trim();
+  else if(rest.endsWith(';')){issues.push({msg:'Στο τέλος έβαλες ερωτηματικό (;).',fix:'Η γραμμή του if τελειώνει με άνω-κάτω τελεία (:), όχι με ερωτηματικό.'}); rest=rest.slice(0,-1).trim();}
+  else if(rest.endsWith('.')){issues.push({msg:'Στο τέλος έβαλες τελεία (.).',fix:'Η γραμμή του if τελειώνει με άνω-κάτω τελεία (:).'}); rest=rest.slice(0,-1).trim();}
+  else issues.push({msg:'Λείπει η άνω-κάτω τελεία στο τέλος της γραμμής.',fix:'Πρόσθεσε <code>:</code> στο τέλος. Χωρίς αυτήν η Python βγάζει SyntaxError.'});
+  if(rest.includes(':')) issues.push({msg:'Η άνω-κάτω τελεία είναι σε λάθος θέση.',fix:'Η <code>:</code> μπαίνει μόνο μία φορά, στο τέλος της γραμμής.'});
+  rest=rest.replace(/:/g,'').trim();
+  // παρενθέσεις γύρω από τη συνθήκη επιτρέπονται
+  if(/^\(.*\)$/.test(rest)) rest=rest.slice(1,-1).trim();
+  // 3. ανάλυση συνθήκης
+  const opRe=/(==|!=|<=|>=|=<|=>|<>|=|<|>)/;
+  const parts=rest.split(opRe);
+  if(parts.length<3){
+    issues.push({msg:'Δεν βρήκα τελεστή σύγκρισης στη συνθήκη.',fix:'Η συνθήκη συγκρίνει τη μεταβλητή με έναν αριθμό, π.χ. <code>'+q.v+' &lt; '+q.n+'</code>. Διάλεξε τον σωστό τελεστή για τη φράση '+q.words+'.'});
+    return {ok:false,issues};
+  }
+  if(parts.length>3){issues.push({msg:'Η συνθήκη έχει περισσότερους από έναν τελεστές.',fix:'Μια απλή συνθήκη έχει μία μεταβλητή, έναν τελεστή και έναν αριθμό.'}); return {ok:false,issues};}
+  let [L,op,R]=parts.map(x=>x.trim());
+  // λάθη γραφής τελεστή
+  if(op==='='){issues.push({msg:'Έγραψες ένα μόνο =.',fix:'Το ένα = δίνει τιμή σε μεταβλητή. Για σύγκριση χρειάζεσαι τελεστή σύγκρισης, π.χ. το == σημαίνει «ίσο».'}); return {ok:false,issues};}
+  if(op==='=<'||op==='=>'){const good=op==='=<'?'<=':'>=';issues.push({msg:'Έγραψες τον τελεστή '+esc(op)+' ανάποδα.',fix:'Γράφεται <code>'+esc(good)+'</code>, πρώτα το '+esc(good[0])+' και μετά το =.'}); op=good;}
+  if(op==='<>'){issues.push({msg:'Το &lt;&gt; δεν υπάρχει στην Python 3.',fix:'Για «διάφορο» γράφουμε <code>!=</code>.'}); op='!=';}
+  // ποια πλευρά είναι η μεταβλητή
+  const isNum=x=>/^-?\d+$/.test(x);
+  let varSide,num,effOp;
+  if(isNum(R)&&!isNum(L)){varSide=L;num=+R;effOp=op;}
+  else if(isNum(L)&&!isNum(R)){varSide=R;num=+L;effOp=FLIP[op];}
+  else if(isNum(L)&&isNum(R)){issues.push({msg:'Η συνθήκη συγκρίνει δύο αριθμούς.',fix:'Η μία πλευρά πρέπει να είναι η μεταβλητή <code>'+q.v+'</code>.'}); return {ok:false,issues};}
+  else {
+    if(L===q.v||R===q.v){issues.push({msg:'Λείπει ο αριθμός ή δεν είναι γραμμένος σωστά.',fix:'Η φράση λέει '+q.words+'. Γράψε τον αριθμό '+q.n+' με ψηφία.'});}
+    else issues.push({msg:'Η συνθήκη δεν είναι γραμμένη σωστά.',fix:'Γράψε τη μεταβλητή, τον τελεστή και τον αριθμό, π.χ. <code>'+q.v+' &lt; '+q.n+'</code> (με τον σωστό τελεστή).'});
+    return {ok:false,issues};
+  }
+  // μεταβλητή
+  if(varSide!==q.v){
+    if(varSide.toLowerCase()===q.v) issues.push({msg:'Η μεταβλητή γράφτηκε «'+esc(varSide)+'».',fix:'Η Python ξεχωρίζει κεφαλαία και μικρά. Γράψε <code>'+q.v+'</code> ακριβώς όπως είναι με τα έντονα γράμματα.'});
+    else issues.push({msg:'Χρησιμοποίησες τη μεταβλητή «'+esc(varSide)+'».',fix:'Η μεταβλητή είναι η <code>'+q.v+'</code>, αυτή που είναι γραμμένη με έντονα γράμματα στη φράση.'});
+  }
+  // αριθμός
+  if(num!==q.n) issues.push({msg:'Ο αριθμός '+num+' δεν είναι σωστός.',fix:'Η φράση λέει '+q.words+'. Ο αριθμός είναι το '+q.n+'.'});
+  // τελεστής
+  if(effOp!==q.op){
+    const why=q.wrong[effOp]||'Ο τελεστής δεν ταιριάζει με τη φράση.';
+    issues.push({msg:'Ο τελεστής '+esc(op)+' ('+OPNAME[op]+') δεν ταιριάζει με τη φράση '+q.words+'.',fix:why+' Σκέψου ποιος από τους τελεστές <, >, <=, >=, ==, != λέει το ίδιο με τη φράση.'});
+  }
+  return {ok:issues.length===0,issues,reversed:isNum(L)};
+}
+
+const qs=document.getElementById('qs');
+QUESTIONS.forEach((q,i)=>{
+  const d=document.createElement('div'); d.className='q'; d.id=q.id;
+  d.innerHTML='<div class="phrase">'+(i+1)+'. '+q.phrase+'</div>'+
+    '<div class="row"><input class="ans" id="a_'+q.id+'" data-save spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Γράψε εδώ την πρώτη γραμμή του if"><button class="btn">Έλεγχος</button></div>'+
+    '<div class="fb" aria-live="polite"></div>';
+  qs.appendChild(d);
+  const inp=d.querySelector('input'), btn=d.querySelector('button'), fb=d.querySelector('.fb');
+  if(store['a_'+q.id]) inp.value=store['a_'+q.id];
+  inp.addEventListener('input',()=>{store['a_'+q.id]=inp.value;persist();d.classList.remove('ok','bad');fb.innerHTML='';update();});
+  const run=()=>{
+    const r=check(q,inp.value);
+        d.classList.toggle('ok',r.ok); d.classList.toggle('bad',!r.ok);
+    if(r.ok){
+      fb.innerHTML='<div class="head">Σωστά!</div>'+(r.reversed?'<div class="fix">Έγραψες τον αριθμό πρώτα. Είναι σωστό, αλλά συνήθως γράφουμε πρώτα τη μεταβλητή, π.χ. <code>if '+q.v+' '+q.op.replace('<','&lt;').replace('>','&gt;')+' '+q.n+':</code>.</div>':'<div class="fix">Η γραμμή έχει if, σωστή συνθήκη και άνω-κάτω τελεία.</div>');
+    } else {
+      fb.innerHTML='<div class="head">Δεν είναι ακόμα σωστό. Δες τι πρέπει να διορθώσεις:</div><ul>'+
+        r.issues.map(x=>'<li><b>'+x.msg+'</b> <span class="fix">'+x.fix+'</span></li>').join('')+'</ul>';
+    }
+    store['ok_'+q.id]=r.ok; persist(); update();
+  };
+  btn.addEventListener('click',run);
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter')run();});
+  if(inp.value.trim()) run();
+});
+function update(){
+  const n=QUESTIONS.filter(q=>{const e=document.getElementById(q.id);return e&&e.classList.contains('ok')}).length;
+  document.getElementById('scoreTxt').textContent=n+' από 4 σωστές';
+  document.getElementById('scoreBar').style.width=(n/4*100)+'%';
+}
+update();
+
+/* ---------- Αποθήκευση φύλλου ---------- */
+const pad=n=>String(n).padStart(2,'0');
+function stamp(d){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()+' '+pad(d.getHours())+':'+pad(d.getMinutes());}
+if(isSaved){
+  const b=document.createElement('div'); b.className='savedbanner';
+  b.innerHTML='Αποθηκευμένο φύλλο εργασίας <span>'+esc(store.name||'χωρίς όνομα')+(store['class']?', '+esc(store['class']):'')+' · αποθηκεύτηκε '+esc(store._savedAt||'')+'</span>';
+  document.querySelector('.wrap').prepend(b);
+}
+function toast(html,warn){const t=document.getElementById('toast');t.innerHTML=html;t.classList.toggle('warn',!!warn);t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),9000);}
+function summary(){
+  const ok=QUESTIONS.filter(q=>document.getElementById(q.id).classList.contains('ok')).length;
+  const cbs=[...document.querySelectorAll('.step input[type=checkbox]')]; const done=cbs.filter(c=>c.checked).length;
+  return 'Άσκηση 1: '+ok+' από 4 σωστές. Βήματα που σημείωσες ως ολοκληρωμένα: '+done+' από '+cbs.length+'.';
+}
+document.getElementById('saveBtn').addEventListener('click',()=>{
+  const name=(document.getElementById('name').value||'').trim();
+  if(!name){toast('<b>Γράψε πρώτα το όνομά σου</b> στην αρχή της σελίδας και μετά πάτησε ξανά «Αποθήκευση φύλλου».',true);document.getElementById('name').focus();return;}
+  const data=Object.assign({},store); data._savedAt=stamp(new Date());
+  // καθαρό αντίγραφο της σελίδας
+  const doc=document.documentElement.cloneNode(true);
+  doc.querySelector('#qs').innerHTML='';
+  doc.querySelectorAll('.savedbanner,#saved-data').forEach(e=>e.remove());
+  const t=doc.querySelector('#toast'); t.className='toast'; t.innerHTML='';
+  doc.querySelectorAll('.step.done').forEach(e=>e.classList.remove('done'));
+  doc.querySelectorAll('input:not([readonly])').forEach(i=>{i.removeAttribute('value');i.removeAttribute('checked');});
+  doc.querySelector('#scoreTxt').textContent='0 από 4 σωστές'; doc.querySelector('#scoreBar').removeAttribute('style');
+  const sd=document.createElement('script'); sd.type='application/json'; sd.id='saved-data';
+  sd.textContent=JSON.stringify(data).replace(/</g,'\\u003c');
+  doc.querySelector('head').appendChild(sd);
+  const html='<!DOCTYPE html>\n'+doc.outerHTML;
+  const cls=(document.getElementById('class').value||'').trim();
+  const fname=('Α.7.Μ8 - '+name+(cls?' - '+cls:'')).replace(/[\\/:*?"<>|]+/g,' ').trim()+'.html';
+  const blob=new Blob([html],{type:'text/html'});
+  const done=where=>toast('<b>Το φύλλο αποθηκεύτηκε</b> ως «'+esc(fname)+'»'+where+'. '+summary()+' Αν συνεχίσεις να γράφεις, πάτησε ξανά «Αποθήκευση φύλλου» στο τέλος.');
+  const fail=()=>toast('<b>Η αποθήκευση δεν έγινε.</b> Ζήτησε βοήθεια από τον καθηγητή σου.',true);
+  const anchor=()=>{try{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);done(' στον φάκελο Downloads');}catch(e){fail();}};
+  const viaCapability=()=>{
+    const use=window.claude&&window.claude.use;
+    if(!use){anchor();return;}
+    Promise.race([window.claude.use('downloads'),new Promise(r=>setTimeout(()=>r(null),1500))])
+      .then(dl=>{ if(!dl){anchor();return;} return dl.save({filename:fname,data:html}).then(()=>done('')); })
+      .catch(()=>toast('Η αποθήκευση δεν ολοκληρώθηκε. Πάτησε ξανά «Αποθήκευση φύλλου».',true));
+  };
+  // 1. Παράθυρο «Αποθήκευση ως» (Chrome, Edge): ανοίγει αμέσως με το κλικ
+  if(typeof window.showSaveFilePicker==='function'){
+    let picker;
+    try{
+      picker=window.showSaveFilePicker({suggestedName:fname,types:[{description:'Φύλλο εργασίας (HTML)',accept:{'text/html':['.html']}}]});
+    }catch(e){ viaCapability(); return; }
+    picker.then(async h=>{
+      const w=await h.createWritable(); await w.write(blob); await w.close();
+      let where='';
+      try{ const f=await h.getFile(); if(!f.size) throw 0; where=' στον φάκελο που διάλεξες'; }catch(e){ fail(); return; }
+      done(where);
+    }).catch(e=>{
+      if(e&&e.name==='AbortError') toast('Η αποθήκευση ακυρώθηκε. Πάτησε ξανά «Αποθήκευση φύλλου» όταν είσαι έτοιμος ή έτοιμη.',true);
+      else viaCapability();
+    });
+    return;
+  }
+  // 2. Χωρίς παράθυρο «Αποθήκευση ως»
+  viaCapability();
+});
+</script>
+</body>
+</html>
