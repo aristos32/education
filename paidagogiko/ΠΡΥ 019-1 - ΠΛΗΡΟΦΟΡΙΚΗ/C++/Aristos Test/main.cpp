@@ -1,9 +1,15 @@
+
 #include <iostream>
+#include <cmath>
+#include <iomanip>
 
 using namespace std;
 
+void example1();
+void example2();
+
 int main()
 {
-    cout << "Hello world!" << endl;
-    return 0;
+    //example1();
+    example2();
 }

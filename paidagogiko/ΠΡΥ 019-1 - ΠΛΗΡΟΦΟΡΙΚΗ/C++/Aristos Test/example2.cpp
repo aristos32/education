@@ -4,19 +4,29 @@
 
 using namespace std;
 
-int main()
+void example2()
 {
-    int x1, y1, x2, y2;
-    float distance;
+    int studentNumber, monades, dekades, ekatondades;
 
-    cout << "Enter x1, y1:" << endl;
-    cin >> x1 >> y1;
+    cout << "Enter student number:" << endl;
+    cin >> studentNumber;
 
-    cout << "Enter x2, y2:" << endl;
-    cin >> x2 >> y2;
+    // integer division by 100 -> get ekatondades
+    ekatondades = studentNumber / 100;
 
-    distance = sqrt(std::pow(x2-x1, 2) + std::pow(y2-y1, 2));
+    studentNumber = studentNumber - ekatondades * 100;
 
-    cout << "distance is:" << fixed << setprecision(2) << distance;
-    return 0;
+    // integer division by 10 -> get dekades
+    dekades = studentNumber / 10;
+
+    cout << "Answer is:" << dekades;
+
+    // studentNumber = studentNumber - dekades * 10
+
+    // monades = studentNumber
+
+
+
+
+
 }
