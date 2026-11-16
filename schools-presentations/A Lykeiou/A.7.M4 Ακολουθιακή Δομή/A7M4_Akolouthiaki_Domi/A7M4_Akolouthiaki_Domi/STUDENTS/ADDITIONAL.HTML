@@ -193,7 +193,7 @@ const PY = (() => {
   const V = (t, v) => ({ t, v });
   const NONE = V('none', null);
   const KW = new Set(['if', 'else', 'elif', 'for', 'while', 'def', 'return', 'import', 'from', 'class', 'and', 'or', 'not', 'in', 'is', 'pass', 'break', 'continue', 'lambda', 'with', 'try', 'except', 'global']);
-  const tname = x => ({ int: 'int', float: 'float', str: 'str', bool: 'bool', none: 'NoneType', tuple: 'tuple', func: 'builtin_function_or_method', type: 'type' })[x.t];
+  const tname = x => ({ int: 'int', float: 'float', str: 'str', bool: 'bool', none: 'NoneType', tuple: 'tuple', complex: 'complex', func: 'builtin_function_or_method', type: 'type' })[x.t];
   function fmtFloat(v) {
     if (!isFinite(v)) return isNaN(v) ? 'nan' : (v > 0 ? 'inf' : '-inf');
     if (Number.isInteger(v) && Math.abs(v) < 1e16) return v.toFixed(1);
@@ -211,9 +211,11 @@ const PY = (() => {
       case 'tuple': return '(' + x.v.map(repr).join(', ') + (x.v.length === 1 ? ',' : '') + ')';
       case 'func': return '<built-in function ' + x.name + '>';
       case 'type': return "<class '" + x.v + "'>";
+      case 'complex': { const f = v => Number.isInteger(v) ? String(v) : fmtFloat(v); return (x.v.re === 0 ? '' : '(' + f(x.v.re)) + (x.v.re === 0 ? '' : (x.v.im < 0 || Object.is(x.v.im, -0) ? '-' : '+')) + f(x.v.re === 0 ? x.v.im : Math.abs(x.v.im)) + 'j' + (x.v.re === 0 ? '' : ')'); }
     }
   }
   const str = x => x.t === 'str' ? x.v : repr(x);
+  const truthy = x => x.t === 'bool' ? x.v : (x.t === 'int' || x.t === 'float') ? x.v !== 0 : (x.t === 'str' || x.t === 'tuple') ? x.v.length > 0 : x.t !== 'none';
   const isNum = x => x.t === 'int' || x.t === 'float' || x.t === 'bool';
   const num = x => x.t === 'bool' ? (x.v ? 1 : 0) : x.v;
 
@@ -242,8 +244,8 @@ const PY = (() => {
       }
       const two = src.substr(i, 2);
       if (['**', '//', '==', '!=', '<=', '>='].includes(two)) { toks.push({ k: 'op', v: two }); i += 2; continue; }
-      if ('+-*/%(),=<>'.includes(c)) { toks.push({ k: 'op', v: c }); i++; continue; }
-      if (c === '[' || c === ']' || c === '{' || c === '}' || c === ':' || c === '.' || c === ';') throw new PyErr('SyntaxError', 'invalid syntax', ln);
+      if ('+-*/%(),=<>:'.includes(c)) { toks.push({ k: 'op', v: c }); i++; continue; }
+      if (c === '[' || c === ']' || c === '{' || c === '}' || c === '.' || c === ';') throw new PyErr('SyntaxError', 'invalid syntax', ln);
       throw new PyErr('SyntaxError', "invalid character '" + c + "' (U+" + c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0') + ')', ln);
     }
     return toks;
@@ -251,7 +253,7 @@ const PY = (() => {
 
   /* ---------------- parser (Pratt) ---------------- */
   const BP = { '==': 5, '!=': 5, '<': 5, '>': 5, '<=': 5, '>=': 5, '+': 10, '-': 10, '*': 20, '/': 20, '//': 20, '%': 20, '**': 40 };
-  function parseLine(toks, ln) {
+  function parseLine(toks, ln, mode) {
     let p = 0;
     const peek = () => toks[p], next = () => toks[p++];
     const err = m => { throw new PyErr('SyntaxError', m || 'invalid syntax', ln); };
@@ -261,6 +263,7 @@ const PY = (() => {
       let node;
       if (t.k === 'num') node = { n: 'num', v: t.v, f: t.f };
       else if (t.k === 'str') { let s = t.v; while (peek() && peek().k === 'str') s += next().v; node = { n: 'str', v: s }; }
+      else if (t.k === 'name' && t.v === 'not') { if (!peek()) err(); node = { n: 'not', a: expr(3) }; }
       else if (t.k === 'name') {
         if (KW.has(t.v)) err();
         node = t.v === 'True' || t.v === 'False' ? { n: 'bool', v: t.v === 'True' } : t.v === 'None' ? { n: 'none' } : { n: 'name', v: t.v };
@@ -304,12 +307,28 @@ const PY = (() => {
       let left = primary();
       for (;;) {
         const t = peek(); if (!t) break;
-        if (t.k !== 'op') err('invalid syntax. Perhaps you forgot a comma?');
+        if (t.k === 'name' && (t.v === 'and' || t.v === 'or')) {
+          const bp = t.v === 'or' ? 1 : 2; if (bp <= minbp) break;
+          next(); if (!peek()) err();
+          left = { n: 'boolop', op: t.v, a: left, b: expr(bp) }; continue;
+        }
+        if (t.k !== 'op') { if (t.k === 'name' && (t.v === 'if' || t.v === 'else' || t.v === 'in' || t.v === 'is')) err(); err('invalid syntax. Perhaps you forgot a comma?'); }
         const bp = BP[t.v]; if (bp === undefined || bp <= minbp) break;
         next(); if (!peek()) err();
+        if (bp === 5) {
+          const ops = [t.v], items = [left, expr(5)];
+          while (peek() && peek().k === 'op' && BP[peek().v] === 5 && 5 > minbp) { ops.push(next().v); if (!peek()) err(); items.push(expr(5)); }
+          left = { n: 'cmp', ops, items }; continue;
+        }
         left = { n: 'bin', op: t.v, a: left, b: expr(t.v === '**' ? bp - 1 : bp) };
       }
       return left;
+    }
+    if (mode === 'expr') {
+      if (!toks.length) err();
+      const e = expr(0);
+      if (peek()) { if (isOp(peek(), '=')) err("invalid syntax. Maybe you meant '==' or ':=' instead of '='?"); err(); }
+      return e;
     }
     if (!toks.length) return null;
     if (toks[0].k === 'name' && toks[0].v === 'print' && toks[1] && !(toks[1].k === 'op' && '(=+-*/%'.includes(toks[1].v)))
@@ -411,7 +430,7 @@ const PY = (() => {
         case '/': if (y === 0) throw E('ZeroDivisionError', 'division by zero'); return V('float', x / y);
         case '//': if (y === 0) throw E('ZeroDivisionError', fl ? 'float floor division by zero' : 'integer division or modulo by zero'); return V(T, Math.floor(x / y));
         case '%': if (y === 0) throw E('ZeroDivisionError', fl ? 'float modulo' : 'integer modulo by zero'); return V(T, x - Math.floor(x / y) * y);
-        case '**': if (x === 0 && y < 0) throw E('ZeroDivisionError', '0.0 cannot be raised to a negative power'); return V(fl || y < 0 ? 'float' : 'int', Math.pow(x, y));
+        case '**': if (x === 0 && y < 0) throw E('ZeroDivisionError', '0.0 cannot be raised to a negative power'); if (x < 0 && !Number.isInteger(y)) { const r = Math.pow(-x, y), th = Math.PI * y; return V('complex', { re: r * Math.cos(th), im: r * Math.sin(th) }); } return V(fl || y < 0 ? 'float' : 'int', Math.pow(x, y));
       }
     }
     if (a.t === 'str' && b.t === 'str' && op === '+') return V('str', a.v + b.v);
@@ -486,6 +505,16 @@ const PY = (() => {
         return V(a.t === 'float' ? 'float' : 'int', node.op === '-' ? -num(a) : num(a));
       }
       case 'bin': { const a = await ev(node.a, env, io), b = await ev(node.b, env, io); return binop(node.op, a, b); }
+      case 'cmp': {
+        let a = await ev(node.items[0], env, io);
+        for (let k = 0; k < node.ops.length; k++) {
+          const b = await ev(node.items[k + 1], env, io), r = compare(node.ops[k], a, b);
+          if (!r.v) return r; a = b;
+        }
+        return V('bool', true);
+      }
+      case 'boolop': { const a = await ev(node.a, env, io); if (node.op === 'and' ? !truthy(a) : truthy(a)) return a; return await ev(node.b, env, io); }
+      case 'not': return V('bool', !truthy(await ev(node.a, env, io)));
       case 'call': {
         const f = await ev(node.f, env, io); const args = [], kw = {};
         for (const x of node.args) args.push(await ev(x, env, io));
@@ -496,23 +525,87 @@ const PY = (() => {
     }
   }
   /* run a whole program. io = {out(text, kind), input(): Promise<string>, err(text)} */
-  async function run(src, io, fname) {
-    fname = fname || 'program.py';
-    const lines = src.replace(/\r/g, '').split('\n'), prog = [];
-    for (let k = 0; k < lines.length; k++) {
-      const raw = lines[k]; if (!raw.trim() || raw.trim().startsWith('#')) continue;
-      try {
-        if (/^\s/.test(raw)) throw new PyErr('IndentationError', 'unexpected indent', k + 1);
-        const st = parseLine(lex(raw, k + 1), k + 1); if (st) prog.push([k + 1, st, raw]);
-      } catch (e) {
-        if (!(e instanceof PyErr)) throw e;
-        io.err('  File "' + fname + '", line ' + (k + 1) + '\n    ' + raw.trim() + '\n' + e.type + ': ' + e.message);
-        return { ok: false, type: e.type, line: k + 1 };
-      }
+  const HEADS = { if: 'if', elif: 'elif', else: 'else', while: 'while', for: 'for', def: 'function definition' };
+  function parseProgram(src) {
+    const raw = src.replace(/\r/g, '').split('\n'), L = [];
+    for (let k = 0; k < raw.length; k++) {
+      const r = raw[k]; if (!r.trim() || r.trim().startsWith('#')) continue;
+      let w = 0; for (const ch of r) { if (ch === ' ') w++; else if (ch === '\t') w = (Math.floor(w / 8) + 1) * 8; else break; }
+      L.push({ ln: k + 1, ind: w, raw: r, toks: lex(r, k + 1) });
     }
-    const env = { __b: builtins() };
-    for (const [ln, st, raw] of prog) {
+    let i = 0;
+    const stack = [0];
+    const IE = (m, ln) => new PyErr('IndentationError', m, ln);
+    function simple(toks, ln) { return parseLine(toks, ln); }
+    function header(line, kw) {        /* returns {cond, inline} for 'kw ... :' */
+      const t = line.toks, last = t.length - 1;
+      let colon = -1, depth = 0;
+      for (let j = 1; j < t.length; j++) { const x = t[j]; if (x.k === 'op' && x.v === '(') depth++; else if (x.k === 'op' && x.v === ')') depth--; else if (x.k === 'op' && x.v === ':' && depth === 0) { colon = j; break; } }
+      if (kw === 'else') {
+        if (colon !== 1) throw new PyErr('SyntaxError', "expected ':'", line.ln);
+        return { cond: null, inline: t.slice(2) };
+      }
+      if (colon < 0) {
+        if (t.length === 1) throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+        const has = t.some(x => x.k === 'op' && x.v === '=');
+        if (has) parseLine(t.slice(1), line.ln, 'expr');
+        throw new PyErr('SyntaxError', "expected ':'", line.ln);
+      }
+      if (colon === 1) throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+      return { cond: parseLine(t.slice(1, colon), line.ln, 'expr'), inline: t.slice(colon + 1) };
+    }
+    function body(hline, h, kw) {
+      if (h.inline.length) return [{ ln: hline.ln, raw: hline.raw, st: simple(h.inline, hline.ln) }];
+      const nx = L[i];
+      if (!nx || nx.ind <= hline.ind) throw IE("expected an indented block after '" + kw + "' statement on line " + hline.ln, nx ? nx.ln : hline.ln);
+      return block(nx.ind);
+    }
+    function block(ind) {
+      stack.push(ind); const out = [];
+      while (i < L.length) {
+        const line = L[i];
+        if (line.ind < ind) { if (!stack.includes(line.ind)) throw IE('unindent does not match any outer indentation level', line.ln); break; }
+        if (line.ind > ind) throw IE('unexpected indent', line.ln);
+        const t0 = line.toks[0], kw = t0 && t0.k === 'name' ? t0.v : '';
+        if (kw === 'if') {
+          const node = { ln: line.ln, raw: line.raw, st: { n: 'if', arms: [] } };
+          let h = header(line, 'if'); i++;
+          node.st.arms.push({ ln: line.ln, raw: line.raw, cond: h.cond, body: body(line, h, 'if') });
+          while (i < L.length && L[i].ind === ind && L[i].toks[0] && L[i].toks[0].k === 'name' && (L[i].toks[0].v === 'elif' || L[i].toks[0].v === 'else')) {
+            const ln2 = L[i], k2 = ln2.toks[0].v; h = header(ln2, k2); i++;
+            node.st.arms.push({ ln: ln2.ln, raw: ln2.raw, cond: h.cond, body: body(ln2, h, k2) });
+            if (k2 === 'else') break;
+          }
+          out.push(node); continue;
+        }
+        if (kw === 'elif' || kw === 'else') throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+        if (kw === 'pass' && line.toks.length === 1) { out.push({ ln: line.ln, raw: line.raw, st: { n: 'pass' } }); i++; continue; }
+        if (line.toks.some(x => x.k === 'op' && x.v === ':')) {
+          if (HEADS[kw]) throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+          throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+        }
+        out.push({ ln: line.ln, raw: line.raw, st: simple(line.toks, line.ln) }); i++;
+      }
+      stack.pop(); return out;
+    }
+    if (L.length && L[0].ind > 0) throw IE('unexpected indent', L[0].ln);
+    return block(0);
+  }
+  async function execBlock(stmts, env, io) {
+    for (const s of stmts) {
+      const st = s.st;
       try {
+        if (st.n === 'if') {
+          let done = false;
+          for (const arm of st.arms) {
+            let go;
+            if (arm.cond === null) go = true;
+            else { try { go = truthy(await ev(arm.cond, env, io)); } catch (e) { if (e instanceof PyErr && !e.at) e.at = arm; throw e; } }
+            if (go) { await execBlock(arm.body, env, io); done = true; break; }
+          }
+          continue;
+        }
+        if (st.n === 'pass') continue;
         if (st.n === 'assign' && st.names) {
           const v = await ev(st.e, env, io), k = st.names.length;
           let items; if (v.t === 'tuple') items = v.v; else if (v.t === 'str') items = [...v.v].map(c => V('str', c));
@@ -521,12 +614,27 @@ const PY = (() => {
           if (items.length < k) throw E('ValueError', 'not enough values to unpack (expected ' + k + ', got ' + items.length + ')');
           st.names.forEach((nm, j) => { env[nm] = items[j]; });
         } else if (st.n === 'assign') env[st.name] = await ev(st.e, env, io); else await ev(st.e, env, io);
-      } catch (e) {
-        if (e instanceof Stop) return { ok: false, type: 'Stopped', line: ln };
-        if (!(e instanceof PyErr)) throw e;
-        io.err('Traceback (most recent call last):\n  File "' + fname + '", line ' + ln + ', in <module>\n    ' + raw.trim() + '\n' + e.type + ': ' + e.message);
-        return { ok: false, type: e.type, line: ln };
-      }
+      } catch (e) { if (e instanceof PyErr && !e.at) e.at = s; throw e; }
+    }
+  }
+  async function run(src, io, fname) {
+    fname = fname || 'program.py';
+    let prog;
+    try { prog = parseProgram(src); }
+    catch (e) {
+      if (!(e instanceof PyErr)) throw e;
+      const raws = src.replace(/\r/g, '').split('\n'), r = raws[e.line - 1];
+      io.err('  File "' + fname + '", line ' + e.line + (r !== undefined && r.trim() ? '\n    ' + r.trim() : '') + '\n' + e.type + ': ' + e.message);
+      return { ok: false, type: e.type, line: e.line };
+    }
+    const env = { __b: builtins() };
+    try { await execBlock(prog, env, io); }
+    catch (e) {
+      if (e instanceof Stop) return { ok: false, type: 'Stopped', line: 0 };
+      if (!(e instanceof PyErr)) throw e;
+      const at = e.at || { ln: 0, raw: '' };
+      io.err('Traceback (most recent call last):\n  File "' + fname + '", line ' + at.ln + ', in <module>\n    ' + at.raw.trim() + '\n' + e.type + ': ' + e.message);
+      return { ok: false, type: e.type, line: at.ln };
     }
     return { ok: true };
   }
@@ -561,7 +669,18 @@ const PYIDE = (() => {
     ta.addEventListener('input', () => { sync(); opt.onChange && opt.onChange(ta.value); });
     ta.addEventListener('scroll', () => { gut.scrollTop = ta.scrollTop; });
     ta.addEventListener('keydown', e => {
-      if (e.key === 'Tab') { e.preventDefault(); const s = ta.selectionStart; ta.setRangeText('    ', s, ta.selectionEnd, 'end'); sync(); opt.onChange && opt.onChange(ta.value); }
+      const chg = () => { sync(); opt.onChange && opt.onChange(ta.value); };
+      const s0 = ta.selectionStart, s1 = ta.selectionEnd, ls = ta.value.lastIndexOf('\n', s0 - 1) + 1, before = ta.value.slice(ls, s0);
+      if (e.key === 'Tab' && e.shiftKey) { e.preventDefault(); const m = /^ {1,4}/.exec(ta.value.slice(ls)); if (m) { ta.setRangeText('', ls, ls + m[0].length, 'preserve'); chg(); } }
+      else if (e.key === 'Tab') { e.preventDefault(); ta.setRangeText('    ', s0, s1, 'end'); chg(); }
+      else if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault(); let ind = /^[ \t]*/.exec(before)[0];
+        if (/:\s*(#.*)?$/.test(before)) ind += '    ';
+        ta.setRangeText('\n' + ind, s0, s1, 'end'); chg();
+      }
+      else if (e.key === 'Backspace' && s0 === s1 && before.length && /^ +$/.test(before)) {
+        e.preventDefault(); const n = before.length % 4 || 4; ta.setRangeText('', s0 - n, s0, 'end'); chg();
+      }
       if (e.key === 'F5') { e.preventDefault(); runIt(); }
     });
     el.querySelector('.pyrun').onclick = () => runIt();
@@ -605,8 +724,12 @@ const app=$('app');
 const numStr=s=>String(s).match(/-?\d+(?:\.\d+)?/g)||[];
 const numsOf=s=>(String(s).match(/-?\d+(?:\.\d+)?/g)||[]).map(Number);
 function subseq(have,want){let k=0;for(const x of have){if(k<want.length&&Math.abs(x-want[k])<0.051)k++}return k===want.length}
-async function runTests(p,src){const tests=[];for(const [inp,exp] of p.tests){const r=await PY.test(src,inp);tests.push({inputs:inp,expect:exp,printed:r.printed,err:r.err,pass:r.ok&&subseq(numsOf(r.printed),exp)})}
- const reqs=(p.req||[]).map(q=>({label:q==='fmt'?t('fmt').replace(/N/g,p.dec):t(q),pass:q==='prompt'?!/input\(\s*\)/.test(src):q==='fmt'?tests.every(r=>r.expect.every(v=>numStr(r.printed).includes(Number(v).toFixed(p.dec)))):tests.some(r=>/\p{L}/u.test(r.printed))}));return {tests,reqs,ok:tests.every(r=>r.pass)&&reqs.every(r=>r.pass)}}
+function lineEnds(l,s,ch){l=String(l).trim().toLowerCase().replace(/[.!;]+$/,'');s=String(s).toLowerCase();if(!(l===s||l.endsWith(' '+s)||l.endsWith(':'+s)))return false;return !(ch||[]).some(c=>{c=String(c).toLowerCase();return c!==s&&c.length>s.length&&c.endsWith(s)&&(l===c||l.endsWith(' '+c))})}
+function matchOut(printed,want,ch){const lines=String(printed).split('\n');if(want.every(x=>typeof x==='number')){if(!subseq(numsOf(printed),want))return false;if(ch&&ch.length)for(const line of lines)for(const c of ch)if(lineEnds(line,c,ch))return false;return true}let k=0;for(const line of lines){const nums=numsOf(line);let ni=0;while(k<want.length){const w=want[k];if(typeof w==='number'){while(ni<nums.length&&Math.abs(nums[ni]-w)>=0.051)ni++;if(ni<nums.length){ni++;k++;continue}break}if(lineEnds(line,w,ch))k++;break}}if(k<want.length)return false;if(ch&&ch.length){const wanted=want.filter(x=>typeof x!=='number');for(const line of lines)for(const c of ch)if(!wanted.includes(c)&&lineEnds(line,c,ch))return false}return true}
+const fmtV=(v,d)=>typeof v==='number'&&d!=null?Number(v).toFixed(d):v;
+
+async function runTests(p,src){const tests=[];for(const [inp,exp] of p.tests){const r=await PY.test(src,inp);tests.push({inputs:inp,expect:exp,printed:r.printed,err:r.err,pass:r.ok&&matchOut(r.printed,exp,p.choices)})}
+ const reqs=(p.req||[]).map(q=>({label:q==='fmt'?t('fmt').replace(/N/g,p.dec):t(q),pass:q==='prompt'?!/input\(\s*\)/.test(src):q==='fmt'?tests.every(r=>r.expect.every(v=>typeof v!=='number'||numStr(r.printed).includes(Number(v).toFixed(p.dec)))):tests.some(r=>/\p{L}/u.test(r.printed))}));return {tests,reqs,ok:tests.every(r=>r.pass)&&reqs.every(r=>r.pass)}}
 
 async function saveAs(name,content,mime,ext,desc){
  if(window.showSaveFilePicker&&window.top===window.self){try{const h=await window.showSaveFilePicker({suggestedName:name,types:[{description:desc,accept:{[mime]:[ext]}}]});const w=await h.createWritable();await w.write(content);await w.close();return 'saved'}catch(err){if(err.name==='AbortError')return 'cancel'}}
@@ -657,7 +780,7 @@ function openP(i){cur=i;const p=P[i];if(ide){ide.stop();ide=null}
  if(res[i])showRes(i);window.scrollTo(0,0)}
 function markDots(){app.querySelectorAll('.dots button').forEach(b=>{const k=+b.dataset.k;b.classList.toggle('ok',!!S.solved[P[k].id]&&k!==cur)});const l=app.querySelector('.pdesc .label');if(l&&P[cur].tests)l.textContent=(S.solved[P[cur].id]?t('solved'):t('todo'))+(P[cur].file?' · '+P[cur].file:'')}
 function showRes(i){const R=res[i];if(!R)return;const n=R.tests.length+R.reqs.length,ok=R.tests.filter(r=>r.pass).length+R.reqs.filter(r=>r.pass).length;
- $('pres').innerHTML='<table class="ctest"><tr><th>'+t('in')+'</th><th>'+t('expect')+'</th><th>'+t('yours')+'</th><th></th></tr>'+R.tests.map(r=>'<tr><td>'+esc(r.inputs.join(', ')||'—')+'</td><td>'+esc(r.expect.map(v=>P[i].dec!=null?Number(v).toFixed(P[i].dec):v).join(', '))+'</td><td>'+esc((r.err?r.err.split('\n').pop():r.printed.trim())||'—')+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')
+ $('pres').innerHTML='<table class="ctest"><tr><th>'+t('in')+'</th><th>'+t('expect')+'</th><th>'+t('yours')+'</th><th></th></tr>'+R.tests.map(r=>'<tr><td>'+esc(r.inputs.join(', ')||'—')+'</td><td>'+esc(r.expect.map(v=>fmtV(v,P[i].dec)).join(', '))+'</td><td>'+esc((r.err?r.err.split('\n').pop():r.printed.trim())||'—')+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')
  +R.reqs.map(r=>'<tr><td colspan="3">'+esc(r.label)+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')+'</table><div class="feedback'+(R.ok?' ok':'')+'">'+(R.ok?t('allok'):ok+'/'+n+' '+t('some'))+'</div>'}
 function confetti(){const c=document.createElement('div');c.className='confetti';const cols=['#146f86','#d9991a','#c4533c','#5363b8','#2f9a5c'];for(let k=0;k<60;k++){const e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.background=cols[k%5];e.style.animationDelay=(Math.random()*.6)+'s';c.append(e)}document.body.append(c);setTimeout(()=>c.remove(),2600)}
 document.addEventListener('keydown',e=>{if(e.key==='F5'&&ide&&!e.defaultPrevented){e.preventDefault();ide.run()}});
