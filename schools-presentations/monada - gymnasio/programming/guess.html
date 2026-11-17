@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><title>Guessing Game</title></head>
+<body>
+<h1>Guess my number!</h1>
+<p>I am thinking of a number from 1 to 10.</p>
+<input type="number" id="guess">
+<button id="btn">Check</button>
+<p id="message"></p>
+<p>Tries: <span id="tries">0</span></p>
+<script>
+  let secret = Math.floor(Math.random() * 10) + 1;
+  console.log("Secret number:", secret);
+  let tries = 0;
+
+  document.getElementById("btn").onclick = function() {
+    let guess = Number(document.getElementById("guess").value);
+    let message = document.getElementById("message");
+    tries++;
+    document.getElementById("tries").textContent = tries;
+
+    if (guess > secret) {
+      message.textContent = guess + " is too big!";
+      message.style.color = "red";
+    } else if (guess < secret) {
+      message.textContent = guess + " is too small!";
+      message.style.color = "blue";
+    } else {
+      message.textContent = "Correct! You found it in " + tries + " tries!";
+      message.style.color = "green";
+    }
+  };
+</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+Ασκήσεις μιας σελίδας – λίστα αρχείων
+
+1.word-type-sentence                  Word – Πληκτρολόγηση μιας πρότασης
+2.word-page-border-watermark-picture  Word – Περίγραμμα σελίδας, υδατογράφημα, εικόνα (stock images)
+3.excel-autofill-sum                  Excel – Αυτόματη συμπλήρωση σειράς (5, 10 … 100) και SUM
+4.powerpoint-first-slide-save         PowerPoint – Πρώτη διαφάνεια «Η τάξη μας» και αποθήκευση
+5.powerpoint-new-slide-text           PowerPoint – Νέα διαφάνεια (Τίτλος και περιεχόμενο), 2 προτάσεις για ένα ζώο
+6.excel-average                       Excel – Τρεις βαθμοί και μέσος όρος με AVERAGE
+7.excel-max-min-sum                   Excel – MAX, MIN και SUM στο αρχείο «Βαθμοί μου»
+8.powerpoint-add-star-shape           PowerPoint – Εισαγωγή σχήματος αστεριού και αλλαγή μεγέθους
+9.powerpoint-star-animation           PowerPoint – Κίνηση Εμφάνιση (Appear) στο αστέρι και δοκιμή με F5
+10.excel-bold-currency-pricelist      Excel – Τιμοκατάλογος κυλικείου: έντονα, μέγεθος 14, νομισματική μορφή €
+11.excel-wrap-text-borders            Excel – Εβδομαδιαίο πρόγραμμα: αναδίπλωση κειμένου και περιγράμματα
+12.excel-bar-chart                    Excel – Αγαπημένα φρούτα: γράφημα οριζόντιων ράβδων
+13.word-bold-italic-underline         Word – Επιλογή κειμένου, Έντονα / Πλάγια / Υπογράμμιση σε προτάσεις
+14.word-font-size-color               Word – Μέγεθος και χρώμα γραμματοσειράς σε προτάσεις
+15.word-text-alignment                Word – Στοίχιση αριστερά / κέντρο / δεξιά (πρόσκληση πάρτι)
+16.excel-pie-chart                    Excel – Γράφημα πίτας με ετικέτες δεδομένων (συνέχεια της 12)
+17.powerpoint-slide-transition        PowerPoint – Μετάβαση Fade, Apply To All, δοκιμή με F5 (συνέχεια των 4–5)
+
+Ανά εφαρμογή:
+  Word:        1, 2, 13, 14, 15
+  Excel:       3, 6, 7, 10, 11, 12, 16
+  PowerPoint:  4, 5, 8, 9, 17
