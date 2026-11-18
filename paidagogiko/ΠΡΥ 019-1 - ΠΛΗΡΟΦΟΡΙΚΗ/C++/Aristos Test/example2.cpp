@@ -6,7 +6,7 @@ using namespace std;
 
 void example2()
 {
-    int studentNumber, monades, dekades, ekatondades;
+    int studentNumber, monades, dekades, ekatondades, isArtios;
 
     cout << "Enter student number:" << endl;
     cin >> studentNumber;
@@ -19,14 +19,32 @@ void example2()
     // integer division by 10 -> get dekades
     dekades = studentNumber / 10;
 
-    cout << "Answer is:" << dekades;
+    studentNumber = studentNumber - dekades * 10;
 
-    // studentNumber = studentNumber - dekades * 10
+    monades = studentNumber;
 
-    // monades = studentNumber
+    isArtios = monades%2 == 0;
 
+    cout << "The student is:" << endl;
+    if(isArtios){
+        cout << "Boy" << endl;
+    }
+    else{
+        cout << "Girl" << endl;
+    }
 
+    if(dekades == 5){
+        cout << "Ektopismenos" << endl;
+    }
+    else{
+        cout << "Oxi ektopismenos" << endl;
+    }
 
-
+    if(ekatondades > 7){
+        cout << "polyteknos" << endl;
+    }
+    else{
+        cout << "oxi polyteknos" << endl;
+    }
 
 }
