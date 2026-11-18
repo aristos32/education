@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1322">
+<title>Python while · Visual Debugger v11 | Α΄ Λυκείου</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2213%22%20fill%3D%22%23162741%22%2F%3E%3Cpath%20d%3D%22M10%2017h8l6%2023%208-18%208%2018%206-23h8L44%2048h-8l-4-11-4%2011h-8z%22%20fill%3D%22%23ffda78%22%2F%3E%3C%2Fsvg%3E">
+<style>
+:root { color-scheme:dark; --bg:#09111f;--panel:#13233a;--panel-2:#192d48;--line:#344c69;--text:#f6f8ff;--muted:#b8c8df;--yellow:#ffda78;--green:#55ecb6;--red:#ff9a9f;--blue:#8bbaff; }
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:radial-gradient(ellipse at 50% -20%,#20395b,transparent 65%),var(--bg);color:var(--text)}
+button,input,select{font:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,[contenteditable]:focus-visible{outline:3px solid #ffe49c;outline-offset:2px}
+.app{width:100%;height:100dvh;min-height:680px;max-width:1920px;margin:0 auto;padding:16px 22px 18px;display:flex;flex-direction:column;gap:12px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:0 0 42px}
+.brand{display:flex;align-items:baseline;gap:15px;min-width:0}.brand-title{font-size:27px;font-weight:880;letter-spacing:-.8px;white-space:nowrap}.brand-title em{color:var(--yellow);font-style:normal}.subtitle{font-size:17px;font-weight:700;color:#b9cee8}
+.school{padding:9px 13px;border:1px solid #354b6a;border-radius:11px;background:#182840;color:#d7e5f6;font-weight:750;font-size:15px;white-space:nowrap}
+.toolbar{display:flex;align-items:center;gap:18px;justify-content:space-between;background:linear-gradient(110deg,#1b304c,#15253e);border:1px solid #3d5675;border-radius:15px;padding:10px 14px;min-height:78px;box-shadow:0 7px 24px #0002}
+.step-text{min-width:300px;flex:1;display:flex;align-items:center;gap:13px;overflow:hidden}
+.step-number{font-weight:900;font-size:25px;color:var(--yellow);min-width:65px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.step-message{font-size:19px;line-height:1.3;font-weight:770;white-space:normal}.step-message strong{color:var(--yellow)}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;flex-shrink:0}
+.btn{border:1px solid #526886;border-radius:10px;background:#273d59;color:#f0f5ff;font-size:17px;font-weight:750;min-height:48px;padding:8px 13px;cursor:pointer;white-space:nowrap;transition:background .12s,filter .12s}
+.btn:hover:not(:disabled){background:#375372}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{color:#202531;background:#ffdd7c;border-color:#fff0ba;font-weight:900;padding:8px 19px;font-size:19px}
+.btn-primary:hover:not(:disabled){background:#ffe9a8}
+.btn-stop{border-color:#9c515b;color:#ffd9df;background:#4a2c3b}
+.btn-stop:disabled{opacity:.32}.btn-sound{padding:8px 12px}
+.speed{min-height:48px;max-width:115px;border:1px solid #536987;border-radius:10px;background:#1f344e;color:white;padding:7px;font-size:16px}
+.meters{display:grid;grid-template-columns:1fr 1.65fr 1fr 1fr;gap:11px;flex:0 0 76px}
+.meter{background:#122239;border:1px solid #31455f;border-radius:13px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:11px;min-width:0}
+.meter-label{font-size:16px;font-weight:800;color:#bed0e7}.meter-value{font-size:35px;font-weight:880;color:white;font-variant-numeric:tabular-nums}
+.meter:first-child .meter-value{color:var(--yellow)}
+.repeat-meter{gap:10px}.repeat-meter .meter-label{display:flex;flex-direction:column;gap:4px}
+.repeat-meter small{font-size:14px;color:#c7d8ef;font-weight:600}
+.repeat-meter strong{color:var(--green)}
+.repeat-input{width:108px;font-size:32px;text-align:center;background:#243c57;color:var(--yellow);border:2px solid #718ba7;border-radius:10px;padding:4px 9px;font-weight:850;flex-shrink:0}
+.repeat-input.invalid{border-color:var(--red)}
+.workspace{display:grid;grid-template-columns:34% 31.5% minmax(0,1fr);gap:13px;min-height:0;flex:1}
+.panel{background:linear-gradient(180deg,#162741,#101e32);border:1px solid #36506d;border-radius:17px;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 28px #0002}
+.panel-head{flex:0 0 56px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #34506c;padding:10px 17px}
+.index{background:#2a4260;color:#daedff;border:1px solid #526f90;border-radius:8px;padding:7px 9px;font-size:15px;font-weight:900}
+.panel-head h2{margin:0;font-size:23px;line-height:1.2;font-weight:850;letter-spacing:-.4px}
+.panel-body{padding:13px;min-height:0;flex:1}
+/* Flowchart occupies available vertical space, without pushing the page to scroll. */
+.flow-body{display:flex;flex-direction:column;gap:8px}
+.diagram-frame{min-height:0;flex:1;border:1px solid #334b66;background:radial-gradient(ellipse at 50% 45%,#243e5c 0%,#14253b 80%);border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.diagram{width:100%;height:100%;display:block}
+.diagram .shape{fill:#213956;stroke:#9bb3d1;stroke-width:2.5;transition:fill .14s,stroke .14s}
+.diagram .node text{fill:#fff;font-family:"Segoe UI",Arial,sans-serif;text-anchor:middle;pointer-events:none}
+.diagram .node .main{font-size:25px;font-weight:850}.diagram .node .sub{font-size:20px;font-weight:760}
+.diagram .node.active .shape{fill:#ffe3a0;stroke:#ffc64a;stroke-width:4;filter:drop-shadow(0 0 8px #ffd25583)}
+.diagram .node.active text{fill:#252c38}
+.diagram .node.finished .shape{fill:#315949;stroke:var(--green);stroke-width:3.5}
+.diagram .edge{fill:none;stroke:#9cb2cb;stroke-width:3.3;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#an)}
+.diagram .edge.truth{stroke:var(--green);stroke-width:5;marker-end:url(#ag)}.diagram .edge.falsity{stroke:var(--red);stroke-width:5;marker-end:url(#ar)}
+.diagram .edge.loop{stroke:var(--yellow);stroke-width:5;marker-end:url(#ay)}
+.diagram .route-tag{fill:#d7e4f8;font-size:22px;font-weight:900;letter-spacing:.6px;font-family:"Segoe UI",Arial,sans-serif}
+.diagram .route-tag.true{fill:var(--green)}.diagram .route-tag.false{fill:var(--red)}
+.flow-short{display:none}
+.flow-no-increment .flow-with-increment{display:none}
+.flow-no-increment .flow-short{display:block}
+/* Code editor and trace get priority over explanatory text. */
+.code-body{display:flex;flex-direction:column;gap:13px}
+.code-box{border:1px solid #344a68;background:#091526;border-radius:12px;padding:17px 12px;flex:0 0 auto;overflow:hidden}
+.code-line{display:flex;gap:7px;align-items:flex-start;padding:14px 9px;border-radius:9px;margin:5px 0;min-height:58px;border:1px solid transparent}
+.code-line.current{background:#ffdd84;color:#1c293a;border-color:#ffcd4f;box-shadow:0 0 0 1px #ffd669}
+.line-number{font-size:17px;color:#8198b5;font-weight:750;flex:0 0 23px;padding-top:3px;text-align:right;font-family:Consolas,monospace}
+.code-line.current .line-number{color:#604d2a}
+.code-line code{font-family:Consolas,"Cascadia Code",monospace;font-size:21px;font-weight:700;line-height:1.42;color:#e7f0ff;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0;tab-size:4;flex:1}
+.code-line.current code,.code-line.current .kw,.code-line.current .num,.code-line.current .fn,.code-line.current .str{color:#192637}
+.kw{color:#ca99ff}.num{color:#ffd57b}.fn{color:#79d7f5}.str{color:#91e8b0}
+.editable-line{border:1px solid transparent;background:transparent}
+.editable-line:focus-within{border-color:transparent;background:transparent}
+.editable-code{display:inline-block;min-width:120px;max-width:100%;padding:0;border-radius:2px;white-space:pre-wrap;cursor:text;caret-color:var(--yellow)}
+.editable-code:empty::before{content:""}
+.editable-line.removed{border-color:transparent;background:transparent}
+.editable-line.removed .editable-code{min-height:1.4em}
+.editable-line.current:focus-within{background:#ffdd84;border-color:#ffcd4f}
+.editable-code:focus-visible{outline:none}
+.code-hint{font-size:16px;color:#c0d4eb;font-weight:650;line-height:1.35;padding:0 8px}
+.code-hint strong{color:#ffdc83}
+.code-error{font-size:15px;color:#ffb0b4;min-height:20px;padding:0 8px;font-weight:700}
+.condition-card{border:1px solid #3d5673;background:#1a2e49;border-radius:13px;padding:15px 17px;margin-top:auto;display:flex;flex-direction:column;gap:7px}
+.condition-label{font-size:15px;color:#c0d5eb;font-weight:800;letter-spacing:.04em}
+.condition-value{font-family:Consolas,"Cascadia Code",monospace;color:#d2e2fa;font-size:26px;font-weight:900;min-height:32px}
+.condition-value.true{color:var(--green)}.condition-value.false{color:var(--red)}
+.mode-status{border:1px solid #42607b;background:#122941;border-radius:12px;padding:13px 16px;font-size:17px;line-height:1.35;font-weight:800;color:#cde3f7}
+.mode-status.infinite{border-color:#b87239;background:#412d24;color:#ffe19d}
+.trace-body{display:flex;flex-direction:column;gap:8px}
+.trace-frame{min-height:0;flex:1;border:1px solid #405671;border-radius:11px;background:#0c1829;overflow:hidden;display:flex}
+.trace-scroll{overflow:auto;min-height:0;min-width:0;flex:1;scrollbar-color:#6783a6 #13263d;}
+.trace-table{border-collapse:separate;border-spacing:0;width:100%;table-layout:fixed;text-align:center;font-variant-numeric:tabular-nums}
+.trace-table col.c-x{width:14%}.trace-table col.c-expr{width:24%}.trace-table col.c-tf{width:13%}.trace-table col.c-output{width:49%}
+.trace-table thead{position:sticky;top:0;z-index:2;background:#293f5b}
+.trace-table th{border-right:1px solid #526882;border-bottom:1px solid #526882;font-size:17px;font-weight:850;color:white;padding:10px 5px;line-height:1.24}
+.trace-table thead tr:first-child th{background:#304d6c}
+.trace-table th:last-child{border-right:0}
+.trace-table td{font-size:18px;color:#edf4ff;border-right:1px solid #28425e;border-bottom:1px solid #2b425d;padding:12px 5px;line-height:1.3;height:49px;font-weight:650;vertical-align:middle}
+.trace-table td:last-child{border-right:0}
+.trace-table td:nth-child(2){font-family:Consolas,"Cascadia Code",monospace;font-size:18px}
+.trace-table td:nth-child(4){text-align:left;padding-left:12px;font-size:17px;font-weight:700;overflow-wrap:break-word}
+.trace-table tbody tr:nth-child(even){background:#152840}
+.trace-table td.cell-active{background:#ffe08d;color:#182737!important;box-shadow:inset 0 0 0 2px #ffc747;font-weight:900}
+.trace-table td.cell-active .t,.trace-table td.cell-active .f{color:#172737}
+.t{color:var(--green);font-weight:900}.f{color:var(--red);font-weight:900}
+.empty{padding:45px 10px!important;text-align:center!important;color:#a4b5d0!important;font-size:17px!important}
+.trace-bottom{font-size:15px;color:#bed1e7;min-height:20px;padding:0 2px;display:flex;justify-content:space-between;gap:10px}
+.trace-bottom strong{color:var(--yellow)}
+@media(min-width:1500px) and (min-height:840px){body{overflow:hidden}}
+@media(max-width:1510px){.app{padding:12px;gap:9px}.brand-title{font-size:23px}.subtitle{font-size:14px}.panel-head h2{font-size:19px}.code-line code{font-size:17px}.code-line{padding:10px 4px;min-height:48px}.trace-table td{font-size:15px}.trace-table td:nth-child(4){font-size:14px}.trace-table th{font-size:14px}.btn{font-size:13px;padding:7px 9px}.btn-primary{font-size:15px}.actions{gap:5px}.step-message{font-size:15px}}
+@media(max-width:1140px){body{overflow:auto}.app{height:auto;min-height:100dvh}.topbar{flex-wrap:wrap}.toolbar{flex-wrap:wrap}.step-text{flex:1 0 100%}.actions{flex-wrap:wrap}.workspace{grid-template-columns:1fr 1fr;min-height:700px}.panel-trace{grid-column:1/-1}.diagram-frame{min-height:600px}.trace-frame{min-height:410px}.meters{grid-template-columns:repeat(2,minmax(0,1fr));flex-basis:auto}}
+@media(max-width:700px){.app{padding:10px}.brand{display:block}.school{font-size:13px}.workspace{display:flex;flex-direction:column;gap:10px}.diagram-frame{min-height:490px}.panel{min-height:450px}.code-line code{font-size:16px}.meters{gap:7px}.meter{padding:7px}.meter-label{font-size:13px}.meter-value{font-size:25px}.repeat-input{width:80px;font-size:23px}.trace-scroll{min-height:430px}.btn{min-height:40px}.trace-table td{font-size:15px}.trace-table td:nth-child(4){font-size:14px}}
+
+/* Compact, readable three-column layout for 16-inch laptop screens. */
+@media (min-width:1141px) and (max-width:1600px){
+ .app{padding:10px 13px 12px;gap:8px;min-height:0}
+ .topbar{flex-basis:35px}
+ .brand-title{font-size:clamp(19px,1.65vw,24px)}
+ .subtitle{font-size:13px}
+ .school{font-size:12px;padding:6px 10px}
+ .toolbar{min-height:61px;padding:6px 9px;gap:7px}
+ .step-text{min-width:215px;gap:7px}
+ .step-number{font-size:23px;min-width:45px}
+ .step-message{font-size:clamp(13px,1.12vw,18px)}
+ .actions{gap:5px}
+ .btn{min-height:41px;font-size:clamp(12px,.97vw,15px);padding:6px 9px}
+ .btn-primary{font-size:clamp(13px,1.07vw,17px);padding:6px 12px}
+ .speed{min-height:41px;max-width:100px;font-size:13px}
+ .meters{flex-basis:59px;gap:8px;grid-template-columns:1fr 1.65fr 1fr 1fr}
+ .meter{padding:5px 12px;gap:6px}
+ .meter-label{font-size:14px}
+ .meter-value{font-size:28px}
+ .repeat-input{width:82px;font-size:25px;padding:2px 5px}
+ .repeat-meter small{font-size:12px}
+ .workspace{grid-template-columns:32% 30% minmax(0,1fr);gap:10px}
+ .panel-head{flex-basis:47px;padding:7px 10px;gap:8px}
+ .panel-head h2{font-size:clamp(16px,1.36vw,21px)}
+ .index{font-size:12px;padding:6px 7px}
+ .panel-body{padding:9px}
+ .code-body{gap:7px}
+ .code-box{padding:8px 7px}
+ .code-line{min-height:44px;padding:8px 4px;margin:3px 0;gap:5px}
+ .code-line code{font-size:clamp(16px,1.25vw,19px);line-height:1.33}
+ .line-number{font-size:14px;flex-basis:19px}
+ .code-error{min-height:0;font-size:13px}
+ .code-error:empty{display:none}
+ .condition-card{padding:9px 11px;gap:3px;border-radius:10px}
+ .condition-label{font-size:12px}
+ .condition-value{font-size:clamp(18px,1.55vw,24px);min-height:26px}
+ .mode-status{padding:9px 11px;font-size:clamp(13px,1.06vw,16px)}
+ .diagram .node .main{font-size:26px}
+ .diagram .node .sub{font-size:20px}
+ .trace-table col.c-x{width:24%}
+ .trace-table col.c-expr{width:22%}
+ .trace-table col.c-tf{width:11%}
+ .trace-table col.c-output{width:43%}
+ .trace-table th{font-size:clamp(11px,.98vw,15px);padding:8px 2px;overflow-wrap:anywhere}
+ .trace-table td{font-size:clamp(13px,1.1vw,16px);padding:9px 3px;height:43px}
+ .trace-table td:nth-child(2){font-size:clamp(13px,1.1vw,16px)}
+ .trace-table td:nth-child(4){font-size:clamp(12px,.98vw,15px);padding-left:6px}
+ .trace-bottom{font-size:12px;min-height:16px}
+}
+@media (min-width:1141px) and (max-height:780px){
+ .app{gap:7px;padding-top:8px;padding-bottom:8px}
+ .topbar{flex-basis:32px}
+ .toolbar{min-height:56px}
+ .meters{flex-basis:54px}
+ .panel-head{flex-basis:43px}
+ .code-box{padding:6px}
+ .code-line{min-height:41px;padding:7px 4px;margin:2px 0}
+ .code-body{gap:6px}
+ .condition-card{padding:7px 10px}
+ .mode-status{padding:7px 10px}
+ .panel-body{padding:7px}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-title">Python <em>while</em> · Visual Debugger</div><div class="subtitle">Βήμα προς βήμα</div></div>
+    <div class="school">Α΄ ΛΥΚΕΙΟΥ</div>
+  </header>
+  <section class="toolbar" aria-label="Χειριστήρια προσομοίωσης">
+    <div class="step-text"><div class="step-number" id="stepNumber">00</div><div class="step-message" id="stepMessage" aria-live="polite">Πάτησε «Επόμενη εντολή».</div></div>
+    <div class="actions">
+      <button class="btn" id="prevBtn" type="button" title="Πίσω (←)" disabled>← Πίσω</button>
+      <button class="btn btn-primary" id="nextBtn" type="button" title="Επόμενη εντολή (→, Page Down ή Logitech presenter)">Επόμενη εντολή →</button>
+      <button class="btn" id="autoBtn" type="button" title="Αυτόματη εκτέλεση">▶ Αυτόματα</button>
+      <select class="speed" id="speedSelect" aria-label="Ταχύτητα αυτόματης εκτέλεσης"><option value="1700">Αργά</option><option value="1000" selected>Κανονικά</option><option value="480">Γρήγορα</option></select>
+      <button class="btn btn-stop" id="stopBtn" type="button" disabled>■ Διακοπή</button>
+      <button class="btn" id="resetBtn" type="button" title="Από την αρχή (R)">↺ Αρχή</button>
+      <button class="btn btn-sound" id="soundBtn" type="button" aria-pressed="true" title="Απενεργοποίηση ήχου">♪ ON</button>
+    </div>
+  </section>
+  <section class="meters" aria-label="Τρέχουσα κατάσταση">
+    <div class="meter"><span class="meter-label">Τιμή x</span><strong class="meter-value" id="statX">—</strong></div>
+    <div class="meter repeat-meter"><div class="meter-label"><label for="repeatInput">Επαναλήψεις</label><small>Εκτελέστηκαν: <strong id="statCycles">0</strong></small></div><input class="repeat-input" type="number" min="0" max="1000" step="1" id="repeatInput" value="5" aria-label="Επιθυμητές επαναλήψεις"></div>
+    <div class="meter"><span class="meter-label">Έλεγχοι</span><strong class="meter-value" id="statChecks">0</strong></div>
+    <div class="meter"><span class="meter-label">Εκτυπώσεις</span><strong class="meter-value" id="statPrints">0</strong></div>
+  </section>
+  <section class="workspace" aria-label="Προσομοίωση εκτέλεσης">
+    <article class="panel panel-flow">
+      <header class="panel-head"><span class="index">01</span><h2>Λογικό διάγραμμα</h2></header>
+      <div class="panel-body flow-body">
+        <div class="diagram-frame" id="diagramFrame">
+          <svg class="diagram" id="diagram" viewBox="0 0 550 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowTitle flowDescription">
+            <title id="flowTitle">Λογικό διάγραμμα της while</title>
+            <desc id="flowDescription">x ίσον 1, έλεγχος συνθήκης, τύπωσε μήνυμα, αύξηση x κατά 1, επανάληψη ή τέλος.</desc>
+            <defs>
+              <marker id="an" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path fill="#9cb2cb" d="M0 0L10 5L0 10Z"/></marker>
+              <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path fill="#55ecb6" d="M0 0L10 5L0 10Z"/></marker>
+              <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path fill="#ff9a9f" d="M0 0L10 5L0 10Z"/></marker>
+              <marker id="ay" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path fill="#ffda78" d="M0 0L10 5L0 10Z"/></marker>
+            </defs>
+            <path class="edge" d="M230 66V107"/>
+            <path class="edge" d="M230 169V206"/>
+            <path class="edge" id="edgeYes" d="M230 354V406"/>
+            <path class="edge" id="edgeNo" d="M343 282H395"/>
+            <g class="flow-with-increment">
+              <path class="edge" d="M230 472V520"/>
+              <path class="edge" id="edgeBack" d="M120 550H51V282H112"/>
+            </g>
+            <path class="edge flow-short" id="edgeShort" d="M104 438H47V282H112"/>
+            <text class="route-tag" id="labelYes" x="274" y="391">TRUE</text>
+            <text class="route-tag" id="labelNo" x="352" y="252">FALSE</text>
+            <g class="node" data-node="start"><ellipse class="shape" cx="230" cy="40" rx="80" ry="26"/><text class="main" x="230" y="48">ΑΡΧΗ</text></g>
+            <g class="node" data-node="assign"><rect class="shape" x="135" y="107" width="190" height="62" rx="5"/><text class="main" x="230" y="146">x = 1</text></g>
+            <g class="node" data-node="condition"><polygon class="shape" points="230,206 343,282 230,354 112,282"/><text class="main" id="flowConditionText" x="230" y="290">x &lt;= 5</text></g>
+            <g class="node" data-node="print"><polygon class="shape" points="118,406 346,406 331,472 104,472"/><text class="sub" x="225" y="435">ΤΥΠΩΣΕ</text><text class="sub" x="225" y="458">Δεν θα ξαναμιλήσω</text></g>
+            <g class="node flow-with-increment" data-node="increment"><rect class="shape" x="120" y="520" width="210" height="61" rx="5"/><text class="main" x="225" y="559">x = x + 1</text></g>
+            <g class="node" data-node="end"><ellipse class="shape" cx="458" cy="282" rx="65" ry="28"/><text class="main" x="458" y="290">ΤΕΛΟΣ</text></g>
+          </svg>
+        </div>
+      </div>
+    </article>
+    <article class="panel panel-code">
+      <header class="panel-head"><span class="index">02</span><h2>Πρόγραμμα Python</h2></header>
+      <div class="panel-body code-body">
+        <div class="code-box" role="group" aria-label="Κώδικας Python. Η τέταρτη γραμμή είναι επεξεργάσιμη.">
+          <div class="code-line" data-line="1"><span class="line-number">1</span><code>x = <span class="num">1</span></code></div>
+          <div class="code-line" data-line="2"><span class="line-number">2</span><code><span class="kw">while</span> x&lt;=<span id="codeLimit" class="num">5</span>:</code></div>
+          <div class="code-line" data-line="3"><span class="line-number">3</span><code>    <span class="fn">print</span>(<span class="str">'Δεν θα ξαναμιλήσω'</span>)</code></div>
+          <div class="code-line editable-line" data-line="4" id="incrementLine"><span class="line-number">4</span><code>    <span id="incrementEditor" class="editable-code" contenteditable="true" spellcheck="false" role="textbox" aria-label="Επεξεργάσιμη εντολή x ίσον x συν 1" title="Κάνε κλικ, επίλεξε x=x+1 και πάτησε Delete">x=x+1</span></code></div>
+        </div>
+        <div class="code-error" id="editorError" aria-live="polite"></div>
+        <div class="condition-card"><div class="condition-label">ΕΛΕΓΧΟΣ ΣΥΝΘΗΚΗΣ</div><div class="condition-value" id="conditionValue">—</div></div>
+        <div class="mode-status" id="modeStatus">✓ Κανονική επανάληψη</div>
+      </div>
+    </article>
+    <article class="panel panel-trace">
+      <header class="panel-head"><span class="index">03</span><h2>Προκαταρκτική εκτέλεση</h2></header>
+      <div class="panel-body trace-body">
+        <div class="trace-frame"><div class="trace-scroll" id="traceScroll">
+          <table class="trace-table" aria-label="Μεταβλητές, Αποφάσεις και Output">
+            <colgroup><col class="c-x"><col class="c-expr"><col class="c-tf"><col class="c-output"></colgroup>
+            <thead><tr><th>Μεταβλητές</th><th colspan="2">Αποφάσεις</th><th rowspan="2">Output</th></tr><tr><th>x</th><th id="traceConditionHeading">x&lt;=5</th><th>T/F</th></tr></thead>
+            <tbody id="traceBody"><tr><td colspan="4" class="empty">Ξεκίνα με «Επόμενη εντολή»</td></tr></tbody>
+          </table>
+        </div></div>
+        <div class="trace-bottom"><span id="traceNote">Ανανεώνεται σε κάθε εντολή</span><strong id="traceCount"></strong></div>
+      </div>
+    </article>
+  </section>
+</main>
+<script>
+'use strict';
+const MESSAGE='Δεν θα ξαναμιλήσω';
+const $=id=>document.getElementById(id);
+const $$=selector=>document.querySelectorAll(selector);
+let LIMIT=5;
+let incrementEnabled=true;
+let editorValid=true;
+let soundEnabled=true;
+let audioContext=null;
+let timer=null;
+const MAX_HISTORY=900;
+const fresh=()=>({step:0,x:null,type:null,check:null,prints:0,checks:0});
+let states=[fresh()];
+let position=0;
+
+function current(){return states[position];}
+function isFinished(s){return s.type==='condition' && s.check===false;}
+function stopAuto(){if(timer!==null){clearInterval(timer);timer=null;} $('autoBtn').textContent='▶ Αυτόματα';$('stopBtn').disabled=true;}
+function reset(){stopAuto();states=[fresh()];position=0;render();}
+function getNext(s){
+  if(s.type===null) return {...s,step:s.step+1,type:'assign',x:1};
+  if(isFinished(s)) return null;
+  if(s.type==='assign'||s.type==='increment'||(s.type==='print'&&!incrementEnabled)){
+    return {...s,step:s.step+1,type:'condition_expression',check:null};
+  }
+  if(s.type==='condition_expression') return {...s,step:s.step+1,type:'condition',check:s.x<=LIMIT,checks:s.checks+1};
+  if(s.type==='condition') return {...s,step:s.step+1,type:'print',prints:s.prints+1};
+  if(s.type==='print'&&incrementEnabled) return {...s,step:s.step+1,type:'increment',x:s.x+1};
+  return null;
+}
+function advance(){
+  if(!editorValid)return;
+  const next=getNext(current());
+  if(!next){stopAuto();render();return;}
+  // All edits affect upcoming instructions. Old steps remain visible in history.
+  if(position<states.length-1)states.length=position+1;
+  states.push(next);position++;
+  if(states.length>MAX_HISTORY+1){states.shift();position--;}
+  render();
+  if(isFinished(current()))stopAuto();
+}
+function manualNext(){stopAuto();if(!editorValid||isFinished(current()))return;playSound();advance();}
+function previous(){stopAuto();if(position>0){position--;render();}}
+function autoTick(){if(!editorValid||isFinished(current())){stopAuto();return;}advance();}
+function toggleAuto(){
+  if(timer!==null){stopAuto();return;}
+  if(!editorValid||isFinished(current()))return;
+  $('autoBtn').textContent='❚❚ Παύση';$('stopBtn').disabled=false;
+  autoTick();
+  if(!isFinished(current()))timer=setInterval(autoTick,Number($('speedSelect').value));
+  else stopAuto();
+}
+function playSound(){
+  if(!soundEnabled)return;
+  try{
+    const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;
+    if(!audioContext)audioContext=new Audio();
+    if(audioContext.state==='suspended')audioContext.resume().catch(()=>{});
+    const t=audioContext.currentTime,osc=audioContext.createOscillator(),gain=audioContext.createGain();
+    osc.type='sine';osc.frequency.setValueAtTime(620,t);osc.frequency.exponentialRampToValueAtTime(460,t+.083);
+    gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.055,t+.008);gain.gain.exponentialRampToValueAtTime(.0001,t+.092);
+    osc.connect(gain);gain.connect(audioContext.destination);osc.start(t);osc.stop(t+.096);
+  }catch(e){}
+}
+function updateEditedCode(){
+  const text=$('incrementEditor').textContent.replace(/\u00a0/g,' ').trim();
+  const cleaned=text.replace(/\s+/g,'');
+  const nextEnabled=cleaned==='x=x+1';
+  const valid=nextEnabled||cleaned==='';
+  stopAuto();
+  incrementEnabled=nextEnabled;
+  editorValid=valid;
+  $('editorError').textContent=valid?'':'Γράψε x=x+1 ή άφησε τη γραμμή κενή.';
+  $('incrementLine').classList.toggle('removed',!nextEnabled&&valid);
+  $('diagramFrame').classList.toggle('flow-no-increment',!nextEnabled&&valid);
+  $('modeStatus').classList.toggle('infinite',!nextEnabled&&valid);
+  $('modeStatus').textContent=!valid?'⚠ Μη αναγνωρίσιμη εντολή':nextEnabled?'✓ Κανονική επανάληψη':'∞ Χωρίς αύξηση του x — ατέρμονας βρόχος';
+  if(!valid){$('nextBtn').disabled=true;$('autoBtn').disabled=true;}
+  render();
+}
+// The editable line is intentionally limited to x=x+1 or an empty line.
+// Any intermediate input is shown, but advancing pauses until it is valid.
+$('incrementEditor').addEventListener('input',updateEditedCode);
+$('incrementEditor').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();}});
+$('incrementEditor').addEventListener('paste',e=>{
+  e.preventDefault();const text=e.clipboardData.getData('text/plain').replace(/[\r\n]/g,' ');
+  document.execCommand('insertText',false,text);
+});
+function setLimit(){
+  const input=$('repeatInput'),v=input.value.trim();
+  const valid=/^\d+$/.test(v)&&Number(v)<=1000;
+  input.classList.toggle('invalid',!valid);
+  if(!valid)return;
+  const n=Number(v);if(n===LIMIT)return;
+  LIMIT=n;
+  $('flowConditionText').textContent='x <= '+LIMIT;
+  $('codeLimit').textContent=String(LIMIT);
+  $('traceConditionHeading').textContent='x<='+LIMIT;
+  reset();
+}
+$('repeatInput').addEventListener('input',setLimit);
+$('repeatInput').addEventListener('change',()=>{if($('repeatInput').classList.contains('invalid')){$('repeatInput').value=String(LIMIT);$('repeatInput').classList.remove('invalid');}});
+function buildTraceEvents(){
+  const events=states.slice(1,position+1);
+  const rows=[];
+  const row=()=>rows[rows.length-1];
+  for(const event of events){
+    if(event.type==='assign'||event.type==='increment'){
+      rows.push({x:event.x,expr:'',tf:'',presentation:'',stamp:event.step});
+    }else if(event.type==='condition_expression'){
+      // A repeated test with unchanged x gets a new trace row.
+      if(!rows.length||row().expr!=='')rows.push({x:event.x,expr:'',tf:'',presentation:'',stamp:event.step});
+      row().expr=event.x+' <= '+LIMIT;
+    }else if(event.type==='condition'){
+      // Also handle a history boundary when the expression event was trimmed.
+      if(!rows.length||row().expr==='') {
+        if(!rows.length)rows.push({x:event.x,expr:'',tf:'',presentation:'',stamp:event.step});
+        row().expr=event.x+' <= '+LIMIT;
+      }
+      row().tf=event.check?'T':'F';
+      row().conditionStep=event.step;
+    }else if(event.type==='print'){
+      if(!rows.length)rows.push({x:event.x,expr:'',tf:'',presentation:'',stamp:event.step});
+      row().presentation=MESSAGE;
+      row().printStep=event.step;
+    }
+  }
+  return rows;
+}
+const escapeHTML = text => String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function render(){
+  const s=current();
+  $('statX').textContent=s.x===null?'—':s.x;
+  $('statCycles').textContent=s.prints;
+  $('statChecks').textContent=s.checks;
+  $('statPrints').textContent=s.prints;
+  $('stepNumber').textContent=String(s.step).padStart(2,'0');
+  let msg='Πάτησε «Επόμενη εντολή».';
+  if(s.type==='assign')msg='x = <strong>1</strong>';
+  else if(s.type==='condition_expression')msg=escapeHTML(s.x+' <= '+LIMIT)+' → <strong>?</strong>';
+  else if(s.type==='condition')msg=s.x+' <= '+LIMIT+' → <strong style="color:'+(s.check?'var(--green)':'var(--red)')+'">'+(s.check?'TRUE':'FALSE')+'</strong>';
+  else if(s.type==='print')msg='Εμφάνιση · <strong>'+s.prints+'η εκτύπωση</strong>';
+  else if(s.type==='increment')msg='x = <strong>'+s.x+'</strong>';
+  if(isFinished(s))msg='FALSE → <strong>ΤΕΛΟΣ</strong> · '+s.prints+' εκτυπώσεις';
+  $('stepMessage').innerHTML=msg;
+  $('prevBtn').disabled=position===0;
+  $('nextBtn').disabled=isFinished(s)||!editorValid;
+  $('autoBtn').disabled=isFinished(s)||!editorValid;
+  $('nextBtn').textContent=isFinished(s)?'✓ Ολοκληρώθηκε':'Επόμενη εντολή →';
+  $$('.code-line').forEach(el=>el.classList.toggle('current',Number(el.dataset.line)==={assign:1,condition_expression:2,condition:2,print:3,increment:4}[s.type]));
+  $$('.node').forEach(el=>el.classList.remove('active','finished'));
+  ['edgeYes','edgeNo','edgeBack','edgeShort'].forEach(id=>$(id).classList.remove('truth','falsity','loop'));
+  $('labelYes').classList.remove('true');$('labelNo').classList.remove('false');
+  const nodeType=s.type==='condition_expression'?'condition':s.type||'start';
+  const node=document.querySelector('[data-node="'+nodeType+'"]');if(node)node.classList.add('active');
+  if(s.type==='condition'){
+    const edge=s.check?'edgeYes':'edgeNo';
+    $(edge).classList.add(s.check?'truth':'falsity');
+    $(s.check?'labelYes':'labelNo').classList.add(s.check?'true':'false');
+    if(!s.check)document.querySelector('[data-node="end"]').classList.add('finished');
+  }
+  if(s.type==='increment')$('edgeBack').classList.add('loop');
+  if(!incrementEnabled&&s.type==='print')$('edgeShort').classList.add('loop');
+  // When the user deletes x=x+1, the most recent condition stays visible,
+  // while the chart dynamically skips the increment rectangle.
+  const reversed=states.slice(0,position+1).reverse();
+  const lastCheck=reversed.find(v=>v.type==='condition');
+  const cv=$('conditionValue');
+  const pending=s.type==='condition_expression';
+  cv.textContent=pending?s.x+' <= '+LIMIT+' → ?':lastCheck?lastCheck.x+' <= '+LIMIT+' → '+(lastCheck.check?'TRUE':'FALSE'):'—';
+  cv.className='condition-value'+(!pending&&lastCheck?(lastCheck.check?' true':' false'):'');
+  const rows=buildTraceEvents(),latest=rows.slice(-55);
+  $('traceBody').innerHTML=latest.length?latest.map((r,i)=>{
+    const active=s.type==='assign'||s.type==='increment'?'x':s.type==='condition_expression'?'expr':s.type==='condition'?'tf':s.type==='print'?'presentation':null;
+    const now=i===latest.length-1;
+    const css=k=>now&&active===k?' class="cell-active"':'';
+    const tf=r.tf?'<span class="'+(r.tf==='T'?'t':'f')+'">'+r.tf+'</span>':'';
+    return '<tr><td'+css('x')+'>'+escapeHTML(r.x)+'</td><td'+css('expr')+'>'+escapeHTML(r.expr)+'</td><td'+css('tf')+'>'+tf+'</td><td'+css('presentation')+'>'+escapeHTML(r.presentation)+'</td></tr>';
+  }).join(''):'<tr><td colspan="4" class="empty">Ξεκίνα με «Επόμενη εντολή»</td></tr>';
+  $('traceCount').textContent=rows.length>55?'Τελευταίες 55 γραμμές':'';
+  $('traceNote').textContent=!incrementEnabled&&editorValid?'∞ Η τιμή x δεν αυξάνεται':isFinished(s)?'Ολοκλήρωση':'Ενημέρωση ανά εντολή';
+  const scroll=$('traceScroll');if(s.type)scroll.scrollTop=scroll.scrollHeight;else scroll.scrollTop=0;
+}
+$('nextBtn').addEventListener('click',manualNext);
+$('prevBtn').addEventListener('click',previous);
+$('resetBtn').addEventListener('click',reset);
+$('stopBtn').addEventListener('click',stopAuto);
+$('autoBtn').addEventListener('click',toggleAuto);
+$('speedSelect').addEventListener('change',()=>{if(timer!==null){clearInterval(timer);timer=setInterval(autoTick,Number($('speedSelect').value));}});
+$('soundBtn').addEventListener('click',()=>{soundEnabled=!soundEnabled;$('soundBtn').textContent=soundEnabled?'♪ ON':'♪ OFF';$('soundBtn').setAttribute('aria-pressed',String(soundEnabled));$('soundBtn').title=soundEnabled?'Απενεργοποίηση ήχου':'Ενεργοποίηση ήχου';});
+// Logitech and most other slide presenters send PageDown/PageUp;
+// some models send arrow keys. Work even while a toolbar button has focus.
+document.addEventListener('keydown',e=>{
+  if(e.altKey||e.ctrlKey||e.metaKey||e.repeat)return;
+  const el=e.target instanceof Element?e.target:null;
+  if(el&&el.closest('input,textarea,select,[contenteditable]'))return;
+  const onButton=!!(el&&el.closest('button'));
+  const next=e.key==='PageDown'||e.key==='Next'||e.key==='ArrowRight'||e.key==='ArrowDown'||(e.code==='Space'&&!onButton);
+  const back=e.key==='PageUp'||e.key==='Prior'||e.key==='ArrowLeft'||e.key==='ArrowUp';
+  if(next){e.preventDefault();manualNext();}
+  else if(back){e.preventDefault();previous();}
+  else if(!onButton&&(e.key==='r'||e.key==='R')){e.preventDefault();reset();}
+});
+render();
+</script>
+</body>
+</html>

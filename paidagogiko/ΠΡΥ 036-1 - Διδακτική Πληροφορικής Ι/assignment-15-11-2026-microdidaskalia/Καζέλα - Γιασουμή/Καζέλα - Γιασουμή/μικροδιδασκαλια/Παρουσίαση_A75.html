@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Το κινητό αποφασίζει · if / else</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1ff;--ink:#1d1640;--muted:#5d5880;--card:#fff;--line:#e2dcf5;
+  --violet:#6c3cf0;--pink:#ff3d8b;--orange:#ff8a1f;--yellow:#ffd23f;--teal:#12b5a5;--blue:#2f7cf6;--green:#1fbf6a;--red:#ff4757;
+  --true:#1fbf6a;--false:#ff4757;
+  --font:"Nunito","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",Consolas,ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);background-image:radial-gradient(800px 500px at 0% 0%,#ffe6f1 0,transparent 60%),radial-gradient(900px 500px at 100% 100%,#dff6ff 0,transparent 60%);font-size:19px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+code,.mono{font-family:var(--mono)}
+/* χωρίς ligatures: το != και το == εμφανίζονται όπως γράφονται στην Python */
+*{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(100deg,#2a1572,#6c3cf0 45%,#ff3d8b 85%,#ff8a1f);color:#fff;box-shadow:0 6px 20px rgba(60,20,140,.25)}
+.top-in{max-width:1400px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px;white-space:nowrap}
+.logo .ph{width:30px;height:46px;border-radius:9px;border:3px solid #fff;position:relative;background:rgba(255,255,255,.15)}
+.logo .ph::after{content:"";position:absolute;left:5px;right:5px;bottom:5px;height:40%;border-radius:3px;background:var(--yellow)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.chip{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:999px;padding:5px 12px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:6px}
+.chip .n{background:rgba(255,255,255,.25);border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font-size:12px}
+.chip.on{background:#fff;color:var(--violet)}
+.chip.done{background:rgba(31,191,106,.55)}
+.clock{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.22);border-radius:14px;padding:4px 6px 4px 12px}
+.clock b{font-family:var(--mono);font-size:22px;min-width:68px;text-align:center}
+.clock button{border:0;background:#fff;color:var(--violet);border-radius:10px;padding:4px 10px;font-weight:900}
+.prog{height:6px;background:rgba(255,255,255,.25)}
+.prog i{display:block;height:100%;width:0;background:var(--yellow);transition:width .4s}
+/* layout */
+main{max-width:1400px;margin:0 auto;padding:22px 18px 90px}
+.slide{display:none;animation:in .35s ease-out}
+.slide.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.kicker{font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--pink)}
+h1,h2{margin:0;font-weight:900;line-height:1.1}
+h1{font-size:clamp(34px,4.6vw,60px)}
+h2{font-size:clamp(28px,3.2vw,42px)}
+h3{margin:0 0 8px;font-size:22px;font-weight:900}
+.time{font-weight:900;background:#fff;border:3px solid var(--line);border-radius:999px;padding:4px 14px;color:var(--violet);font-size:15px;white-space:nowrap}
+.card{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 10px 26px rgba(70,40,160,.08)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.muted{color:var(--muted)}
+.btn{border:0;border-radius:16px;padding:12px 20px;font-weight:900;font-size:18px;color:#fff;background:linear-gradient(180deg,#8a63ff,var(--violet));box-shadow:0 4px 0 #3f1fb0;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #3f1fb0}
+.btn.pink{background:linear-gradient(180deg,#ff6fa8,var(--pink));box-shadow:0 4px 0 #b3125a}
+.btn.orange{background:linear-gradient(180deg,#ffab55,var(--orange));box-shadow:0 4px 0 #b65700}
+.btn.teal{background:linear-gradient(180deg,#3fd3c4,var(--teal));box-shadow:0 4px 0 #087a6f}
+.btn.ghost{background:#fff;color:var(--violet);border:3px solid var(--line);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;border-radius:999px;padding:2px 12px;font-weight:900;font-size:15px}
+.navbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-top:3px solid var(--line)}
+.navbar .in{max-width:1400px;margin:0 auto;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.navbar .where{font-weight:800;color:var(--muted)}
+/* slide 0 */
+.hero{display:grid;grid-template-columns:1fr;gap:24px;align-items:center;max-width:1000px}
+.hero h1 span{background:linear-gradient(90deg,var(--violet),var(--pink),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.goals{display:grid;gap:10px;margin-top:16px}
+.goal{display:flex;gap:12px;align-items:center;background:#fff;border:3px solid var(--line);border-radius:18px;padding:10px 14px;font-weight:800}
+.goal .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:22px;flex:none}
+.timeline{display:flex;border-radius:16px;overflow:hidden;margin-top:18px;border:3px solid #fff;box-shadow:0 6px 16px rgba(70,40,160,.12)}
+.timeline div{padding:10px 6px;color:#fff;font-weight:900;font-size:14px;text-align:center}
+.timeline small{display:block;font-weight:700;opacity:.9}
+/* phone */
+.phone{width:min(330px,100%);aspect-ratio:9/17.5;margin:0 auto;border-radius:46px;padding:10px;background:linear-gradient(145deg,#6b7385,#111827 35%,#3d4656);box-shadow:0 24px 50px rgba(20,10,60,.35)}
+.screen{height:100%;border-radius:37px;overflow:hidden;position:relative;color:#fff;padding:18px 20px;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 20% 15%,#6a5cff 0,transparent 50%),radial-gradient(ellipse at 90% 80%,#ff3d8b 0,transparent 50%),linear-gradient(165deg,#120f3a,#2a1b6e 50%,#1a1030)}
+.island{width:96px;height:26px;border-radius:14px;background:#05060a;margin:-6px auto 0}
+.clockbig{font-size:56px;font-weight:300;letter-spacing:-2px;margin-top:22px}
+.batt{width:84%;margin-top:22px;border-radius:22px;padding:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)}
+.bshell{display:flex;align-items:center;justify-content:center;gap:0;margin:8px 0}
+.binner{flex:1;height:70px;border:4px solid rgba(255,255,255,.8);border-radius:14px;padding:5px;position:relative}
+.bfill{height:100%;border-radius:7px;transition:width .3s,background .3s}
+.bnum{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;font-weight:900;text-shadow:0 2px 8px #000a}
+.btip{width:8px;height:28px;background:rgba(255,255,255,.8);border-radius:0 5px 5px 0}
+.note{width:84%;margin-top:14px;border-radius:18px;padding:12px;background:rgba(255,255,255,.18);font-size:14px;min-height:70px;display:flex;gap:10px;align-items:flex-start}
+.note .i{font-size:22px}
+.slider{width:100%;accent-color:var(--violet);height:34px}
+.bigpct{font-size:64px;font-weight:900;text-align:center;line-height:1;background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.predict{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.pbtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:14px;font-weight:900;font-size:18px}
+.pbtn.g{color:var(--green)}.pbtn.r{color:var(--red)}
+.pbtn.sel{box-shadow:0 0 0 5px #e5dcff;border-color:var(--violet)}
+.reveal{margin-top:12px;padding:14px;border-radius:16px;font-weight:800;display:none}
+.reveal.show{display:block;animation:in .3s}
+.qbox{background:linear-gradient(120deg,#fff6d6,#ffe9f2);border:3px solid #ffd9a0;border-radius:18px;padding:14px 16px;font-weight:800}
+/* operators */
+.lab{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin:10px 0}
+.lab .side{background:#fff;border:3px solid var(--line);border-radius:20px;padding:14px;text-align:center}
+.lab .val{font-family:var(--mono);font-size:56px;font-weight:800}
+.opsel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.op{border:3px solid var(--line);background:#fff;border-radius:14px;padding:8px 0;font-family:var(--mono);font-size:26px;font-weight:800;color:var(--violet);min-width:72px}
+.op.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+.verdict{margin-top:14px;border-radius:22px;padding:18px;text-align:center;font-size:30px;font-weight:900;color:#fff;transition:background .25s}
+.verdict code{background:rgba(255,255,255,.25);padding:2px 10px;border-radius:10px}
+.flip{perspective:900px;height:170px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-weight:800}
+.flip .f{background:linear-gradient(135deg,#6c3cf0,#ff3d8b);color:#fff}
+.flip .b{background:#fff;border:3px solid var(--line);transform:rotateY(180deg)}
+.flip .f .big{font-family:var(--mono);font-size:30px}
+/* game */
+.game{text-align:center}
+.gcard{margin:14px auto;max-width:640px;background:#fff;border:4px solid var(--line);border-radius:28px;padding:26px;box-shadow:0 14px 30px rgba(70,40,160,.12)}
+.gvars{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.gvars span{font-family:var(--mono);font-weight:800;background:#efe9ff;color:var(--violet);border-radius:12px;padding:4px 12px}
+.gcond{font-family:var(--mono);font-size:44px;font-weight:800}
+.gbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.gbtns button{border:0;border-radius:20px;padding:18px;font-size:26px;font-weight:900;color:#fff}
+.gT{background:linear-gradient(180deg,#45d98a,var(--true));box-shadow:0 5px 0 #0f8b48}
+.gF{background:linear-gradient(180deg,#ff7a86,var(--false));box-shadow:0 5px 0 #b51d2b}
+.score{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.score div{background:#fff;border:3px solid var(--line);border-radius:16px;padding:6px 16px;font-weight:900}
+.gfb{min-height:34px;font-weight:900;font-size:20px;margin-top:10px}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pop{animation:popk .4s}
+@keyframes popk{50%{transform:scale(1.06)}}
+/* flowchart */
+.fcwrap{background:#fff;border:3px solid var(--line);border-radius:24px;padding:10px}
+svg text{font-family:var(--font);font-weight:800}
+.fc-node{transition:filter .25s}
+.fc-on{filter:drop-shadow(0 0 10px #ffd23f) drop-shadow(0 0 4px #ffd23f)}
+.path{stroke:#9b94c4;stroke-width:4;fill:none;transition:stroke .25s,stroke-width .25s}
+.path.lit{stroke:#ffb400;stroke-width:7}
+.out-term{background:#130f33;color:#eef;border-radius:18px;padding:14px;font-family:var(--mono);font-size:18px;min-height:120px;white-space:pre-wrap}
+.out-term .y{color:var(--yellow)}.out-term .g{color:#5cf2a0}.out-term .r{color:#ff8f99}.out-term .e{color:#ff6b6b;font-weight:800}
+/* code */
+.code{background:#130f33;color:#e9e6ff;border-radius:20px;padding:14px 0;font-family:var(--mono);font-size:20px;line-height:1.7;overflow:auto}
+.code .ln{display:block;padding:0 18px;border-left:6px solid transparent;white-space:pre}
+.code .ln.cur{background:rgba(255,210,63,.18);border-left-color:var(--yellow)}
+.code .ln.skip{opacity:.35}
+.code .ln::before{content:attr(data-n);display:inline-block;width:1.8em;color:#7d76b5}
+.kw{color:#ff7ab6;font-weight:800}.fn{color:#7ddcff}.st{color:#b6f37a}.nu{color:#ffd23f}.op2{color:#ffb35c;font-weight:800}.cm{color:#8e88bd;font-style:italic}
+.ind{background:repeating-linear-gradient(90deg,rgba(255,210,63,.35) 0 2px,transparent 2px 12px);border-radius:3px}
+/* σελίδα 4: μεγαλύτερος κώδικας αριστερά, δεξί μέρος πιο ψηλά */
+.pygrid{grid-template-columns:1.3fr 1fr;align-items:start}
+.pygrid #pyCode{font-size:25px;line-height:1.8;padding:20px 0}
+.pygrid .card{padding:14px 18px;margin-top:-6px}
+.pygrid .card .out-term{min-height:96px}
+.toggles{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.toggle{display:flex;gap:8px;align-items:center;background:#fff;border:3px solid var(--line);border-radius:14px;padding:6px 12px;font-weight:800;font-size:16px}
+.toggle input{width:20px;height:20px;accent-color:var(--pink)}
+/* cycle */
+.cycle{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cstep{border:0;border-radius:22px;padding:16px;color:#fff;text-align:left;box-shadow:0 6px 0 rgba(0,0,0,.18);opacity:.55;transition:opacity .2s,transform .2s}
+.cstep.on{opacity:1;transform:translateY(-4px)}
+.cstep b{display:block;font-size:22px}
+.cstep span{font-size:15px;font-weight:700}
+.cpanel{margin-top:16px}
+.revealcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.rc{border:3px dashed #cfc6ef;background:#faf8ff;border-radius:18px;padding:14px;min-height:110px;cursor:pointer;font-weight:800}
+.rc .a{display:none;margin-top:8px;font-family:var(--mono);color:var(--violet);font-size:18px}
+.rc.open{border-style:solid;border-color:var(--violet);background:#fff}
+.rc.open .a{display:block}
+.tests{width:100%;border-collapse:separate;border-spacing:0 8px}
+.tests td,.tests th{padding:8px 12px;text-align:left}
+.tests th{color:var(--muted);font-size:15px}
+.tests tr.r td{background:#fff;border-top:3px solid var(--line);border-bottom:3px solid var(--line)}
+.tests tr.r td:first-child{border-left:3px solid var(--line);border-radius:14px 0 0 14px}
+.tests tr.r td:last-child{border-right:3px solid var(--line);border-radius:0 14px 14px 0}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:14px;font-weight:900;color:#fff}
+/* bugs */
+.bugcode .tok{cursor:pointer;border-radius:6px;padding:0 2px;transition:background .2s}
+.bugcode .tok:hover{background:rgba(255,255,255,.12)}
+.bugcode .tok.found{background:var(--red);color:#fff}
+.bugcode .tok.miss{animation:shake .4s}
+.buglist{display:grid;gap:8px}
+.bug{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid var(--line);border-radius:14px;padding:8px 12px;font-weight:800;opacity:.45}
+.bug.found{opacity:1;border-color:var(--red)}
+.bug .x{width:30px;height:30px;border-radius:50%;background:#eee;display:grid;place-items:center;flex:none}
+.bug.found .x{background:var(--red);color:#fff}
+/* timer */
+.timer{text-align:center}
+.tdisp{font-family:var(--mono);font-size:clamp(80px,14vw,170px);font-weight:800;line-height:1;margin:10px 0;background:linear-gradient(90deg,var(--teal),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tdisp.warn{background:linear-gradient(90deg,var(--orange),var(--red));-webkit-background-clip:text;background-clip:text}
+.ring{height:18px;border-radius:999px;background:#e9e3ff;overflow:hidden;max-width:760px;margin:0 auto}
+.ring i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--violet),var(--pink));transition:width 1s linear}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;text-align:left}
+.role{border-radius:20px;padding:16px;color:#fff}
+/* quiz */
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.qopt{border:3px solid var(--line);background:#fff;border-radius:18px;padding:16px;font-size:22px;font-weight:900;text-align:left;display:flex;gap:12px;align-items:center}
+.qopt .k{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.qopt.right{border-color:var(--green);background:#e5fbef}
+.qopt.wrong{border-color:var(--red);background:#ffe8ea}
+.qmeta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.dots{display:flex;gap:6px}
+.dots i{width:14px;height:14px;border-radius:50%;background:#ddd6f7}
+.dots i.on{background:var(--violet)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:12px;height:18px;border-radius:3px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.tag{display:inline-block;background:#efe9ff;color:var(--violet);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:900;margin-left:8px;white-space:nowrap;text-transform:none;letter-spacing:0;vertical-align:middle}
+.goal .tag{margin-left:auto}
+.timeline div{font-size:12px;padding:10px 2px}
+.recall{margin-top:14px;font-size:16px}
+.recall .code{font-size:15px;padding:8px 0;margin:8px 0;border-radius:12px}
+.rq{margin-top:8px;background:#fff;border:3px solid var(--line);border-radius:14px;padding:6px 12px}
+.rq summary{cursor:pointer;font-weight:900;list-style:none}
+.rq summary::-webkit-details-marker{display:none}
+.rq[open]{border-color:var(--violet)}
+.rq .ra{margin-top:6px;padding-top:6px;border-top:2px dashed var(--line);font-weight:700}
+.prow{display:grid;grid-template-columns:64px 1fr 1fr 34px;gap:8px;align-items:center;margin-top:8px}
+.prow b{font-family:var(--mono);font-size:20px}
+.prow .pbtn{padding:8px;font-size:15px}
+.pres{font-size:22px;text-align:center}
+.btn.ghost.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+.alertwrap{position:fixed;inset:0;z-index:60;background:rgba(20,10,60,.55);backdrop-filter:blur(4px);display:grid;place-items:center;animation:in .3s}
+.alertwrap[hidden]{display:none}
+.alertphone{width:min(320px,80vw);animation:ring .6s ease-in-out 3}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(-6deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(4deg)}}
+.alertnote{font-size:17px;line-height:1.4;width:92%;background:rgba(255,255,255,.95);color:var(--ink)}
+.alertnote .i{font-size:30px}
+/* Εισαγωγή: τελεστές πάνω, κινητό και πρόβλεψη κάτω */
+.labc{padding:12px 16px}
+.labc .lab{margin:0;gap:12px}
+.labc .side{padding:6px 12px}
+.labc .val{font-size:38px;line-height:1.1}
+.labc .slider{height:24px}
+.labc .opsel{grid-template-columns:repeat(6,1fr);gap:6px}
+.labc .op{min-width:64px;font-size:24px;padding:6px 0}
+.labc .verdict{margin-top:8px;padding:8px;font-size:24px;border-radius:16px}
+.introgrid{display:grid;grid-template-columns:270px 1fr 290px;gap:16px;align-items:start;margin-top:14px}
+.introgrid .phone{width:270px}
+.introgrid .clockbig{font-size:44px;margin-top:14px}
+.introgrid .bigpct{font-size:48px}
+.flipcol{display:grid;gap:10px}
+.flipcol .flip{height:118px}
+.flipcol .flip .f,.flipcol .flip .b{padding:10px;font-size:15px}
+.flipcol .flip .f .big{font-size:24px}
+@media (max-width:1150px){.introgrid{grid-template-columns:1fr 1fr}.flipcol{grid-column:1/-1;grid-template-columns:repeat(3,1fr)}.flipcol h3{grid-column:1/-1}}
+@media (max-width:980px){.introgrid,.flipcol{grid-template-columns:1fr}.labc .opsel{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:980px){.grid2,.hero,.grid3,.cycle,.revealcards{grid-template-columns:1fr}.lab{grid-template-columns:1fr}.qopts{grid-template-columns:1fr}}
+.finalgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.finalgrid .timer{display:flex;flex-direction:column;justify-content:center}
+.finalgrid .ring{width:100%}
+.qrrow{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;text-align:left}
+.qrtxt .row{flex-wrap:wrap}
+.qrbox{position:relative;width:280px;height:280px;background:#fff;border:4px solid var(--violet);border-radius:22px;display:grid;place-items:center;box-shadow:0 8px 20px rgba(70,40,160,.15)}
+.qrbox canvas{width:260px;height:260px;image-rendering:pixelated}
+.qrempty[hidden]{display:none}
+.qrempty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;font-weight:900;color:var(--muted);background:repeating-linear-gradient(45deg,#faf8ff 0 12px,#f1edff 12px 24px);border-radius:18px}
+.qrbig{position:fixed;inset:0;z-index:70;background:rgba(20,10,60,.75);display:grid;place-items:center;cursor:zoom-out}
+.qrbig canvas{width:min(80vh,80vw);height:min(80vh,80vw);background:#fff;border-radius:24px;padding:18px;image-rendering:pixelated}
+@media (max-width:1250px){.qrrow{grid-template-columns:1fr;justify-items:center}}
+@media (max-width:980px){.finalgrid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="logo"><span class="ph" aria-hidden="true"></span>Το κινητό αποφασίζει</div>
+    <nav class="chips" id="chips" aria-label="Ενότητες"></nav>
+    <div class="clock" title="Χρόνος μαθήματος"><span aria-hidden="true">⏱</span><b id="lessonClock">00:00</b><button type="button" id="clockBtn">▶</button></div>
+  </div>
+  <div class="prog"><i id="prog"></i></div>
+</header>
+
+<main>
+<!-- 0 ΣΤΟΧΟΣ -->
+<section class="slide" data-title="Στόχος" data-min="1">
+  <div class="hero">
+    <div>
+      <p class="kicker">Α΄ Λυκείου · Python · Δομή Διακλάδωσης</p>
+      <h1>Πώς <span>αποφασίζει</span> το κινητό μας;</h1>
+      <p class="muted" style="font-size:21px;margin:10px 0 0">Σήμερα ακολουθούμε τον Κύκλο Ανάπτυξης μιας Εφαρμογής για να λύνουμε προβλήματα με <b>if / else</b>.</p>
+      <div class="goals">
+        <div class="goal"><span class="ic" style="background:var(--blue)">🔍</span>Χρησιμοποιώ απλές συνθήκες: Αληθής ή Ψευδής;</div>
+        <div class="goal"><span class="ic" style="background:var(--violet)">==</span>Χρησιμοποιώ συγκριτικούς τελεστές <span class="mono">&lt; &gt; &lt;= &gt;= == !=</span></div>
+        <div class="goal"><span class="ic" style="background:var(--teal)">&lt;/&gt;</span>Γράφω τη δομή if / else σε Python</div>
+        <div class="goal"><span class="ic" style="background:var(--orange)">✓</span>Ακολουθώ τον Κύκλο Ανάπτυξης: Ανάλυση → Σχεδίαση → Υλοποίηση → Έλεγχος (και δοκιμάζω το όριο!)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ΑΝΑΚΛΗΣΗ: ΑΚΟΛΟΥΘΙΑΚΗ ΔΟΜΗ -->
+<section class="slide" data-title="Ανάκληση" data-min="4">
+  <div class="hd"><div><p class="kicker">Εισαγωγή · Τι θυμόμαστε;</p><h2>Ακολουθιακή δομή: χωρίς καμία επιλογή</h2></div></div>
+  <div class="grid2 pygrid">
+    <div>
+      <div class="qbox">✋ Πριν τρέξει: τι θα εμφανιστεί στην οθόνη αν δώσουμε <b>Μαρία</b> και <b>15</b>;</div>
+      <div class="code" id="sqCode" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="row"><span style="font-weight:800">Όνομα:</span>
+        <input type="text" id="sqName" value="Μαρία" style="width:130px;font:inherit;font-size:20px;font-weight:900;text-align:center;border:3px solid var(--line);border-radius:14px;padding:4px">
+        <span style="font-weight:800">Μπαταρία:</span>
+        <input type="number" id="sqPct" value="15" style="width:90px;font:inherit;font-size:20px;font-weight:900;text-align:center;border:3px solid var(--line);border-radius:14px;padding:4px"></div>
+      <div class="row" style="margin-top:10px"><button class="btn teal" id="sqStep" type="button">Επόμενη γραμμή ▸</button><button class="btn ghost" id="sqReset" type="button">↻</button></div>
+      <div class="out-term" id="sqOut" style="margin-top:12px"></div>
+      <div class="qbox" id="sqExp" style="margin-top:12px">Πάτησε «Επόμενη γραμμή» για να εκτελεστεί το πρόγραμμα.</div>
+    </div>
+  </div>
+  <div class="qbox recall" style="margin-top:18px;font-size:18px">↩ <b>Ανάκληση προηγούμενης γνώσης</b> — σκέψου πρώτα, πάτα μετά για να δεις την απάντηση:
+    <details class="rq"><summary>1️⃣ Τι κάνει η <span class="mono">input()</span> και τι η <span class="mono">print()</span>;</summary><div class="ra">Η <b>input</b> διαβάζει δεδομένα από το πληκτρολόγιο (είσοδος). Η <b>print</b> εμφανίζει αποτέλεσμα στην οθόνη (έξοδος).</div></details>
+    <details class="rq"><summary>2️⃣ Γιατί γράφουμε <span class="mono">int(...)</span> γύρω από την <span class="mono">input</span>;</summary><div class="ra">Η <b>input</b> επιστρέφει πάντα κείμενο (<span class="mono">str</span>). Με το <b>int</b> το μετατρέπουμε σε ακέραιο αριθμό, για να μπορούμε να τον συγκρίνουμε.</div></details>
+    <details class="rq"><summary>3️⃣ Τι είναι η μεταβλητή <span class="mono">pososto</span> και τι κάνει το <span class="mono">=</span>;</summary><div class="ra">Η μεταβλητή είναι ένα «κουτί» στη μνήμη με όνομα. Το <b>=</b> <u>βάζει</u> μια τιμή στο κουτί (δεν ρωτά αν είναι ίσο!).</div></details>
+    <details class="rq"><summary>4️⃣ Αν δώσω 15, τι εμφανίζεται; Και αν δώσω 85;</summary><div class="ra">«Το ποσοστό είναι 15» και «Το ποσοστό είναι 85». Οι εντολές εκτελούνται από πάνω προς τα κάτω και εκτελούνται <b>όλες</b>, <b>ό,τι κι αν δώσω</b>.</div></details>
+    <details class="rq"><summary>5️⃣ Από τα Μαθηματικά: το 15 &lt; 20 είναι αληθές ή ψευδές; Και το 20 &lt; 20;</summary><div class="ra">Το 15 &lt; 20 είναι <b>αληθές</b>. Το 20 &lt; 20 είναι <b>ψευδές</b> (το 20 δεν είναι μικρότερο από τον εαυτό του). Θα το χρειαστούμε σήμερα!</div></details>
+  </div>
+  <div class="qbox" style="margin-top:14px;font-size:20px">🤔 Τι λείπει για να <b>αποφασίσει</b> το πρόγραμμα να δείξει προειδοποίηση <b>μόνο</b> όταν η μπαταρία είναι χαμηλή;</div>
+</section>
+
+<!-- 1 ΕΙΣΑΓΩΓΗ: ΤΕΛΕΣΤΕΣ + ΚΙΝΗΤΟ -->
+<section class="slide" data-title="Εισαγωγή" data-min="8">
+  <div class="hd"><div><p class="kicker">Εισαγωγή · Πρόβλεψε πριν δεις!</p><h2>Τι θα δείξει το κινητό; Συνθήκες και τελεστές</h2></div></div>
+  <div class="card labc">
+    <div class="lab">
+      <div class="side"><div class="muted" style="font-weight:800">pososto</div><div class="val" id="lv">15</div><input class="slider" type="range" min="0" max="100" value="15" id="lsl" aria-label="pososto"></div>
+      <div><div class="muted" style="font-weight:900;text-align:center;font-size:15px;margin-bottom:6px">Συγκριτικοί τελεστές</div><div class="opsel" id="ops"></div></div>
+      <div class="side"><div class="muted" style="font-weight:800">όριο</div><div class="val" id="rv">20</div><input class="slider" type="range" min="0" max="100" value="20" id="rsl" aria-label="όριο"></div>
+    </div>
+    <div class="verdict" id="verd"></div>
+  </div>
+  <div class="introgrid">
+    <div class="phone"><div class="screen" id="scr">
+      <div class="island"></div>
+      <div class="clockbig">09:41</div><div style="font-size:14px;opacity:.9">Κυριακή</div>
+      <div class="batt"><div style="font-size:11px;letter-spacing:2px;font-weight:900;opacity:.85">ΜΠΑΤΑΡΙΑ</div>
+        <div class="bshell"><div class="binner"><div class="bfill" id="bfill"></div><div class="bnum" id="bnum">65%</div></div><div class="btip"></div></div>
+        <div id="bstate" style="text-align:center;font-weight:900">Κανονική λειτουργία</div></div>
+      <div class="note"><span class="i" id="nicon">✓</span><div><b id="ntitle">Μπαταρία</b><br><span id="ntext">Δεν υπάρχει προειδοποίηση.</span></div></div>
+    </div></div>
+    <div class="card">
+      <div class="bigpct" id="bpct">65%</div>
+      <input class="slider" type="range" id="bslider" min="0" max="100" value="65" aria-label="Ποσοστό μπαταρίας">
+      <div class="row" style="justify-content:center;margin-top:6px" id="bquick"></div>
+      <div class="qbox" style="margin-top:14px">🤔 Πρόβλεψη πριν δεις: τι θα δείξει το κινητό στο <b>19%</b>, στο <b>20%</b> και στο <b>21%</b>;</div>
+      <div id="predRows"></div>
+      <div class="row" style="margin-top:10px"><button class="btn teal" id="predCheck" type="button">✔ Έλεγχος προβλέψεων</button></div>
+      <div class="reveal" id="predRev"></div>
+      <div class="qbox" style="margin-top:12px">❓ Γιατί στο <b>20%</b> δεν εμφανίζεται προειδοποίηση;</div>
+      <div class="row" style="margin-top:12px"><button class="btn pink" id="ruleBtn" type="button">🔎 Αποκάλυψη κανόνα</button></div>
+      <div class="reveal" id="ruleRev" style="background:#f2edff">Ο κανόνας είναι μια <b>συνθήκη</b>:<div class="mono" style="font-size:28px;margin:6px 0;color:var(--violet)">if pososto &lt; 20:</div>Αν είναι <b style="color:var(--green)">Αληθής</b> → κόκκινο και προειδοποίηση. Αλλιώς (<b style="color:var(--red)">Ψευδής</b>) → πράσινο, χωρίς μήνυμα.<br>Στο 20%: <span class="mono">20 &lt; 20</span> είναι <b style="color:var(--red)">Ψευδής</b>, γι' αυτό δεν εμφανίζεται προειδοποίηση.</div>
+    </div>
+    <div class="flipcol">
+      <h3 style="margin:0">Παγίδες! Πάτησε την κάρτα</h3>
+      <div class="flip" tabindex="0"><div class="in"><div class="f"><div class="big">=  ή  ==</div>Ποιο συγκρίνει;</div><div class="b"><div><b class="mono" style="color:var(--violet)">x = 5</b> βάζει τιμή (εκχώρηση)<br><b class="mono" style="color:var(--pink)">x == 5</b> ρωτά «είναι ίσο;»</div></div></div></div>
+    <div class="flip" tabindex="0"><div class="in"><div class="f"><div class="big">40 &gt; 40 ;</div>Αληθής ή Ψευδής;</div><div class="b"><div><b style="color:var(--red)">Ψευδής!</b> Το 40 δεν είναι μεγαλύτερο από το 40.<br><span class="mono">40 &gt;= 40</span> είναι <b style="color:var(--green)">Αληθής</b>.</div></div></div></div>
+    <div class="flip" tabindex="0"><div class="in"><div class="f"><div class="big">&lt;&gt;  ή  !=</div>Πώς γράφω «διάφορο»;</div><div class="b"><div>Στην Python: <b class="mono" style="color:var(--violet)">!=</b><br>Το <span class="mono">&lt;&gt;</span> δεν υπάρχει. Ούτε το <span class="mono">=&lt;</span>: γράφουμε <b class="mono">&lt;=</b>.</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 PYTHON -->
+<section class="slide" data-title="if / else σε Python" data-min="2">
+  <div class="hd"><div><p class="kicker">Παρουσίαση · 3 · Υλοποίηση</p><h2>Από τη συνθήκη στην Python</h2></div></div>
+  <div class="grid2 pygrid">
+    <div>
+      <div class="code" id="pyCode"></div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="tgColon"> Σβήσε την άνω και κάτω τελεία</label>
+        <label class="toggle"><input type="checkbox" id="tgIndent"> Σβήσε την εσοχή</label>
+        <label class="toggle"><input type="checkbox" id="tgInt"> Χωρίς int()</label>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row"><span style="font-weight:800">Είσοδος:</span>
+        <input type="number" id="pyIn" value="19" style="width:100px;font:inherit;font-size:22px;font-weight:900;text-align:center;border:3px solid var(--line);border-radius:14px;padding:4px">
+        <button class="btn teal" id="pyStep" type="button">Επόμενη γραμμή ▸</button><button class="btn ghost" id="pyReset" type="button">↻</button></div>
+      <div class="row" id="pyQuick" style="margin-top:10px"></div>
+      <div class="out-term" id="pyOut" style="margin-top:12px"></div>
+      <div class="qbox" id="pyExp" style="margin-top:12px">Πάτησε «Επόμενη γραμμή» για να εκτελεστεί το πρόγραμμα.</div>
+      <div style="margin-top:12px;font-weight:800;font-size:16px" class="muted">💡 Μετά το <span class="mono" style="color:var(--pink)">if</span> γράφουμε την ερώτηση και βάζουμε <span class="mono" style="color:var(--pink)">:</span> στο τέλος. Ό,τι γράφουμε πιο μέσα (με εσοχή) κάτω από το <span class="mono" style="color:var(--pink)">if</span> γίνεται όταν η απάντηση είναι <b style="color:var(--green)">Αληθής</b>. Ό,τι γράφουμε κάτω από το <span class="mono" style="color:var(--pink)">else:</span> γίνεται όταν είναι <b style="color:var(--red)">Ψευδής</b>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 ΩΡΑ ΓΙΑ ΔΟΥΛΕΙΑ -->
+<section class="slide" data-title="Φύλλο εργασίας" data-min="21">
+  <div class="hd"><div><p class="kicker">Φύλλο εργασίας Α7.5 · Εμπέδωση και Αξιολόγηση</p><h2 id="wTitle">Μέρος Α · Εμπέδωση ανά δύο</h2></div>
+    <div class="row"><button class="btn teal" type="button" id="wA">👥 Εμπέδωση · Μέρος Α · 11΄</button><button class="btn pink" type="button" id="wB">💻 Αξιολόγηση · Μέρος Β · 10΄</button></div></div>
+  <div class="card timer">
+    <div class="tdisp" id="tdisp">11:00</div>
+    <div class="ring"><i id="tring" style="width:100%"></i></div>
+    <div class="row" style="justify-content:center;margin-top:14px"><button class="btn" type="button" id="tGo">▶ Έναρξη</button><button class="btn ghost" type="button" id="tReset">↻ Επαναφορά</button></div>
+    <div id="wInfo"></div>
+  </div>
+</section>
+
+<!-- 10 ΣΥΝΟΨΗ -->
+<section class="slide" data-title="Σύνοψη" data-min="4">
+  <div class="hd"><div><p class="kicker">Σύνοψη · Τι μάθαμε σήμερα</p><h2>Από την ακολουθία στην απόφαση</h2></div></div>
+  <div class="card" style="text-align:center">
+    <p style="font-size:22px;margin-top:0">Σήμερα μάθαμε: <b>συνθήκη (Αληθής/Ψευδής) → τελεστές → if / else με εσοχή → έλεγχος στο όριο</b>.</p>
+    <div class="qbox" style="max-width:820px;margin:10px auto">↩ <b>Επιστρέφουμε στην αρχή:</b> το πρόγραμμα με <span class="mono">input</span> και <span class="mono">print</span> εκτελούσε τα πάντα με τη σειρά. Τι άλλαξε τώρα; <span class="muted">(Μία συνθήκη διαλέγει ποιος δρόμος θα εκτελεστεί.)</span></div>
+    <div class="qbox" style="max-width:820px;margin:10px auto">🗣️ <b>Με δικά σου λόγια:</b> πώς λειτουργεί η if / else; Πες το σε μία πρόταση σε έναν συμμαθητή ή μια συμμαθήτρια.</div>
+    <div class="qbox" style="max-width:820px;margin:10px auto">🔮 Για το επόμενο μάθημα: τι γίνεται όταν υπάρχουν <b>περισσότερες από δύο περιπτώσεις</b>; Π.χ. κάτω από 5% «Κρίσιμη μπαταρία», κάτω από 20% «Χαμηλή μπαταρία», αλλιώς «Εντάξει». Πώς προσθέτουμε και τρίτο δρόμο; (<span class="mono">elif</span>)</div>
+  </div>
+</section>
+<!-- 9 ΤΕΛΙΚΗ ΑΞΙΟΛΟΓΗΣΗ -->
+<section class="slide" data-title="Τελική αξιολόγηση" data-min="3">
+  <div class="hd"><div><p class="kicker">Σύνοψη · Τελική αξιολόγηση</p><h2>Τελική αξιολόγηση</h2></div></div>
+  <div class="finalgrid">
+  <div class="card">
+    <div class="qrrow">
+      <div class="qrbox"><canvas id="qrCanvas" width="260" height="260" aria-label="QR code για την Τελική αξιολόγηση"></canvas><div id="qrEmpty" class="qrempty">Επικόλλησε τον σύνδεσμο<br>της αξιολόγησης ⬇</div></div>
+      <div class="qrtxt">
+        <p style="font-weight:900;font-size:24px;margin:0">📱 Σκάναρε το QR code</p>
+        <p style="font-weight:800;margin:6px 0 0">Άνοιξε την <b>κάμερα</b> του κινητού, σκάναρε τον κωδικό και μπες στην <b>«Τελική αξιολόγηση»</b>. Γράψε το ονοματεπώνυμό σου και ξεκίνα.</p>
+        <div class="row noprint" style="margin-top:12px"><input id="qrUrl" type="url" placeholder="https://… σύνδεσμος της Τελικής αξιολόγησης" style="flex:1;min-width:220px;font:inherit;font-size:16px;font-weight:700;border:3px solid var(--line);border-radius:14px;padding:6px 10px"><button class="btn teal" type="button" id="qrMake" style="padding:8px 14px;font-size:16px">🔳 Δημιουργία QR</button><button class="btn ghost" type="button" id="qrBig" style="padding:8px 14px;font-size:16px">⛶</button></div>
+        <div class="muted" id="qrMsg" style="font-size:14px;font-weight:700;margin-top:6px">Ο σύνδεσμος αποθηκεύεται σε αυτόν τον υπολογιστή.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card timer">
+    <div class="tdisp" id="fDisp">03:00</div>
+    <div class="ring"><i id="fRing" style="width:100%"></i></div>
+    <div class="row" style="justify-content:center;margin-top:14px"><button class="btn pink" type="button" id="fGo">▶ Έναρξη</button><button class="btn ghost" type="button" id="fReset">↻ Επαναφορά</button></div>
+    <div class="gfb" id="fMsg" style="margin-top:12px"></div>
+  </div>
+  </div>
+</section>
+
+</main>
+
+<div class="navbar"><div class="in"><button class="btn ghost" id="prev" type="button">← Πίσω</button><span class="where" id="where"></span><button class="btn" id="next" type="button">Επόμενο →</button></div></div>
+<div class="confetti" id="confetti"></div>
+<div class="alertwrap" id="oneMin" hidden>
+  <div class="phone alertphone"><div class="screen">
+    <div class="island"></div>
+    <div class="clockbig" style="font-size:60px" id="oneMinClock">01:00</div>
+    <div class="note alertnote"><span class="i">⏰</span><div><b>Τελική αξιολόγηση</b><br>Έχεις μόνο <b>ένα λεπτό</b> για να ολοκληρώσεις.<br>Πιστεύω σε σένα! 💪</div></div>
+    <button class="btn" type="button" id="oneMinOk" style="margin-top:auto;margin-bottom:10px">ΟΚ 👍</button>
+  </div></div>
+</div>
+
+<script>
+/* QRCode for JavaScript – Copyright (c) 2009 Kazuhiko Arase – MIT license. "QR Code" is a registered trademark of DENSO WAVE INCORPORATED. */
+var QRLIB=(function(){var M={};function require(p){return M[p.replace("./","")];}
+M["QRMode"]=(function(){var module={exports:{}};var exports=module.exports;
+module.exports = {
+    MODE_NUMBER :       1 << 0,
+    MODE_ALPHA_NUM :    1 << 1,
+    MODE_8BIT_BYTE :    1 << 2,
+    MODE_KANJI :        1 << 3
+};
+
+return module.exports;})();
+M["QRErrorCorrectLevel"]=(function(){var module={exports:{}};var exports=module.exports;
+module.exports = {
+	L : 1,
+	M : 0,
+	Q : 3,
+	H : 2
+};
+
+
+return module.exports;})();
+M["QRMaskPattern"]=(function(){var module={exports:{}};var exports=module.exports;
+module.exports = {
+	PATTERN000 : 0,
+	PATTERN001 : 1,
+	PATTERN010 : 2,
+	PATTERN011 : 3,
+	PATTERN100 : 4,
+	PATTERN101 : 5,
+	PATTERN110 : 6,
+	PATTERN111 : 7
+};
+
+return module.exports;})();
+M["QRMath"]=(function(){var module={exports:{}};var exports=module.exports;
+var QRMath = {
+
+	glog : function(n) {
+	
+		if (n < 1) {
+			throw new Error("glog(" + n + ")");
+		}
+		
+		return QRMath.LOG_TABLE[n];
+	},
+	
+	gexp : function(n) {
+	
+		while (n < 0) {
+			n += 255;
+		}
+	
+		while (n >= 256) {
+			n -= 255;
+		}
+	
+		return QRMath.EXP_TABLE[n];
+	},
+	
+	EXP_TABLE : new Array(256),
+	
+	LOG_TABLE : new Array(256)
+
+};
+	
+for (var i = 0; i < 8; i++) {
+	QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+	QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+		^ QRMath.EXP_TABLE[i - 5]
+		^ QRMath.EXP_TABLE[i - 6]
+		^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+	QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+
+module.exports = QRMath;
+
+return module.exports;})();
+M["QRPolynomial"]=(function(){var module={exports:{}};var exports=module.exports;
+var QRMath = require('./QRMath');
+
+function QRPolynomial(num, shift) {
+	if (num.length === undefined) {
+		throw new Error(num.length + "/" + shift);
+	}
+
+	var offset = 0;
+
+	while (offset < num.length && num[offset] === 0) {
+		offset++;
+	}
+
+	this.num = new Array(num.length - offset + shift);
+	for (var i = 0; i < num.length - offset; i++) {
+		this.num[i] = num[i + offset];
+	}
+}
+
+QRPolynomial.prototype = {
+
+	get : function(index) {
+		return this.num[index];
+	},
+	
+	getLength : function() {
+		return this.num.length;
+	},
+	
+	multiply : function(e) {
+	
+		var num = new Array(this.getLength() + e.getLength() - 1);
+	
+		for (var i = 0; i < this.getLength(); i++) {
+			for (var j = 0; j < e.getLength(); j++) {
+				num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+			}
+		}
+	
+		return new QRPolynomial(num, 0);
+	},
+	
+	mod : function(e) {
+	
+		if (this.getLength() - e.getLength() < 0) {
+			return this;
+		}
+	
+		var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+	
+		var num = new Array(this.getLength() );
+		
+		for (var i = 0; i < this.getLength(); i++) {
+			num[i] = this.get(i);
+		}
+		
+		for (var x = 0; x < e.getLength(); x++) {
+			num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+		}
+	
+		// recursive call
+		return new QRPolynomial(num, 0).mod(e);
+	}
+};
+
+module.exports = QRPolynomial;
+
+return module.exports;})();
+M["QRRSBlock"]=(function(){var module={exports:{}};var exports=module.exports;
+var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+
+function QRRSBlock(totalCount, dataCount) {
+	this.totalCount = totalCount;
+	this.dataCount  = dataCount;
+}
+
+QRRSBlock.RS_BLOCK_TABLE = [
+
+	// L
+	// M
+	// Q
+	// H
+
+	// 1
+	[1, 26, 19],
+	[1, 26, 16],
+	[1, 26, 13],
+	[1, 26, 9],
+	
+	// 2
+	[1, 44, 34],
+	[1, 44, 28],
+	[1, 44, 22],
+	[1, 44, 16],
+
+	// 3
+	[1, 70, 55],
+	[1, 70, 44],
+	[2, 35, 17],
+	[2, 35, 13],
+
+	// 4		
+	[1, 100, 80],
+	[2, 50, 32],
+	[2, 50, 24],
+	[4, 25, 9],
+	
+	// 5
+	[1, 134, 108],
+	[2, 67, 43],
+	[2, 33, 15, 2, 34, 16],
+	[2, 33, 11, 2, 34, 12],
+	
+	// 6
+	[2, 86, 68],
+	[4, 43, 27],
+	[4, 43, 19],
+	[4, 43, 15],
+	
+	// 7		
+	[2, 98, 78],
+	[4, 49, 31],
+	[2, 32, 14, 4, 33, 15],
+	[4, 39, 13, 1, 40, 14],
+	
+	// 8
+	[2, 121, 97],
+	[2, 60, 38, 2, 61, 39],
+	[4, 40, 18, 2, 41, 19],
+	[4, 40, 14, 2, 41, 15],
+	
+	// 9
+	[2, 146, 116],
+	[3, 58, 36, 2, 59, 37],
+	[4, 36, 16, 4, 37, 17],
+	[4, 36, 12, 4, 37, 13],
+	
+	// 10		
+	[2, 86, 68, 2, 87, 69],
+	[4, 69, 43, 1, 70, 44],
+	[6, 43, 19, 2, 44, 20],
+	[6, 43, 15, 2, 44, 16],
+
+	// 11
+	[4, 101, 81],
+	[1, 80, 50, 4, 81, 51],
+	[4, 50, 22, 4, 51, 23],
+	[3, 36, 12, 8, 37, 13],
+
+	// 12
+	[2, 116, 92, 2, 117, 93],
+	[6, 58, 36, 2, 59, 37],
+	[4, 46, 20, 6, 47, 21],
+	[7, 42, 14, 4, 43, 15],
+
+	// 13
+	[4, 133, 107],
+	[8, 59, 37, 1, 60, 38],
+	[8, 44, 20, 4, 45, 21],
+	[12, 33, 11, 4, 34, 12],
+
+	// 14
+	[3, 145, 115, 1, 146, 116],
+	[4, 64, 40, 5, 65, 41],
+	[11, 36, 16, 5, 37, 17],
+	[11, 36, 12, 5, 37, 13],
+
+	// 15
+	[5, 109, 87, 1, 110, 88],
+	[5, 65, 41, 5, 66, 42],
+	[5, 54, 24, 7, 55, 25],
+	[11, 36, 12],
+
+	// 16
+	[5, 122, 98, 1, 123, 99],
+	[7, 73, 45, 3, 74, 46],
+	[15, 43, 19, 2, 44, 20],
+	[3, 45, 15, 13, 46, 16],
+
+	// 17
+	[1, 135, 107, 5, 136, 108],
+	[10, 74, 46, 1, 75, 47],
+	[1, 50, 22, 15, 51, 23],
+	[2, 42, 14, 17, 43, 15],
+
+	// 18
+	[5, 150, 120, 1, 151, 121],
+	[9, 69, 43, 4, 70, 44],
+	[17, 50, 22, 1, 51, 23],
+	[2, 42, 14, 19, 43, 15],
+
+	// 19
+	[3, 141, 113, 4, 142, 114],
+	[3, 70, 44, 11, 71, 45],
+	[17, 47, 21, 4, 48, 22],
+	[9, 39, 13, 16, 40, 14],
+
+	// 20
+	[3, 135, 107, 5, 136, 108],
+	[3, 67, 41, 13, 68, 42],
+	[15, 54, 24, 5, 55, 25],
+	[15, 43, 15, 10, 44, 16],
+
+	// 21
+	[4, 144, 116, 4, 145, 117],
+	[17, 68, 42],
+	[17, 50, 22, 6, 51, 23],
+	[19, 46, 16, 6, 47, 17],
+
+	// 22
+	[2, 139, 111, 7, 140, 112],
+	[17, 74, 46],
+	[7, 54, 24, 16, 55, 25],
+	[34, 37, 13],
+
+	// 23
+	[4, 151, 121, 5, 152, 122],
+	[4, 75, 47, 14, 76, 48],
+	[11, 54, 24, 14, 55, 25],
+	[16, 45, 15, 14, 46, 16],
+
+	// 24
+	[6, 147, 117, 4, 148, 118],
+	[6, 73, 45, 14, 74, 46],
+	[11, 54, 24, 16, 55, 25],
+	[30, 46, 16, 2, 47, 17],
+
+	// 25
+	[8, 132, 106, 4, 133, 107],
+	[8, 75, 47, 13, 76, 48],
+	[7, 54, 24, 22, 55, 25],
+	[22, 45, 15, 13, 46, 16],
+
+	// 26
+	[10, 142, 114, 2, 143, 115],
+	[19, 74, 46, 4, 75, 47],
+	[28, 50, 22, 6, 51, 23],
+	[33, 46, 16, 4, 47, 17],
+
+	// 27
+	[8, 152, 122, 4, 153, 123],
+	[22, 73, 45, 3, 74, 46],
+	[8, 53, 23, 26, 54, 24],
+	[12, 45, 15, 28, 46, 16],
+
+	// 28
+	[3, 147, 117, 10, 148, 118],
+	[3, 73, 45, 23, 74, 46],
+	[4, 54, 24, 31, 55, 25],
+	[11, 45, 15, 31, 46, 16],
+
+	// 29
+	[7, 146, 116, 7, 147, 117],
+	[21, 73, 45, 7, 74, 46],
+	[1, 53, 23, 37, 54, 24],
+	[19, 45, 15, 26, 46, 16],
+
+	// 30
+	[5, 145, 115, 10, 146, 116],
+	[19, 75, 47, 10, 76, 48],
+	[15, 54, 24, 25, 55, 25],
+	[23, 45, 15, 25, 46, 16],
+
+	// 31
+	[13, 145, 115, 3, 146, 116],
+	[2, 74, 46, 29, 75, 47],
+	[42, 54, 24, 1, 55, 25],
+	[23, 45, 15, 28, 46, 16],
+
+	// 32
+	[17, 145, 115],
+	[10, 74, 46, 23, 75, 47],
+	[10, 54, 24, 35, 55, 25],
+	[19, 45, 15, 35, 46, 16],
+
+	// 33
+	[17, 145, 115, 1, 146, 116],
+	[14, 74, 46, 21, 75, 47],
+	[29, 54, 24, 19, 55, 25],
+	[11, 45, 15, 46, 46, 16],
+
+	// 34
+	[13, 145, 115, 6, 146, 116],
+	[14, 74, 46, 23, 75, 47],
+	[44, 54, 24, 7, 55, 25],
+	[59, 46, 16, 1, 47, 17],
+
+	// 35
+	[12, 151, 121, 7, 152, 122],
+	[12, 75, 47, 26, 76, 48],
+	[39, 54, 24, 14, 55, 25],
+	[22, 45, 15, 41, 46, 16],
+
+	// 36
+	[6, 151, 121, 14, 152, 122],
+	[6, 75, 47, 34, 76, 48],
+	[46, 54, 24, 10, 55, 25],
+	[2, 45, 15, 64, 46, 16],
+
+	// 37
+	[17, 152, 122, 4, 153, 123],
+	[29, 74, 46, 14, 75, 47],
+	[49, 54, 24, 10, 55, 25],
+	[24, 45, 15, 46, 46, 16],
+
+	// 38
+	[4, 152, 122, 18, 153, 123],
+	[13, 74, 46, 32, 75, 47],
+	[48, 54, 24, 14, 55, 25],
+	[42, 45, 15, 32, 46, 16],
+
+	// 39
+	[20, 147, 117, 4, 148, 118],
+	[40, 75, 47, 7, 76, 48],
+	[43, 54, 24, 22, 55, 25],
+	[10, 45, 15, 67, 46, 16],
+
+	// 40
+	[19, 148, 118, 6, 149, 119],
+	[18, 75, 47, 31, 76, 48],
+	[34, 54, 24, 34, 55, 25],
+	[20, 45, 15, 61, 46, 16]
+];
+
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+	
+	var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+	
+	if (rsBlock === undefined) {
+		throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+	}
+
+	var length = rsBlock.length / 3;
+	
+	var list = [];
+	
+	for (var i = 0; i < length; i++) {
+
+		var count = rsBlock[i * 3 + 0];
+		var totalCount = rsBlock[i * 3 + 1];
+		var dataCount  = rsBlock[i * 3 + 2];
+
+		for (var j = 0; j < count; j++) {
+			list.push(new QRRSBlock(totalCount, dataCount) );	
+		}
+	}
+	
+	return list;
+};
+
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+
+	switch(errorCorrectLevel) {
+	case QRErrorCorrectLevel.L :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+	case QRErrorCorrectLevel.M :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+	case QRErrorCorrectLevel.Q :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+	case QRErrorCorrectLevel.H :
+		return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+	default :
+		return undefined;
+	}
+};
+
+module.exports = QRRSBlock;
+
+return module.exports;})();
+M["QRBitBuffer"]=(function(){var module={exports:{}};var exports=module.exports;
+function QRBitBuffer() {
+	this.buffer = [];
+	this.length = 0;
+}
+
+QRBitBuffer.prototype = {
+
+	get : function(index) {
+		var bufIndex = Math.floor(index / 8);
+		return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+	},
+	
+	put : function(num, length) {
+		for (var i = 0; i < length; i++) {
+			this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+		}
+	},
+	
+	getLengthInBits : function() {
+		return this.length;
+	},
+	
+	putBit : function(bit) {
+	
+		var bufIndex = Math.floor(this.length / 8);
+		if (this.buffer.length <= bufIndex) {
+			this.buffer.push(0);
+		}
+	
+		if (bit) {
+			this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+		}
+	
+		this.length++;
+	}
+};
+
+module.exports = QRBitBuffer;
+
+return module.exports;})();
+M["QR8bitByte"]=(function(){var module={exports:{}};var exports=module.exports;
+var QRMode = require('./QRMode');
+
+function QR8bitByte(data) {
+	this.mode = QRMode.MODE_8BIT_BYTE;
+	this.data = data;
+}
+
+QR8bitByte.prototype = {
+
+	getLength : function() {
+		return this.data.length;
+	},
+	
+	write : function(buffer) {
+		for (var i = 0; i < this.data.length; i++) {
+			// not JIS ...
+			buffer.put(this.data.charCodeAt(i), 8);
+		}
+	}
+};
+
+module.exports = QR8bitByte;
+
+return module.exports;})();
+M["QRUtil"]=(function(){var module={exports:{}};var exports=module.exports;
+var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+
+var QRUtil = {
+
+    PATTERN_POSITION_TABLE : [
+        [],
+        [6, 18],
+        [6, 22],
+        [6, 26],
+        [6, 30],
+        [6, 34],
+        [6, 22, 38],
+        [6, 24, 42],
+        [6, 26, 46],
+        [6, 28, 50],
+        [6, 30, 54],        
+        [6, 32, 58],
+        [6, 34, 62],
+        [6, 26, 46, 66],
+        [6, 26, 48, 70],
+        [6, 26, 50, 74],
+        [6, 30, 54, 78],
+        [6, 30, 56, 82],
+        [6, 30, 58, 86],
+        [6, 34, 62, 90],
+        [6, 28, 50, 72, 94],
+        [6, 26, 50, 74, 98],
+        [6, 30, 54, 78, 102],
+        [6, 28, 54, 80, 106],
+        [6, 32, 58, 84, 110],
+        [6, 30, 58, 86, 114],
+        [6, 34, 62, 90, 118],
+        [6, 26, 50, 74, 98, 122],
+        [6, 30, 54, 78, 102, 126],
+        [6, 26, 52, 78, 104, 130],
+        [6, 30, 56, 82, 108, 134],
+        [6, 34, 60, 86, 112, 138],
+        [6, 30, 58, 86, 114, 142],
+        [6, 34, 62, 90, 118, 146],
+        [6, 30, 54, 78, 102, 126, 150],
+        [6, 24, 50, 76, 102, 128, 154],
+        [6, 28, 54, 80, 106, 132, 158],
+        [6, 32, 58, 84, 110, 136, 162],
+        [6, 26, 54, 82, 110, 138, 166],
+        [6, 30, 58, 86, 114, 142, 170]
+    ],
+
+    G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+    G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+    G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+
+    getBCHTypeInfo : function(data) {
+        var d = data << 10;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+            d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+        }
+        return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+    },
+
+    getBCHTypeNumber : function(data) {
+        var d = data << 12;
+        while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+            d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+        }
+        return (data << 12) | d;
+    },
+
+    getBCHDigit : function(data) {
+
+        var digit = 0;
+
+        while (data !== 0) {
+            digit++;
+            data >>>= 1;
+        }
+
+        return digit;
+    },
+
+    getPatternPosition : function(typeNumber) {
+        return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+    },
+
+    getMask : function(maskPattern, i, j) {
+        
+        switch (maskPattern) {
+            
+        case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+        case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+        case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+        case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+        case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+        case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+        case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+        case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+
+        default :
+            throw new Error("bad maskPattern:" + maskPattern);
+        }
+    },
+
+    getErrorCorrectPolynomial : function(errorCorrectLength) {
+
+        var a = new QRPolynomial([1], 0);
+
+        for (var i = 0; i < errorCorrectLength; i++) {
+            a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+        }
+
+        return a;
+    },
+
+    getLengthInBits : function(mode, type) {
+
+        if (1 <= type && type < 10) {
+
+            // 1 - 9
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 10;
+            case QRMode.MODE_ALPHA_NUM  : return 9;
+            case QRMode.MODE_8BIT_BYTE  : return 8;
+            case QRMode.MODE_KANJI      : return 8;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 27) {
+
+            // 10 - 26
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 12;
+            case QRMode.MODE_ALPHA_NUM  : return 11;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 10;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else if (type < 41) {
+
+            // 27 - 40
+
+            switch(mode) {
+            case QRMode.MODE_NUMBER     : return 14;
+            case QRMode.MODE_ALPHA_NUM  : return 13;
+            case QRMode.MODE_8BIT_BYTE  : return 16;
+            case QRMode.MODE_KANJI      : return 12;
+            default :
+                throw new Error("mode:" + mode);
+            }
+
+        } else {
+            throw new Error("type:" + type);
+        }
+    },
+
+    getLostPoint : function(qrCode) {
+        
+        var moduleCount = qrCode.getModuleCount();
+        var lostPoint = 0;
+        var row = 0; 
+        var col = 0;
+
+        
+        // LEVEL1
+        
+        for (row = 0; row < moduleCount; row++) {
+
+            for (col = 0; col < moduleCount; col++) {
+
+                var sameCount = 0;
+                var dark = qrCode.isDark(row, col);
+
+                for (var r = -1; r <= 1; r++) {
+
+                    if (row + r < 0 || moduleCount <= row + r) {
+                        continue;
+                    }
+
+                    for (var c = -1; c <= 1; c++) {
+
+                        if (col + c < 0 || moduleCount <= col + c) {
+                            continue;
+                        }
+
+                        if (r === 0 && c === 0) {
+                            continue;
+                        }
+
+                        if (dark === qrCode.isDark(row + r, col + c) ) {
+                            sameCount++;
+                        }
+                    }
+                }
+
+                if (sameCount > 5) {
+                    lostPoint += (3 + sameCount - 5);
+                }
+            }
+        }
+
+        // LEVEL2
+
+        for (row = 0; row < moduleCount - 1; row++) {
+            for (col = 0; col < moduleCount - 1; col++) {
+                var count = 0;
+                if (qrCode.isDark(row,     col    ) ) count++;
+                if (qrCode.isDark(row + 1, col    ) ) count++;
+                if (qrCode.isDark(row,     col + 1) ) count++;
+                if (qrCode.isDark(row + 1, col + 1) ) count++;
+                if (count === 0 || count === 4) {
+                    lostPoint += 3;
+                }
+            }
+        }
+
+        // LEVEL3
+
+        for (row = 0; row < moduleCount; row++) {
+            for (col = 0; col < moduleCount - 6; col++) {
+                if (qrCode.isDark(row, col) && 
+                        !qrCode.isDark(row, col + 1) && 
+                         qrCode.isDark(row, col + 2) && 
+                         qrCode.isDark(row, col + 3) && 
+                         qrCode.isDark(row, col + 4) && 
+                        !qrCode.isDark(row, col + 5) && 
+                         qrCode.isDark(row, col + 6) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount - 6; row++) {
+                if (qrCode.isDark(row, col) &&
+                        !qrCode.isDark(row + 1, col) &&
+                         qrCode.isDark(row + 2, col) &&
+                         qrCode.isDark(row + 3, col) &&
+                         qrCode.isDark(row + 4, col) &&
+                        !qrCode.isDark(row + 5, col) &&
+                         qrCode.isDark(row + 6, col) ) {
+                    lostPoint += 40;
+                }
+            }
+        }
+
+        // LEVEL4
+        
+        var darkCount = 0;
+
+        for (col = 0; col < moduleCount; col++) {
+            for (row = 0; row < moduleCount; row++) {
+                if (qrCode.isDark(row, col) ) {
+                    darkCount++;
+                }
+            }
+        }
+        
+        var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+        lostPoint += ratio * 10;
+
+        return lostPoint;       
+    }
+
+};
+
+module.exports = QRUtil;
+
+return module.exports;})();
+M["index"]=(function(){var module={exports:{}};var exports=module.exports;
+//---------------------------------------------------------------------
+// QRCode for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//   http://www.opensource.org/licenses/mit-license.php
+//
+// The word "QR Code" is registered trademark of 
+// DENSO WAVE INCORPORATED
+//   http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+// Modified to work in node for this project (and some refactoring)
+//---------------------------------------------------------------------
+
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+
+function QRCode(typeNumber, errorCorrectLevel) {
+	this.typeNumber = typeNumber;
+	this.errorCorrectLevel = errorCorrectLevel;
+	this.modules = null;
+	this.moduleCount = 0;
+	this.dataCache = null;
+	this.dataList = [];
+}
+
+QRCode.prototype = {
+	
+	addData : function(data) {
+		var newData = new QR8bitByte(data);
+		this.dataList.push(newData);
+		this.dataCache = null;
+	},
+	
+	isDark : function(row, col) {
+		if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+			throw new Error(row + "," + col);
+		}
+		return this.modules[row][col];
+	},
+
+	getModuleCount : function() {
+		return this.moduleCount;
+	},
+	
+	make : function() {
+		// Calculate automatically typeNumber if provided is < 1
+		if (this.typeNumber < 1 ){
+			var typeNumber = 1;
+			for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+				var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+
+				var buffer = new QRBitBuffer();
+				var totalDataCount = 0;
+				for (var i = 0; i < rsBlocks.length; i++) {
+					totalDataCount += rsBlocks[i].dataCount;
+				}
+
+				for (var x = 0; x < this.dataList.length; x++) {
+					var data = this.dataList[x];
+					buffer.put(data.mode, 4);
+					buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+					data.write(buffer);
+				}
+				if (buffer.getLengthInBits() <= totalDataCount * 8)
+					break;
+			}
+			this.typeNumber = typeNumber;
+		}
+		this.makeImpl(false, this.getBestMaskPattern() );
+	},
+	
+	makeImpl : function(test, maskPattern) {
+		
+		this.moduleCount = this.typeNumber * 4 + 17;
+		this.modules = new Array(this.moduleCount);
+		
+		for (var row = 0; row < this.moduleCount; row++) {
+			
+			this.modules[row] = new Array(this.moduleCount);
+			
+			for (var col = 0; col < this.moduleCount; col++) {
+				this.modules[row][col] = null;//(col + row) % 3;
+			}
+		}
+	
+		this.setupPositionProbePattern(0, 0);
+		this.setupPositionProbePattern(this.moduleCount - 7, 0);
+		this.setupPositionProbePattern(0, this.moduleCount - 7);
+		this.setupPositionAdjustPattern();
+		this.setupTimingPattern();
+		this.setupTypeInfo(test, maskPattern);
+		
+		if (this.typeNumber >= 7) {
+			this.setupTypeNumber(test);
+		}
+	
+		if (this.dataCache === null) {
+			this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+		}
+	
+		this.mapData(this.dataCache, maskPattern);
+	},
+
+	setupPositionProbePattern : function(row, col)  {
+		
+		for (var r = -1; r <= 7; r++) {
+			
+			if (row + r <= -1 || this.moduleCount <= row + r) continue;
+			
+			for (var c = -1; c <= 7; c++) {
+				
+				if (col + c <= -1 || this.moduleCount <= col + c) continue;
+				
+				if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+                     (0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+                     (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+					this.modules[row + r][col + c] = true;
+				} else {
+					this.modules[row + r][col + c] = false;
+				}
+			}		
+		}		
+	},
+	
+	getBestMaskPattern : function() {
+	
+		var minLostPoint = 0;
+		var pattern = 0;
+	
+		for (var i = 0; i < 8; i++) {
+			
+			this.makeImpl(true, i);
+	
+			var lostPoint = QRUtil.getLostPoint(this);
+	
+			if (i === 0 || minLostPoint >  lostPoint) {
+				minLostPoint = lostPoint;
+				pattern = i;
+			}
+		}
+	
+		return pattern;
+	},
+	
+	createMovieClip : function(target_mc, instance_name, depth) {
+	
+		var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+		var cs = 1;
+	
+		this.make();
+
+		for (var row = 0; row < this.modules.length; row++) {
+			
+			var y = row * cs;
+			
+			for (var col = 0; col < this.modules[row].length; col++) {
+	
+				var x = col * cs;
+				var dark = this.modules[row][col];
+			
+				if (dark) {
+					qr_mc.beginFill(0, 100);
+					qr_mc.moveTo(x, y);
+					qr_mc.lineTo(x + cs, y);
+					qr_mc.lineTo(x + cs, y + cs);
+					qr_mc.lineTo(x, y + cs);
+					qr_mc.endFill();
+				}
+			}
+		}
+		
+		return qr_mc;
+	},
+
+	setupTimingPattern : function() {
+		
+		for (var r = 8; r < this.moduleCount - 8; r++) {
+			if (this.modules[r][6] !== null) {
+				continue;
+			}
+			this.modules[r][6] = (r % 2 === 0);
+		}
+	
+		for (var c = 8; c < this.moduleCount - 8; c++) {
+			if (this.modules[6][c] !== null) {
+				continue;
+			}
+			this.modules[6][c] = (c % 2 === 0);
+		}
+	},
+	
+	setupPositionAdjustPattern : function() {
+	
+		var pos = QRUtil.getPatternPosition(this.typeNumber);
+		
+		for (var i = 0; i < pos.length; i++) {
+		
+			for (var j = 0; j < pos.length; j++) {
+			
+				var row = pos[i];
+				var col = pos[j];
+				
+				if (this.modules[row][col] !== null) {
+					continue;
+				}
+				
+				for (var r = -2; r <= 2; r++) {
+				
+					for (var c = -2; c <= 2; c++) {
+					
+						if (Math.abs(r) === 2 || 
+                            Math.abs(c) === 2 ||
+                            (r === 0 && c === 0) ) {
+							this.modules[row + r][col + c] = true;
+						} else {
+							this.modules[row + r][col + c] = false;
+						}
+					}
+				}
+			}
+		}
+	},
+	
+	setupTypeNumber : function(test) {
+	
+		var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+        var mod;
+	
+		for (var i = 0; i < 18; i++) {
+			mod = (!test && ( (bits >> i) & 1) === 1);
+			this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+		}
+	
+		for (var x = 0; x < 18; x++) {
+			mod = (!test && ( (bits >> x) & 1) === 1);
+			this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+		}
+	},
+	
+	setupTypeInfo : function(test, maskPattern) {
+	
+		var data = (this.errorCorrectLevel << 3) | maskPattern;
+		var bits = QRUtil.getBCHTypeInfo(data);
+        var mod;
+	
+		// vertical		
+		for (var v = 0; v < 15; v++) {
+	
+			mod = (!test && ( (bits >> v) & 1) === 1);
+	
+			if (v < 6) {
+				this.modules[v][8] = mod;
+			} else if (v < 8) {
+				this.modules[v + 1][8] = mod;
+			} else {
+				this.modules[this.moduleCount - 15 + v][8] = mod;
+			}
+		}
+	
+		// horizontal
+		for (var h = 0; h < 15; h++) {
+	
+			mod = (!test && ( (bits >> h) & 1) === 1);
+			
+			if (h < 8) {
+				this.modules[8][this.moduleCount - h - 1] = mod;
+			} else if (h < 9) {
+				this.modules[8][15 - h - 1 + 1] = mod;
+			} else {
+				this.modules[8][15 - h - 1] = mod;
+			}
+		}
+	
+		// fixed module
+		this.modules[this.moduleCount - 8][8] = (!test);
+	
+	},
+	
+	mapData : function(data, maskPattern) {
+		
+		var inc = -1;
+		var row = this.moduleCount - 1;
+		var bitIndex = 7;
+		var byteIndex = 0;
+		
+		for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+	
+			if (col === 6) col--;
+	
+			while (true) {
+	
+				for (var c = 0; c < 2; c++) {
+					
+					if (this.modules[row][col - c] === null) {
+						
+						var dark = false;
+	
+						if (byteIndex < data.length) {
+							dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+						}
+	
+						var mask = QRUtil.getMask(maskPattern, row, col - c);
+	
+						if (mask) {
+							dark = !dark;
+						}
+						
+						this.modules[row][col - c] = dark;
+						bitIndex--;
+	
+						if (bitIndex === -1) {
+							byteIndex++;
+							bitIndex = 7;
+						}
+					}
+				}
+								
+				row += inc;
+	
+				if (row < 0 || this.moduleCount <= row) {
+					row -= inc;
+					inc = -inc;
+					break;
+				}
+			}
+		}
+		
+	}
+
+};
+
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+	
+	var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+	
+	var buffer = new QRBitBuffer();
+	
+	for (var i = 0; i < dataList.length; i++) {
+		var data = dataList[i];
+		buffer.put(data.mode, 4);
+		buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+		data.write(buffer);
+	}
+
+	// calc num max data.
+	var totalDataCount = 0;
+	for (var x = 0; x < rsBlocks.length; x++) {
+		totalDataCount += rsBlocks[x].dataCount;
+	}
+
+	if (buffer.getLengthInBits() > totalDataCount * 8) {
+		throw new Error("code length overflow. (" + 
+            buffer.getLengthInBits() + 
+            ">" +  
+            totalDataCount * 8 + 
+            ")");
+	}
+
+	// end code
+	if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+		buffer.put(0, 4);
+	}
+
+	// padding
+	while (buffer.getLengthInBits() % 8 !== 0) {
+		buffer.putBit(false);
+	}
+
+	// padding
+	while (true) {
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD0, 8);
+		
+		if (buffer.getLengthInBits() >= totalDataCount * 8) {
+			break;
+		}
+		buffer.put(QRCode.PAD1, 8);
+	}
+
+	return QRCode.createBytes(buffer, rsBlocks);
+};
+
+QRCode.createBytes = function(buffer, rsBlocks) {
+
+	var offset = 0;
+	
+	var maxDcCount = 0;
+	var maxEcCount = 0;
+	
+	var dcdata = new Array(rsBlocks.length);
+	var ecdata = new Array(rsBlocks.length);
+	
+	for (var r = 0; r < rsBlocks.length; r++) {
+
+		var dcCount = rsBlocks[r].dataCount;
+		var ecCount = rsBlocks[r].totalCount - dcCount;
+
+		maxDcCount = Math.max(maxDcCount, dcCount);
+		maxEcCount = Math.max(maxEcCount, ecCount);
+		
+		dcdata[r] = new Array(dcCount);
+		
+		for (var i = 0; i < dcdata[r].length; i++) {
+			dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+		}
+		offset += dcCount;
+		
+		var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+		var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+		var modPoly = rawPoly.mod(rsPoly);
+		ecdata[r] = new Array(rsPoly.getLength() - 1);
+		for (var x = 0; x < ecdata[r].length; x++) {
+            var modIndex = x + modPoly.getLength() - ecdata[r].length;
+			ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+		}
+
+	}
+	
+	var totalCodeCount = 0;
+	for (var y = 0; y < rsBlocks.length; y++) {
+		totalCodeCount += rsBlocks[y].totalCount;
+	}
+
+	var data = new Array(totalCodeCount);
+	var index = 0;
+
+	for (var z = 0; z < maxDcCount; z++) {
+		for (var s = 0; s < rsBlocks.length; s++) {
+			if (z < dcdata[s].length) {
+				data[index++] = dcdata[s][z];
+			}
+		}
+	}
+
+	for (var xx = 0; xx < maxEcCount; xx++) {
+		for (var t = 0; t < rsBlocks.length; t++) {
+			if (xx < ecdata[t].length) {
+				data[index++] = ecdata[t][xx];
+			}
+		}
+	}
+
+	return data;
+
+};
+
+module.exports = QRCode;
+
+return module.exports;})();
+return {QRCode:M["index"],ECL:M["QRErrorCorrectLevel"]};})();
+</script>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function confetti(n=60){const c=$('confetti');const cols=['#6c3cf0','#ff3d8b','#ff8a1f','#ffd23f','#12b5a5','#2f7cf6'];for(let i=0;i<n;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'vw';e.style.background=cols[i%cols.length];e.style.animationDelay=Math.random()*.4+'s';c.append(e);setTimeout(()=>e.remove(),2200)}}
+
+/* ---------- navigation ---------- */
+const slides=[...document.querySelectorAll('.slide')];let cur=0;const seen=new Set();
+$('chips').innerHTML=slides.map((s,i)=>`<button class="chip" type="button" data-i="${i}"><span class="n">${i}</span>${s.dataset.title}</button>`).join('');
+function go(i){cur=Math.max(0,Math.min(slides.length-1,i));seen.add(cur);
+  slides.forEach((s,k)=>s.classList.toggle('on',k===cur));
+  document.querySelectorAll('.chip').forEach((c,k)=>{c.classList.toggle('on',k===cur);c.classList.toggle('done',k!==cur&&seen.has(k))});
+  $('prog').style.width=(cur/(slides.length-1)*100)+'%';
+  $('where').textContent=`${cur} / ${slides.length-1} · ${slides[cur].dataset.title}`;
+  $('prev').disabled=cur===0;$('next').disabled=cur===slides.length-1;window.scrollTo({top:0,behavior:'smooth'});}
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>go(+c.dataset.i)));
+$('prev').onclick=()=>go(cur-1);$('next').onclick=()=>go(cur+1);
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName))return;if(e.key==='ArrowRight')go(cur+1);if(e.key==='ArrowLeft')go(cur-1)});
+/* lesson clock */
+let lessonSec=0,lessonOn=false,lessonT=null;
+$('clockBtn').onclick=()=>{lessonOn=!lessonOn;$('clockBtn').textContent=lessonOn?'❚❚':'▶';clearInterval(lessonT);if(lessonOn)lessonT=setInterval(()=>{lessonSec++;$('lessonClock').textContent=String(Math.floor(lessonSec/60)).padStart(2,'0')+':'+String(lessonSec%60).padStart(2,'0')},1000)};
+
+/* ---------- ανάκληση: ακολουθιακή δομή ---------- */
+const SQ=[
+ 'onoma = <span class="fn">input</span>(<span class="st">"Πώς σε λένε; "</span>)',
+ 'pososto = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Ποσοστό μπαταρίας: "</span>))',
+ '<span class="fn">print</span>(<span class="st">"Γεια σου"</span>, onoma)',
+ '<span class="fn">print</span>(<span class="st">"Η μπαταρία σου είναι στο"</span>, pososto, <span class="st">"%"</span>)'];
+let sqPc=-1,sqTxt='';
+function sqDraw(){$('sqCode').innerHTML=SQ.map((l,i)=>`<span class="ln ${i===sqPc?'cur':''}" data-n="${i+1}">${l}</span>`).join('')}
+function sqReset(){sqPc=-1;sqTxt='';$('sqOut').innerHTML='';$('sqStep').disabled=false;$('sqExp').innerHTML='Πάτησε «Επόμενη γραμμή» για να εκτελεστεί το πρόγραμμα.';sqDraw()}
+$('sqStep').onclick=()=>{const nm=esc($('sqName').value||'Μαρία'),p=parseInt($('sqPct').value);if(isNaN(p))return;sqPc++;let ex='';
+  if(sqPc===0){sqTxt+=`Πώς σε λένε; <span class="y">${nm}</span>\n`;ex=`Η input() διαβάζει το όνομα και το αποθηκεύει στη μεταβλητή <b>onoma</b>.`}
+  if(sqPc===1){sqTxt+=`Ποσοστό μπαταρίας: <span class="y">${p}</span>\n`;ex=`Η input() δίνει κείμενο· το <b>int()</b> το κάνει αριθμό ${p} και αποθηκεύεται στο <b>pososto</b>.`}
+  if(sqPc===2){sqTxt+=`Γεια σου ${nm}\n`;ex='Η print() εμφανίζει το κείμενο και την τιμή της μεταβλητής onoma.'}
+  if(sqPc===3){sqTxt+=`Η μπαταρία σου είναι στο ${p} %\n`;ex='Τέλος! Εκτελέστηκαν <b>όλες</b> οι εντολές, η μία μετά την άλλη. Το πρόγραμμα δεν πήρε καμία απόφαση.';$('sqStep').disabled=true}
+  $('sqOut').innerHTML=sqTxt;$('sqExp').innerHTML=ex;sqDraw()};
+$('sqReset').onclick=sqReset;['sqName','sqPct'].forEach(id=>$(id).addEventListener('change',sqReset));sqReset();
+
+/* ---------- 1 battery ---------- */
+function batt(v){v=Math.max(0,Math.min(100,+v));$('bslider').value=v;const low=v<20,c=low?'#ff4757':'#1fbf6a';
+  $('bfill').style.width=v+'%';$('bfill').style.background=c;$('bnum').textContent=v+'%';$('bpct').textContent=v+'%';
+  $('bstate').textContent=low?'Χαμηλή μπαταρία':'Κανονική λειτουργία';$('bstate').style.color=low?'#ffb3b9':'#a9f5c8';
+  $('nicon').textContent=low?'⚠️':'✓';$('ntitle').textContent=low?'Χαμηλή μπαταρία':'Μπαταρία';$('ntext').textContent=low?'Συνδέστε τον φορτιστή σας.':'Δεν υπάρχει προειδοποίηση.'}
+$('bslider').addEventListener('input',e=>batt(e.target.value));
+$('bquick').innerHTML=[10,19,20,21,35,80].map(v=>`<button class="btn ghost" style="padding:6px 12px;font-size:16px" type="button" data-v="${v}">${v}%</button>`).join('');
+$('bquick').querySelectorAll('button').forEach(b=>b.onclick=()=>batt(b.dataset.v));
+const PV=[19,20,21],pred={};
+$('predRows').innerHTML=PV.map(v=>`<div class="prow" data-v="${v}"><b>${v}%</b><button class="pbtn g" type="button" data-p="g">🟢 πράσινο</button><button class="pbtn r" type="button" data-p="r">🔴 προειδοποίηση</button><span class="pres"></span></div>`).join('');
+document.querySelectorAll('.prow').forEach(row=>row.querySelectorAll('.pbtn').forEach(b=>b.onclick=()=>{pred[row.dataset.v]=b.dataset.p;row.querySelectorAll('.pbtn').forEach(x=>x.classList.toggle('sel',x===b));row.querySelector('.pres').textContent='';$('predRev').className='reveal'}));
+$('predCheck').onclick=()=>{const r=$('predRev');if(PV.some(v=>!pred[v])){r.className='reveal show';r.style.background='#fff6d6';r.innerHTML='Διάλεξε πρώτα πρόβλεψη για όλες τις τιμές: 19%, 20% και 21%.';return}
+  let n=0;document.querySelectorAll('.prow').forEach(row=>{const v=+row.dataset.v,ok=pred[v]===(v<20?'r':'g');if(ok)n++;row.querySelector('.pres').textContent=ok?'✅':'❌'});
+  r.className='reveal show';r.style.background=n===3?'#e5fbef':'#ffe8ea';
+  r.innerHTML=n===3?'✅ Και οι τρεις σωστές! Προσοχή στο <b>20%</b>: τι ακριβώς ρωτά ο κανόνας;':`Σωστές: ${n}/3. Δοκίμασε τα 19%, 20% και 21% στο κινητό και σύγκρινε με την πρόβλεψή σου.`;if(n===3)confetti(30)};
+$('ruleBtn').onclick=()=>$('ruleRev').classList.toggle('show');
+batt(65);
+
+/* ---------- 2 operators ---------- */
+const OPS=['<','>','<=','>=','==','!='];let op='<';
+const cmp=(a,o,b)=>({'<':a<b,'>':a>b,'<=':a<=b,'>=':a>=b,'==':a===b,'!=':a!==b})[o];
+$('ops').innerHTML=OPS.map(o=>`<button class="op" type="button" data-o="${o}">${esc(o)}</button>`).join('');
+$('ops').querySelectorAll('.op').forEach(b=>b.onclick=()=>{op=b.dataset.o;labDraw()});
+function labDraw(){const a=+$('lsl').value,b=+$('rsl').value;$('lv').textContent=a;$('rv').textContent=b;
+  $('ops').querySelectorAll('.op').forEach(x=>x.classList.toggle('on',x.dataset.o===op));
+  const r=cmp(a,op,b);const v=$('verd');v.style.background=r?'linear-gradient(90deg,#1fbf6a,#12b5a5)':'linear-gradient(90deg,#ff4757,#ff3d8b)';
+  v.innerHTML=`<code>pososto ${esc(op)} ${b}</code> → <code>${a} ${esc(op)} ${b}</code> → ${r?'Αληθής (True) ✔':'Ψευδής (False) ✘'}`;v.classList.remove('pop');void v.offsetWidth;v.classList.add('pop')}
+['lsl','rsl'].forEach(id=>$(id).addEventListener('input',labDraw));labDraw();
+document.querySelectorAll('.flip').forEach(f=>{f.onclick=()=>f.classList.toggle('on');f.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();f.classList.toggle('on')}}});
+
+/* ---------- 5 python ---------- */
+let pyPc=-1,pyOut='',pyVal=null;
+function pyLines(){const c=$('tgColon').checked,i=$('tgIndent').checked,n=$('tgInt').checked;const I=i?'':'<span class="ind">    </span>';
+  return[
+  `pososto = ${n?'':'<span class="fn">int</span>('}<span class="fn">input</span>(<span class="st">"Ποσοστό μπαταρίας: "</span>)${n?'':')'}`,
+  `<span class="kw">if</span> pososto <span class="op2">&lt;</span> <span class="nu">20</span>${c?'':'<span class="op2">:</span>'}`,
+  `${I}<span class="fn">print</span>(<span class="st">"Χαμηλή μπαταρία!"</span>)`,
+  `<span class="kw">else</span>${c?'':'<span class="op2">:</span>'}`,
+  `${I}<span class="fn">print</span>(<span class="st">"Η μπαταρία είναι εντάξει."</span>)`,
+  `<span class="fn">print</span>(<span class="st">"Τέλος ελέγχου"</span>)`]}
+function pyDraw(cls={}){$('pyCode').innerHTML=pyLines().map((l,i)=>`<span class="ln ${cls[i]||''}" data-n="${i+1}">${l}</span>`).join('')}
+function pyReset(){pyPc=-1;pyOut='';$('pyOut').innerHTML='';$('pyExp').innerHTML='Πάτησε «Επόμενη γραμμή» για να εκτελεστεί το πρόγραμμα.';$('pyStep').disabled=false;pyDraw();
+  const c=$('tgColon').checked,i=$('tgIndent').checked;
+  if(c||i){$('pyOut').innerHTML=`<span class="e">${c?'SyntaxError: expected \':\'':'IndentationError: expected an indented block'}</span>\n(γραμμή ${c?2:3})`;$('pyExp').innerHTML=c?'Η Python δεν ξεκινά καν! Χωρίς <b>:</b> μετά τη συνθήκη και το else, το πρόγραμμα έχει συντακτικό λάθος.':'Χωρίς <b>εσοχή</b> η Python δεν ξέρει ποιες εντολές ανήκουν στο if και ποιες στο else.';$('pyStep').disabled=true;pyDraw({[c?1:2]:'cur'})}}
+const PYSEQ=v=>v<20?[0,1,2,5]:[0,1,3,4,5];
+function pyStep(){const noInt=$('tgInt').checked;if(pyPc===-1){pyVal=parseInt($('pyIn').value);if(isNaN(pyVal))return}
+  const seq=PYSEQ(pyVal);pyPc++;const li=seq[pyPc];const cls={};seq.slice(0,pyPc).forEach(k=>cls[k]='');cls[li]='cur';
+  if(pyVal<20&&pyPc>=2){cls[3]='skip';cls[4]='skip'}if(pyVal>=20&&pyPc>=2){cls[2]='skip'}pyDraw(cls);
+  let ex='';
+  if(li===0){pyOut+=`Ποσοστό μπαταρίας: <span class="y">${pyVal}</span>\n`;ex=noInt?`Η input() δίνει <b>κείμενο</b> "${pyVal}". Χωρίς int() δεν μπορεί να συγκριθεί με αριθμό!`:`Η τιμή ${pyVal} μετατρέπεται σε ακέραιο με int() και αποθηκεύεται στο pososto.`}
+  if(li===1){if(noInt){pyOut+=`<span class="e">TypeError: '<' not supported between instances of 'str' and 'int'</span>`;ex='Σφάλμα! Συγκρίνουμε κείμενο με αριθμό. Γι\' αυτό γράφουμε <b>int(input(...))</b>.';$('pyStep').disabled=true}
+    else{const r=pyVal<20;ex=`Η συνθήκη: <b>${pyVal} &lt; 20</b> → ${r?'<b style="color:var(--green)">Αληθής</b>: εκτελείται η εντολή κάτω από το if.':'<b style="color:var(--red)">Ψευδής</b>: πηδάμε στο else.'}`}}
+  if(li===2){pyOut+='<span class="r">Χαμηλή μπαταρία!</span>\n';ex='Εκτελείται η εντολή με εσοχή κάτω από το if. Το else <b>προσπερνιέται</b>.'}
+  if(li===3){ex='Η συνθήκη ήταν ψευδής, άρα πάμε στο else.'}
+  if(li===4){pyOut+='<span class="g">Η μπαταρία είναι εντάξει.</span>\n';ex='Εκτελείται η εντολή με εσοχή κάτω από το else.'}
+  if(li===5){pyOut+='Τέλος ελέγχου\n';ex='Αυτή η εντολή δεν έχει εσοχή: εκτελείται <b>πάντα</b>, ό,τι κι αν δώσουμε.';$('pyStep').disabled=true}
+  $('pyOut').innerHTML=pyOut;$('pyExp').innerHTML=ex}
+$('pyStep').onclick=pyStep;$('pyReset').onclick=pyReset;['tgColon','tgIndent','tgInt','pyIn'].forEach(id=>$(id).addEventListener('change',pyReset));pyReset();
+
+/* κάρτες αποκάλυψης (Ανάκληση) */
+document.querySelectorAll('.rc').forEach(r=>{r.onclick=()=>r.classList.add('open');r.onkeydown=e=>{if(e.key==='Enter')r.classList.add('open')}});
+
+/* ---------- 8 timer ---------- */
+const WORK={A:{min:11,title:'Μέρος Α · Εμπέδωση ανά δύο',info:`<div class="roles"><div class="role" style="background:var(--blue)"><b style="font-size:22px">🧑‍✈️ Οδηγός</b><br>Κρατά το μολύβι / πληκτρολόγιο. Λέει φωναχτά τη σκέψη του.</div><div class="role" style="background:var(--violet)"><b style="font-size:22px">🧭 Πλοηγός</b><br>Διαβάζει την εκφώνηση, ελέγχει, διορθώνει.</div></div><p style="font-weight:900;margin-top:12px">⇄ Αλλάζετε ρόλους σε κάθε άσκηση · Α1 Αληθής / Ψευδής · Α2 Πρόβλεψη και έλεγχος στο IDLE (15, 19, 20, 21) · Α3 Βρίσκω τα λάθη · 🚀 Α4 για όσους τελειώσουν νωρίτερα</p>`},
+  B:{min:10,title:'Μέρος Β · Αξιολόγηση ατομικά',info:`<div class="roles"><div class="role" style="background:var(--red)"><b style="font-size:22px">💻 Β1 · Έλεγχος θερμοκρασίας</b><br>Συνθήκη <span class="mono">therm &gt; 38</span> → Αληθής/Ψευδής για 38 → συμπλήρωση κώδικα → έλεγχος στο IDLE με 40, 23, 38.</div><div class="role" style="background:var(--orange)"><b style="font-size:22px">✅ Τι αξιολογείται</b><br>Σωστή συνθήκη/τελεστής · σύνταξη if/else · εσοχή · δοκιμή οριακής τιμής.</div></div><p style="font-weight:900;margin-top:12px">🤫 Δουλεύεις μόνος/η σου · μην ξεχάσεις να αποθηκεύσεις το αρχείο .py</p>`}};
+let wMode='A',wLeft=660,wT=null,wOn=false;
+function wSet(m){wMode=m;clearInterval(wT);wOn=false;$('tGo').textContent='▶ Έναρξη';wLeft=WORK[m].min*60;$('wTitle').textContent=WORK[m].title;$('wInfo').innerHTML=WORK[m].info;wDraw()}
+function wDraw(){$('tdisp').textContent=String(Math.floor(wLeft/60)).padStart(2,'0')+':'+String(wLeft%60).padStart(2,'0');$('tdisp').classList.toggle('warn',wLeft<=60);$('tring').style.width=(wLeft/(WORK[wMode].min*60)*100)+'%'}
+$('tGo').onclick=()=>{wOn=!wOn;$('tGo').textContent=wOn?'❚❚ Παύση':'▶ Συνέχεια';clearInterval(wT);if(wOn)wT=setInterval(()=>{if(wLeft>0){wLeft--;wDraw()}else{clearInterval(wT);wOn=false;$('tGo').textContent='▶ Έναρξη';confetti(40)}},1000)};
+$('tReset').onclick=()=>wSet(wMode);$('wA').onclick=()=>wSet('A');$('wB').onclick=()=>wSet('B');wSet('A');
+
+/* ---------- 9 τελική αξιολόγηση: αντίστροφη μέτρηση 3΄ ---------- */
+const F_TOTAL=180;let fLeft=F_TOTAL,fT=null,fOn=false,fWarned=false;
+function fDraw(){$('oneMinClock').textContent=$('fDisp').textContent=String(Math.floor(fLeft/60)).padStart(2,'0')+':'+String(fLeft%60).padStart(2,'0');$('fDisp').classList.toggle('warn',fLeft<=60);$('fRing').style.width=(fLeft/F_TOTAL*100)+'%'}
+function fReset(){clearInterval(fT);fOn=false;fWarned=false;fLeft=F_TOTAL;$('fGo').textContent='▶ Έναρξη';$('fMsg').textContent='';$('oneMin').hidden=true;fDraw()}
+$('fGo').onclick=()=>{if(fLeft<=0)return;fOn=!fOn;$('fGo').textContent=fOn?'❚❚ Παύση':'▶ Συνέχεια';clearInterval(fT);
+  if(fOn)fT=setInterval(()=>{if(fLeft>0){fLeft--;fDraw();if(fLeft===60&&!fWarned){fWarned=true;$('oneMin').hidden=false}}
+    if(fLeft<=0){clearInterval(fT);fOn=false;$('fGo').textContent='▶ Έναρξη';$('oneMin').hidden=true;$('fMsg').innerHTML='⏰ Τέλος χρόνου! Πάτησε <b>«Υποβολή αξιολόγησης»</b>.';confetti(40)}},1000)};
+$('fReset').onclick=fReset;$('oneMinOk').onclick=()=>$('oneMin').hidden=true;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('oneMin').hidden=true});
+fReset();
+
+/* quick values for boundary demo (Python slide) */
+$('pyQuick').innerHTML='<span style="font-weight:800">Οριακές τιμές:</span>'+[19,20,21].map(v=>`<button class="btn ghost" style="padding:6px 14px;font-size:16px" type="button" data-v="${v}">${v}</button>`).join('');
+$('pyQuick').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('pyIn').value=b.dataset.v;pyReset()});
+
+
+/* ---------- QR code για την Τελική αξιολόγηση ---------- */
+const QR_KEY='a75_eval_url';
+function qrDraw(url,cv){const q=new QRLIB.QRCode(-1,QRLIB.ECL.M);q.addData(unescape(encodeURIComponent(url)));q.make();
+  const n=q.getModuleCount(),m=4,sz=n+2*m,k=Math.floor(520/sz);cv.width=cv.height=sz*k;const g=cv.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cv.width,cv.height);g.fillStyle='#1d1640';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(q.isDark(r,c))g.fillRect((c+m)*k,(r+m)*k,k,k)}
+function qrMake(save){const u=$('qrUrl').value.trim();if(!u){$('qrEmpty').hidden=false;return}
+  try{qrDraw(u,$('qrCanvas'));$('qrEmpty').hidden=true;$('qrMsg').textContent='✔ Έτοιμο! Οι μαθητές σκανάρουν τον κωδικό με την κάμερα του κινητού.';if(save){try{localStorage.setItem(QR_KEY,u)}catch(e){}}}
+  catch(e){$('qrMsg').textContent='Ο σύνδεσμος είναι πολύ μεγάλος για QR code – χρησιμοποίησε συντομευμένο σύνδεσμο.'}}
+$('qrMake').onclick=()=>qrMake(true);$('qrUrl').addEventListener('keydown',e=>{if(e.key==='Enter')qrMake(true)});
+$('qrBig').onclick=()=>{if($('qrEmpty').hidden===false)return;const w=document.createElement('div');w.className='qrbig';const c=document.createElement('canvas');qrDraw($('qrUrl').value.trim(),c);w.append(c);w.onclick=()=>w.remove();document.body.append(w)};
+try{const u=localStorage.getItem(QR_KEY);if(u){$('qrUrl').value=u;qrMake(false)}}catch(e){}
+
+go(0);
+</script>
+</body>
+</html>

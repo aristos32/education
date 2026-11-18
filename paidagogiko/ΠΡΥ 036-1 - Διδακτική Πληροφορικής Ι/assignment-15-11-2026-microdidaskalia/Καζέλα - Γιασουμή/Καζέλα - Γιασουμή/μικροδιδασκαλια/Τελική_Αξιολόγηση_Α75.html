@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Τελική αξιολόγηση · if / else</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1ff;--ink:#1d1640;--muted:#5d5880;--card:#fff;--line:#e2dcf5;
+  --violet:#6c3cf0;--pink:#ff3d8b;--orange:#ff8a1f;--yellow:#ffd23f;--teal:#12b5a5;--blue:#2f7cf6;--green:#1fbf6a;--red:#ff4757;
+  --font:"Nunito","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",Consolas,ui-monospace,monospace;
+}
+*{box-sizing:border-box;font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);background-image:radial-gradient(800px 500px at 0% 0%,#ffe6f1 0,transparent 60%),radial-gradient(900px 500px at 100% 100%,#dff6ff 0,transparent 60%);font-size:18px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+.mono,code{font-family:var(--mono)}
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(100deg,#2a1572,#6c3cf0 45%,#ff3d8b 85%,#ff8a1f);color:#fff;box-shadow:0 6px 20px rgba(60,20,140,.25)}
+.top-in{max-width:1100px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{font-weight:900;font-size:21px;flex:1;white-space:nowrap}
+.who{font-weight:800;background:rgba(255,255,255,.18);border-radius:999px;padding:4px 14px}
+.clock{font-family:var(--mono);font-weight:800;font-size:20px;background:rgba(0,0,0,.22);border-radius:12px;padding:4px 12px}
+.prog{height:6px;background:rgba(255,255,255,.25)}
+.prog i{display:block;height:100%;width:0;background:var(--yellow);transition:width .4s}
+main{max-width:1100px;margin:0 auto;padding:22px 18px 60px}
+.view{display:none;animation:in .3s ease-out}
+.view.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h1,h2{margin:0;font-weight:900;line-height:1.1}
+h1{font-size:clamp(32px,4.4vw,52px)}
+h2{font-size:clamp(26px,3vw,38px)}
+h3{margin:0 0 8px;font-size:21px;font-weight:900}
+.kicker{font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--pink);margin:0 0 4px}
+.card{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 10px 26px rgba(70,40,160,.08);margin-top:16px}
+.muted{color:var(--muted)}
+.btn{border:0;border-radius:16px;padding:12px 20px;font-weight:900;font-size:18px;color:#fff;background:linear-gradient(180deg,#8a63ff,var(--violet));box-shadow:0 4px 0 #3f1fb0}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #3f1fb0}
+.btn.pink{background:linear-gradient(180deg,#ff6fa8,var(--pink));box-shadow:0 4px 0 #b3125a}
+.btn.teal{background:linear-gradient(180deg,#3fd3c4,var(--teal));box-shadow:0 4px 0 #087a6f}
+.btn.orange{background:linear-gradient(180deg,#ffab55,var(--orange));box-shadow:0 4px 0 #b65700}
+.btn.ghost{background:#fff;color:var(--violet);border:3px solid var(--line);box-shadow:none}
+.btn.small{padding:6px 14px;font-size:15px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.qbox{background:linear-gradient(120deg,#fff6d6,#ffe9f2);border:3px solid #ffd9a0;border-radius:18px;padding:12px 16px;font-weight:800}
+.field{display:grid;gap:6px;font-weight:800}
+.field input{font:inherit;font-size:20px;font-weight:800;border:3px solid var(--line);border-radius:14px;padding:8px 12px}
+.parts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+.parts div{border-radius:18px;padding:14px;color:#fff;font-weight:800}
+.parts b{display:block;font-size:20px}
+.warn{color:var(--red);font-weight:900;min-height:24px}
+/* Μέρος Α */
+.tf{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.tfq{background:#fff;border:3px solid var(--line);border-radius:20px;padding:16px;text-align:center}
+.tfq .var{font-family:var(--mono);font-weight:800;background:#efe9ff;color:var(--violet);border-radius:10px;padding:2px 10px;display:inline-block}
+.tfq .cond{font-family:var(--mono);font-size:32px;font-weight:800;margin:8px 0}
+.tfb{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tfb button{border:3px solid var(--line);background:#fff;border-radius:14px;padding:10px;font-weight:900;font-size:19px}
+.tfb button.g{color:var(--green)}.tfb button.r{color:var(--red)}
+.tfb button.sel.g{background:var(--green);color:#fff;border-color:var(--green)}
+.tfb button.sel.r{background:var(--red);color:#fff;border-color:var(--red)}
+/* Μέρος Β */
+.ex{margin-top:16px}
+.bl{display:grid;grid-template-columns:minmax(260px,1fr) 1.25fr;gap:12px;align-items:center;padding:8px 0;border-top:2px dashed var(--line)}
+.bl:first-of-type{border-top:0}
+.cl{background:#130f33;color:#e9e6ff;border-radius:12px;padding:8px 12px;font-family:var(--mono);font-size:18px;white-space:pre;overflow:auto}
+.cl .n{color:#7d76b5;margin-right:10px}
+.opts{display:flex;gap:6px;flex-wrap:wrap}
+.opt{border:2px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-weight:800;font-size:14px;color:var(--ink)}
+/* κάθε επιλογή με δικό της χρώμα */
+.opt[data-k="int"]{--c:var(--blue);--t:#eaf2ff}
+.opt[data-k="op"]{--c:var(--pink);--t:#ffecf3}
+.opt[data-k="colon"]{--c:var(--orange);--t:#fff2e5}
+.opt[data-k="indent"]{--c:var(--teal);--t:#e3f8f5}
+.opt[data-k="ok"]{--c:var(--green);--t:#e6f9ee}
+.opt{border-color:var(--c);color:var(--c);background:var(--t)}
+.opt.on{background:var(--c);border-color:var(--c);color:#fff;box-shadow:0 0 0 3px var(--t)}
+/* Μέρος Γ */
+.mc{margin-top:14px}
+.mc h3{font-size:20px;background:linear-gradient(120deg,#e8f1ff,#efe9ff);border:3px solid #c9d8ff;border-left:8px solid var(--blue);border-radius:16px;padding:12px 16px;margin-bottom:14px}
+.mcopts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mco{border:3px solid var(--line);background:#fff;border-radius:16px;padding:12px;font-weight:800;text-align:left;display:flex;gap:10px;align-items:center;font-size:17px}
+.mco .k{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;flex:none;background:var(--violet)}
+.mco.on{border-color:var(--violet);background:#efe9ff;box-shadow:0 0 0 4px #e5dcff}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap}
+/* Αποτελέσματα */
+.rhead{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.grade{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;text-align:center;color:#fff;font-weight:900;background:conic-gradient(var(--teal) calc(var(--p)*1%),#e9e3ff 0)}
+.grade>div{width:136px;height:136px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center;align-content:center}
+.grade b{font-size:42px;line-height:1}
+.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px;font-weight:700}
+.meta span{color:var(--muted)}
+.pscore{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pscore div{background:#fff;border:3px solid var(--line);border-radius:14px;padding:4px 12px;font-weight:900}
+table.res{width:100%;border-collapse:collapse;margin-top:10px;font-size:15px}
+.res th{background:var(--violet);color:#fff;text-align:left;padding:8px}
+.res td{padding:8px;border-bottom:2px solid var(--line);vertical-align:top}
+.res tr.bad td{background:#fff1f2}
+.res tr.good td{background:#f0fbf5}
+.res .q{font-family:var(--mono);font-size:14px}
+.res .fb{color:#3d3570}
+.ok{color:var(--green);font-weight:900}.no{color:var(--red);font-weight:900}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;margin-top:10px}
+.tbl th,.tbl td{padding:6px 8px;border-bottom:2px solid var(--line);text-align:left}
+.tbl th{color:var(--muted)}
+.hint{font-size:15px}
+.only-print{display:none}
+/* κινητό ειδοποίησης τελευταίου λεπτού */
+.clock.late{background:#fff;color:var(--red);font-size:24px;box-shadow:0 0 0 3px var(--red);animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.alertwrap{position:fixed;inset:0;z-index:60;background:rgba(20,10,60,.55);backdrop-filter:blur(4px);display:grid;place-items:center;animation:in .3s}
+.alertwrap[hidden]{display:none}
+.phone{width:min(320px,80vw);aspect-ratio:9/17.5;border-radius:46px;padding:10px;background:linear-gradient(145deg,#6b7385,#111827 35%,#3d4656);box-shadow:0 24px 50px rgba(20,10,60,.35);animation:ring .6s ease-in-out 3}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(-6deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(4deg)}}
+.screen{height:100%;border-radius:37px;overflow:hidden;color:#fff;padding:18px 20px;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 20% 15%,#6a5cff 0,transparent 50%),radial-gradient(ellipse at 90% 80%,#ff3d8b 0,transparent 50%),linear-gradient(165deg,#120f3a,#2a1b6e 50%,#1a1030)}
+.island{width:96px;height:26px;border-radius:14px;background:#05060a;margin:-6px auto 0}
+.pclock{font-size:60px;font-weight:300;letter-spacing:-2px;margin-top:22px;font-family:var(--font)}
+.anote{width:92%;margin-top:14px;border-radius:18px;padding:12px;background:rgba(255,255,255,.95);color:var(--ink);font-size:17px;line-height:1.4;display:flex;gap:10px;align-items:flex-start}
+.anote .i{font-size:30px}
+@media (max-width:820px){.tf,.parts,.mcopts,.bl,.rhead,.meta{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff;font-size:12px}
+  .top,.noprint,.nav{display:none!important}
+  main{padding:0;max-width:none}
+  .view{display:none!important}
+  #vResult{display:block!important;animation:none}
+  .card{box-shadow:none;border-width:2px;padding:12px;margin-top:10px;break-inside:auto}
+  .grade{width:110px;height:110px}.grade>div{width:86px;height:86px}.grade b{font-size:28px}
+  table.res{font-size:11px}.res .q{font-size:10px}
+  .res tr{break-inside:avoid}
+  .only-print{display:block}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="logo">📝 Τελική αξιολόγηση · if / else</div>
+    <span class="who" id="who" hidden></span>
+    <span class="clock" id="clock" hidden>00:00</span>
+  </div>
+  <div class="prog"><i id="prog"></i></div>
+</header>
+
+<main>
+<!-- ΕΝΑΡΞΗ -->
+<section class="view on" id="vStart">
+  <p class="kicker">Α΄ Λυκείου · Python · Δομή Διακλάδωσης</p>
+  <h1>Τελική αξιολόγηση</h1>
+  <div class="card">
+    <div class="row" style="align-items:flex-end">
+      <label class="field" style="flex:2;min-width:240px">Ονοματεπώνυμο<input id="inName" autocomplete="off" placeholder="π.χ. Μαρία Γεωργίου"></label>
+      <label class="field" style="flex:1;min-width:120px">Τμήμα<input id="inClass" autocomplete="off" placeholder="π.χ. Α3"></label>
+    </div>
+    <div class="parts">
+      <div style="background:var(--blue)"><b>Μέρος Α</b>Αληθής ή Ψευδής; · 4 μονάδες</div>
+      <div style="background:var(--red)"><b>Μέρος Β</b>Βρες το λάθος · 5 μονάδες</div>
+      <div style="background:var(--orange)"><b>Μέρος Γ</b>Ερωτήσεις πολλαπλής επιλογής · 4 μονάδες</div>
+    </div>
+    <p class="muted hint">⏱ Έχεις <b>3 λεπτά</b>. Ο χρόνος μετρά αντίστροφα από τη στιγμή που πατάς «Ξεκίνα» και, όταν τελειώσει, η αξιολόγηση υποβάλλεται αυτόματα. Στο τέλος βλέπεις τον βαθμό σου (στα 20) και τι έκανες λάθος, με εξήγηση.</p>
+    <div class="warn" id="startWarn"></div>
+    <div class="row"><button class="btn pink" id="btnStart" type="button">▶ Ξεκίνα την αξιολόγηση</button></div>
+  </div>
+  <div class="row noprint" style="justify-content:flex-end;margin-top:26px">
+    <button class="btn ghost small" id="btnTeacher" type="button">🔒 Εκπαιδευτικός</button>
+  </div>
+  <div class="card" id="pinBox" hidden>
+    <div class="row"><label class="field">Κωδικός εκπαιδευτικού<input id="inPin" type="password" style="width:180px"></label><button class="btn small" id="btnPin" type="button" style="align-self:flex-end">Είσοδος</button></div>
+    <div class="warn" id="pinWarn"></div>
+  </div>
+</section>
+
+<!-- ΜΕΡΟΣ Α -->
+<section class="view" id="vA">
+  <p class="kicker">Μέρος Α · 4 μονάδες</p>
+  <h2>Αληθής ή Ψευδής;</h2>
+  <p class="muted">Για κάθε συνθήκη, βάλε την τιμή της μεταβλητής και διάλεξε <b>Αληθής</b> ή <b>Ψευδής</b>.</p>
+  <div class="tf" id="tfList"></div>
+  <div class="nav"><span></span><button class="btn" type="button" data-go="vB">Επόμενο: Μέρος Β →</button></div>
+</section>
+
+<!-- ΜΕΡΟΣ Β -->
+<section class="view" id="vB">
+  <p class="kicker">Μέρος Β · 5 μονάδες</p>
+  <h2>Βρες το λάθος</h2>
+  <p class="muted">Για <b>κάθε γραμμή</b> σημείωσε τι λάθος έχει. Μια γραμμή μπορεί να έχει <b>περισσότερα από ένα</b> λάθη. Αν η γραμμή δεν έχει λάθος, πάτησε «✔ Σωστή». Κάθε γραμμή = 1 μονάδα.</p>
+  <div id="bugList"></div>
+  <div class="nav"><button class="btn ghost" type="button" data-go="vA">← Μέρος Α</button><button class="btn" type="button" data-go="vC">Επόμενο: Μέρος Γ →</button></div>
+</section>
+
+<!-- ΜΕΡΟΣ Γ -->
+<section class="view" id="vC">
+  <p class="kicker">Μέρος Γ · 4 μονάδες</p>
+  <h2>Ερωτήσεις πολλαπλής επιλογής</h2>
+  <p class="muted">Διάλεξε τη σωστή απάντηση σε κάθε ερώτηση.</p>
+  <div id="mcList"></div>
+  <div class="warn" id="submitWarn" style="margin-top:14px"></div>
+  <div class="nav"><button class="btn ghost" type="button" data-go="vB">← Μέρος Β</button><button class="btn pink" type="button" id="btnSubmit">✔ Υποβολή αξιολόγησης</button></div>
+</section>
+
+<!-- ΑΠΟΤΕΛΕΣΜΑΤΑ -->
+<section class="view" id="vResult">
+  <div class="only-print"><b>Τελική αξιολόγηση · Δομή διακλάδωσης if / else (Python) · Α΄ Λυκείου</b></div>
+  <div class="card">
+    <div class="rhead">
+      <div class="grade" id="rGrade"><div><b id="rG20">0</b><span>/ 20</span></div></div>
+      <div>
+        <h2 id="rName"></h2>
+        <div class="meta" id="rMeta" style="margin-top:8px"></div>
+        <div class="pscore" id="rParts"></div>
+      </div>
+    </div>
+    <div class="qbox" id="rMsg" style="margin-top:14px"></div>
+  </div>
+  <div class="row noprint" style="margin-top:14px">
+    <button class="btn teal" id="btnPdf" type="button">📄 Αποθήκευση σε PDF</button>
+    <button class="btn orange" id="btnXlsOne" type="button">📊 Λήψη Excel</button>
+    <button class="btn ghost" id="btnNew" type="button">↻ Νέος μαθητής</button>
+  </div>
+  <p class="muted hint noprint">Για PDF: στο παράθυρο εκτύπωσης διάλεξε <b>«Αποθήκευση ως PDF»</b> (Save as PDF) αντί για εκτυπωτή.</p>
+  <div class="card">
+    <h3>Αναλυτικά οι απαντήσεις σου</h3>
+    <table class="res"><thead><tr><th>#</th><th>Ερώτηση</th><th>Η απάντησή σου</th><th>Σωστή απάντηση</th><th></th><th>Ανατροφοδότηση</th></tr></thead><tbody id="rRows"></tbody></table>
+  </div>
+</section>
+
+<!-- ΕΚΠΑΙΔΕΥΤΙΚΟΣ -->
+<section class="view" id="vTeacher">
+  <p class="kicker">Περιοχή εκπαιδευτικού</p>
+  <h2>Αποτελέσματα μαθητών</h2>
+  <div class="card">
+    <div class="row">
+      <button class="btn orange" id="btnXlsAll" type="button">📊 Λήψη Excel (όλοι οι μαθητές)</button>
+      <button class="btn ghost" id="btnBack" type="button">← Αρχική</button>
+      <button class="btn ghost" id="btnClear" type="button" style="margin-left:auto;color:var(--red)">🗑 Διαγραφή όλων</button>
+    </div>
+    <div class="warn" id="clearWarn"></div>
+    <p class="muted hint">Τα αποτελέσματα κρατιούνται σε αυτόν τον υπολογιστή και σε αυτόν τον browser. Αν κάθε μαθητής δουλεύει σε δικό του υπολογιστή, κάθε μαθητής κατεβάζει το δικό του Excel στο τέλος (ίδιες στήλες, για να τα ενώσετε).</p>
+    <div id="tStats" class="pscore"></div>
+    <div style="overflow:auto"><table class="tbl"><thead><tr><th>#</th><th>Ονοματεπώνυμο</th><th>Τμήμα</th><th>Ημερομηνία</th><th>Διάρκεια</th><th>Μονάδες /13</th><th>Βαθμός /20</th><th>Λάθη σε</th><th></th></tr></thead><tbody id="tRows"></tbody></table></div>
+  </div>
+</section>
+</main>
+
+<div class="alertwrap" id="oneMin" hidden>
+  <div class="phone"><div class="screen">
+    <div class="island"></div>
+    <div class="pclock" id="oneMinClock">01:00</div>
+    <div class="anote"><span class="i">⏰</span><div><b>Τελική αξιολόγηση</b><br>Έχεις μόνο <b>ένα λεπτό</b> για να ολοκληρώσεις.<br>Πιστεύω σε σένα! 💪</div></div>
+    <button class="btn" type="button" id="oneMinOk" style="margin-top:auto;margin-bottom:10px">ΟΚ 👍</button>
+  </div></div>
+</div>
+
+<script>
+/* ===== Ρυθμίσεις ===== */
+const TEACHER_PIN='1234';           // αλλάξτε τον κωδικό εκπαιδευτικού εδώ
+const STORE_KEY='axiologisi_if_else_v1';
+const TIME_LIMIT=3*60;             // χρόνος αξιολόγησης σε δευτερόλεπτα (3 λεπτά)
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const pad=n=>String(n).padStart(2,'0');
+const fmtDur=s=>`${Math.floor(s/60)}:${pad(s%60)}`;
+const fmtDate=d=>`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+const fmtTime=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+/* ===== Ερωτήσεις ===== */
+const TF=[
+ {id:'Α1',n:'pososto',v:10,o:'<',lim:20,a:true, fb:'Το 10 είναι μικρότερο από το 20, άρα η συνθήκη είναι Αληθής.'},
+ {id:'Α2',n:'pososto',v:20,o:'<',lim:20,a:false,fb:'Το 20 ΔΕΝ είναι μικρότερο από το 20 (είναι ίσο). Το < δεν περιλαμβάνει το ίσο· για να ισχύει θα χρειαζόταν <=.'},
+ {id:'Α3',n:'ilikia',v:13,o:'>=',lim:13,a:true, fb:'Το >= σημαίνει «μεγαλύτερο ή ίσο». Το 13 είναι ίσο με 13, άρα Αληθής.'},
+ {id:'Α4',n:'pin',v:1234,o:'==',lim:1357,a:false,fb:'Το == ρωτά «είναι ίσα;». Το 1234 δεν είναι ίσο με το 1357, άρα Ψευδής.'}];
+
+const ERR={int:'Λείπει int()',op:'Λάθος τελεστής',colon:'Λείπει :',indent:'Λείπει εσοχή',ok:'✔ Σωστή'};
+const ERRKEYS=['int','op','colon','indent','ok'];
+const BUGS=[
+ {title:'Β2 · Ο κωδικός PIN',intro:'Θέλουμε: αν ο PIN είναι <b>ίσος με 1357</b> → «Σωστός κωδικός», αλλιώς → «Λάθος κωδικός».',lines:[
+  {code:'pin = input("Δώσε PIN: ")',a:['int'],fix:'pin = int(input("Δώσε PIN: "))',fb:'Η input() δίνει κείμενο. Χωρίς int() το "1357" δεν είναι ίσο με τον αριθμό 1357.'},
+  {code:'if pin = 1357',a:['op','colon'],fix:'if pin == 1357:',fb:'Δύο λάθη: το = βάζει τιμή· για σύγκριση γράφουμε == . Λείπει και η : στο τέλος.'},
+  {code:'print("Σωστός κωδικός")',a:['indent'],fix:'    print("Σωστός κωδικός")',fb:'Λείπει η εσοχή (4 κενά) κάτω από το if.'},
+  {code:'else:',a:['ok'],fix:'else:',fb:'Η γραμμή είναι σωστή.'},
+  {code:'    print("Λάθος κωδικός")',a:['ok'],fix:'    print("Λάθος κωδικός")',fb:'Η γραμμή είναι σωστή: έχει εσοχή κάτω από το else.'}]}];
+
+const MC=[
+ {id:'Γ1',q:'Τι κάνει το == στη γραμμή if pin == 1357: ;',o:['Βάζει την τιμή 1357 στη μεταβλητή pin','Ελέγχει αν το pin είναι ίσο με 1357','Ελέγχει αν το pin είναι διαφορετικό από 1357','Εμφανίζει το 1357 στην οθόνη'],a:1,fb:'Το == συγκρίνει (ρωτά «είναι ίσο;»). Το = βάζει τιμή και το != ελέγχει αν είναι διαφορετικό.'},
+ {id:'Γ2',q:'Όταν η συνθήκη του if είναι ψευδής, ποιες εντολές εκτελούνται;',o:['Οι εντολές κάτω από το if','Οι εντολές κάτω από το else','Και οι εντολές του if και του else','Καμία εντολή'],a:1,fb:'Όταν η συνθήκη είναι ψευδής, πηδάμε στο else και εκτελούνται οι εντολές με εσοχή κάτω από αυτό.'},
+ {id:'Γ3',q:'Γιατί γράφουμε το print(...) με εσοχή κάτω από το if;',o:['Για να είναι πιο όμορφο','Για να δείξουμε ότι ανήκει στο if','Για να τρέχει πιο γρήγορα','Δεν χρειάζεται'],a:1,fb:'Η εσοχή δείχνει ποιες εντολές εκτελούνται μόνο όταν η συνθήκη είναι αληθής.'},
+ {id:'Γ4',q:'Αν pososto = 20, τι δίνει η συνθήκη pososto < 20 και τι εμφανίζεται;',o:['Αληθής → «Χαμηλή μπαταρία!»','Ψευδής → «Η μπαταρία είναι εντάξει.»','Σφάλμα','Δεν εμφανίζεται τίποτα'],a:1,fb:'Το 20 δεν είναι μικρότερο από το 20: η συνθήκη είναι ψευδής και εκτελείται το else. Πρόσεχε πάντα την οριακή τιμή!'}];
+
+/* ===== Κατάσταση ===== */
+let S=null,tick=null,warned=false;
+const fmtMS=s=>`${pad(Math.floor(s/60))}:${pad(s%60)}`;
+function fresh(){return{name:'',cls:'',start:null,tf:TF.map(()=>null),bug:BUGS.map(e=>e.lines.map(()=>new Set())),mc:MC.map(()=>null)}}
+
+/* ===== Πλοήγηση ===== */
+const VIEWS=['vStart','vA','vB','vC','vResult','vTeacher'];
+function show(v){VIEWS.forEach(x=>$(x).classList.toggle('on',x===v));
+  const p={vStart:0,vA:25,vB:50,vC:75,vResult:100,vTeacher:0}[v];$('prog').style.width=p+'%';window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+
+/* ===== Έναρξη ===== */
+$('btnStart').onclick=()=>{const n=$('inName').value.trim().replace(/\s+/g,' ');
+  if(n.length<3||!n.includes(' ')){$('startWarn').textContent='Γράψε ονοματεπώνυμο (όνομα και επώνυμο).';return}
+  S=fresh();S.name=n;S.cls=$('inClass').value.trim();S.start=new Date();$('startWarn').textContent='';
+  $('who').textContent='👤 '+n+(S.cls?' · '+S.cls:'');$('who').hidden=false;$('clock').hidden=false;
+  warned=false;$('clock').textContent=fmtMS(TIME_LIMIT);$('clock').classList.remove('late');
+  clearInterval(tick);tick=setInterval(()=>{const rem=Math.max(0,TIME_LIMIT-Math.floor((Date.now()-S.start)/1000));
+    $('clock').textContent=$('oneMinClock').textContent=fmtMS(rem);$('clock').classList.toggle('late',rem<=60);
+    if(rem<=60&&rem>0&&!warned){warned=true;$('oneMin').hidden=false}
+    if(rem<=0)finish(true)},1000);
+  drawAll();show('vA')};
+
+/* ===== Σχεδίαση ===== */
+function drawAll(){
+  $('tfList').innerHTML=TF.map((q,i)=>`<div class="tfq"><div class="muted" style="font-weight:900">${q.id}</div><span class="var">${q.n} = ${q.v}</span><div class="cond">${q.n} ${esc(q.o)} ${q.lim}</div>
+    <div class="tfb"><button type="button" class="g" data-i="${i}" data-v="1">Αληθής ✔</button><button type="button" class="r" data-i="${i}" data-v="0">Ψευδής ✘</button></div></div>`).join('');
+  $('tfList').querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;S.tf[i]=b.dataset.v==='1';
+    b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b))});
+  $('bugList').innerHTML=BUGS.map((E,e)=>`<div class="card ex"><h3>${E.title}</h3><div class="qbox" style="margin-bottom:10px">${E.intro}</div>
+    ${E.lines.map((L,l)=>`<div class="bl"><div class="cl"><span class="n">${l+1}</span>${esc(L.code)}</div>
+      <div class="opts">${ERRKEYS.map(k=>`<button type="button" class="opt ${k==='ok'?'ok':''}" data-e="${e}" data-l="${l}" data-k="${k}">${ERR[k]}</button>`).join('')}</div></div>`).join('')}</div>`).join('');
+  $('bugList').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const e=+b.dataset.e,l=+b.dataset.l,k=b.dataset.k,set=S.bug[e][l];
+    if(set.has(k))set.delete(k);else{if(k==='ok')set.clear();else set.delete('ok');set.add(k)}
+    b.parentNode.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',set.has(x.dataset.k)))});
+  $('mcList').innerHTML=MC.map((x,i)=>`<div class="card mc"><h3>${x.id}. ${esc(x.q)}</h3><div class="mcopts">${x.o.map((o,j)=>`<button type="button" class="mco" data-i="${i}" data-j="${j}"><span class="k">${j+1}</span><span class="${/[=<>(]/.test(o)?'mono':''}">${esc(o)}</span></button>`).join('')}</div></div>`).join('');
+  $('mcList').querySelectorAll('.mco').forEach(b=>b.onclick=()=>{S.mc[+b.dataset.i]=+b.dataset.j;
+    b.parentNode.querySelectorAll('.mco').forEach(x=>x.classList.toggle('on',x===b))});
+  $('submitWarn').textContent='';confirmEmpty=false;
+}
+
+/* ===== Βαθμολόγηση ===== */
+const sameSet=(s,a)=>s.size===a.length&&a.every(k=>s.has(k));
+const setTxt=s=>s.size?[...s].map(k=>ERR[k]).join(' + '):'—';
+function grade(){const items=[];
+  TF.forEach((q,i)=>{const ans=S.tf[i];const ok=ans===q.a;
+    items.push({id:q.id,part:'Α',q:`${q.n} = ${q.v} → ${q.n} ${q.o} ${q.lim}`,ans:ans===null?'— (χωρίς απάντηση)':(ans?'Αληθής':'Ψευδής'),cor:q.a?'Αληθής':'Ψευδής',ok:ok?1:0,fb:q.fb})});
+  BUGS.forEach((E,e)=>E.lines.forEach((L,l)=>{const s=S.bug[e][l];const ok=sameSet(s,L.a);
+    items.push({id:`${E.title.split(' · ')[0]}.${l+1}`,part:'Β',q:`${E.title.split(' · ')[1]} · γραμμή ${l+1}: ${L.code.trim()}`,ans:s.size?setTxt(s):'— (χωρίς απάντηση)',cor:setTxt(new Set(L.a))+(L.a[0]==='ok'?'':`  →  ${L.fix.trim()}`),ok:ok?1:0,fb:L.fb})}));
+  MC.forEach((x,i)=>{const a=S.mc[i];const ok=a===x.a;
+    items.push({id:x.id,part:'Γ',q:x.q,ans:a===null?'— (χωρίς απάντηση)':`${a+1}. ${x.o[a]}`,cor:`${x.a+1}. ${x.o[x.a]}`,ok:ok?1:0,fb:x.fb})});
+  const end=new Date(),dur=Math.round((end-S.start)/1000),pts=items.reduce((t,x)=>t+x.ok,0);
+  const part=p=>{const it=items.filter(x=>x.part===p);return[it.reduce((t,x)=>t+x.ok,0),it.length]};
+  return{name:S.name,cls:S.cls,start:S.start.toISOString(),end:end.toISOString(),dur,pts,max:items.length,g20:Math.round(pts/items.length*200)/10,
+    parts:{Α:part('Α'),Β:part('Β'),Γ:part('Γ')},items}}
+
+/* ===== Υποβολή ===== */
+let confirmEmpty=false;
+$('btnSubmit').onclick=()=>{
+  const empty=S.tf.filter(x=>x===null).length+S.bug.flat().filter(s=>!s.size).length+S.mc.filter(x=>x===null).length;
+  if(empty&&!confirmEmpty){confirmEmpty=true;$('submitWarn').textContent=`⚠ Έχεις ${empty} αναπάντητες ερωτήσεις/γραμμές. Γύρνα πίσω να τις συμπληρώσεις ή πάτησε ξανά «Υποβολή» για να παραδώσεις έτσι.`;return}
+  finish(false)};
+function finish(timeUp){clearInterval(tick);$('oneMin').hidden=true;$('clock').classList.remove('late');
+  const R=grade();R.timeUp=timeUp;if(timeUp)R.dur=Math.min(R.dur,TIME_LIMIT);saveResult(R);drawResult(R);show('vResult')}
+$('oneMinOk').onclick=()=>$('oneMin').hidden=true;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('oneMin').hidden=true});
+
+/* ===== Αποθήκευση στον browser ===== */
+function loadAll(){try{return JSON.parse(localStorage.getItem(STORE_KEY)||'[]')}catch(e){return[]}}
+function saveResult(R){try{const a=loadAll();a.push(R);localStorage.setItem(STORE_KEY,JSON.stringify(a))}catch(e){}}
+
+/* ===== Αποτελέσματα ===== */
+let lastR=null;
+function msgFor(R){const g=R.g20;const wrongParts=Object.entries(R.parts).filter(([p,[a,b]])=>a<b).map(([p])=>p);
+  const tips={Α:'τις συνθήκες και την οριακή τιμή (< ή <=)',Β:'τη σύνταξη: int(input()), == , : και εσοχή',Γ:'το πώς εκτελείται το if / else'};
+  let m=g>=18.5?'🏆 Εξαιρετικά! ':g>=15?'👏 Πολύ καλά! ':g>=10?'👍 Καλή προσπάθεια! ':'💪 Χρειάζεται λίγη ακόμα εξάσκηση. ';
+  if(wrongParts.length)m+='Ξαναδές '+wrongParts.map(p=>tips[p]).join(' και ')+'. Διάβασε την ανατροφοδότηση στις κόκκινες γραμμές.';else m+='Όλες οι απαντήσεις σου είναι σωστές!';return m}
+function drawResult(R){lastR=R;const st=new Date(R.start),en=new Date(R.end);
+  $('rName').textContent=R.name;$('rG20').textContent=String(R.g20).replace('.',',');$('rGrade').style.setProperty('--p',R.pts/R.max*100);
+  $('rMeta').innerHTML=`<div><span>Τμήμα:</span> ${esc(R.cls||'—')}</div><div><span>Ημερομηνία:</span> ${fmtDate(st)}</div><div><span>Έναρξη – λήξη:</span> ${fmtTime(st)} – ${fmtTime(en)}</div><div><span>Χρόνος εκτέλεσης:</span> <b>${fmtDur(R.dur)}</b> λεπτά</div><div><span>Μονάδες:</span> <b>${R.pts} / ${R.max}</b></div><div><span>Ποσοστό:</span> ${Math.round(R.pts/R.max*100)}%</div>`;
+  $('rParts').innerHTML=Object.entries(R.parts).map(([p,[a,b]])=>`<div>Μέρος ${p}: ${a}/${b}</div>`).join('');
+  $('rMsg').textContent=(R.timeUp?'⏰ Ο χρόνος τελείωσε και η αξιολόγηση υποβλήθηκε αυτόματα. ':'')+msgFor(R);
+  $('rRows').innerHTML=R.items.map(x=>`<tr class="${x.ok?'good':'bad'}"><td><b>${x.id}</b></td><td class="q">${esc(x.q)}</td><td>${esc(x.ans)}</td><td>${esc(x.cor)}</td><td class="${x.ok?'ok':'no'}">${x.ok?'✔':'✘'}</td><td class="fb">${x.ok?'':'💡 '+esc(x.fb)}</td></tr>`).join('')}
+$('btnPdf').onclick=()=>{const t=document.title;document.title='Αξιολόγηση_'+lastR.name.replace(/\s+/g,'_');window.print();setTimeout(()=>document.title=t,1000)};
+$('btnNew').onclick=()=>{S=null;$('inName').value='';$('inClass').value='';$('who').hidden=true;$('clock').hidden=true;$('clock').textContent='00:00';show('vStart')};
+$('btnXlsOne').onclick=()=>downloadXlsx([lastR],'Αξιολόγηση_'+lastR.name.replace(/\s+/g,'_')+'.xlsx');
+
+/* ===== Εκπαιδευτικός ===== */
+$('btnTeacher').onclick=()=>{$('pinBox').hidden=!$('pinBox').hidden;$('inPin').focus()};
+$('btnPin').onclick=()=>{if($('inPin').value===TEACHER_PIN){$('inPin').value='';$('pinWarn').textContent='';$('pinBox').hidden=true;drawTeacher();show('vTeacher')}else $('pinWarn').textContent='Λάθος κωδικός.'};
+$('inPin').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnPin').click()});
+$('btnBack').onclick=()=>show('vStart');
+let clearArm=false;
+$('btnClear').onclick=()=>{if(!clearArm){clearArm=true;$('clearWarn').textContent='Πάτησε ξανά «Διαγραφή όλων» για επιβεβαίωση. Κατέβασε πρώτα το Excel!';return}
+  clearArm=false;$('clearWarn').textContent='';try{localStorage.removeItem(STORE_KEY)}catch(e){}drawTeacher()};
+function drawTeacher(){const A=loadAll();
+  const avg=A.length?A.reduce((t,r)=>t+r.g20,0)/A.length:0,avgT=A.length?Math.round(A.reduce((t,r)=>t+r.dur,0)/A.length):0;
+  $('tStats').innerHTML=`<div>Μαθητές: ${A.length}</div><div>Μέσος βαθμός: ${avg.toFixed(1).replace('.',',')}/20</div><div>Μέσος χρόνος: ${fmtDur(avgT)}</div>`;
+  $('tRows').innerHTML=A.length?A.map((r,i)=>`<tr><td>${i+1}</td><td><b>${esc(r.name)}</b></td><td>${esc(r.cls||'')}</td><td>${fmtDate(new Date(r.start))} ${fmtTime(new Date(r.start))}</td><td>${fmtDur(r.dur)}</td><td>${r.pts}</td><td><b>${String(r.g20).replace('.',',')}</b></td><td style="font-size:13px">${r.items.filter(x=>!x.ok).map(x=>x.id).join(', ')||'—'}</td><td><button class="btn ghost small" type="button" data-r="${i}">Προβολή</button></td></tr>`).join(''):'<tr><td colspan="9" class="muted">Δεν υπάρχουν ακόμα αποτελέσματα.</td></tr>';
+  $('tRows').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{drawResult(A[+b.dataset.r]);show('vResult')})}
+$('btnXlsAll').onclick=()=>{const A=loadAll();if(!A.length){$('clearWarn').textContent='Δεν υπάρχουν αποτελέσματα για λήψη.';return}
+  const d=new Date();downloadXlsx(A,`Αποτελέσματα_αξιολόγησης_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}.xlsx`)};
+
+/* ===== Excel (.xlsx) χωρίς εξωτερικές βιβλιοθήκες ===== */
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+function zip(files){const enc=new TextEncoder(),parts=[],cd=[];let off=0;
+  for(const f of files){const name=enc.encode(f.name),data=enc.encode(f.data),crc=crc32(data);
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint16(8,0,true);h.setUint16(10,0,true);h.setUint16(12,0x21,true);
+    h.setUint32(14,crc,true);h.setUint32(18,data.length,true);h.setUint32(22,data.length,true);h.setUint16(26,name.length,true);h.setUint16(28,0,true);
+    parts.push(new Uint8Array(h.buffer),name,data);
+    const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);c.setUint16(10,0,true);c.setUint16(12,0,true);c.setUint16(14,0x21,true);
+    c.setUint32(16,crc,true);c.setUint32(20,data.length,true);c.setUint32(24,data.length,true);c.setUint16(28,name.length,true);c.setUint32(42,off,true);
+    cd.push(new Uint8Array(c.buffer),name);off+=30+name.length+data.length}
+  const cdSize=cd.reduce((t,a)=>t+a.length,0);const e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdSize,true);e.setUint32(16,off,true);
+  return new Blob([...parts,...cd,new Uint8Array(e.buffer)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+const xesc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');
+const colL=i=>{let s='';i++;while(i){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26)}return s};
+function sheetXml(rows,widths){const body=rows.map((r,ri)=>`<row r="${ri+1}">${r.map((v,ci)=>{const ref=colL(ci)+(ri+1),s=ri===0?' s="1"':' s="2"';
+    if(typeof v==='number'&&isFinite(v))return`<c r="${ref}"${s}><v>${v}</v></c>`;return`<c r="${ref}"${s} t="inlineStr"><is><t xml:space="preserve">${xesc(v??'')}</t></is></c>`}).join('')}</row>`).join('');
+  return`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>${widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')}</cols><sheetData>${body}</sheetData></worksheet>`}
+function buildRows(A){
+  const ids=A[0].items.map(x=>x.id);
+  const sum=[['Α/Α','Ονοματεπώνυμο','Τμήμα','Ημερομηνία','Ώρα έναρξης','Ώρα λήξης','Χρόνος (λεπ:δευτ)','Χρόνος (δευτ.)','Μέρος Α /4','Μέρος Β /5','Μέρος Γ /4','Μονάδες /13','Βαθμός /20','Ποσοστό %','Λάθη σε','Υποβολή',...ids,'Σχόλια εκπαιδευτικού']];
+  A.forEach((r,i)=>{const st=new Date(r.start),en=new Date(r.end);
+    sum.push([i+1,r.name,r.cls||'',fmtDate(st),fmtTime(st),fmtTime(en),fmtDur(r.dur),r.dur,r.parts['Α'][0],r.parts['Β'][0],r.parts['Γ'][0],r.pts,r.g20,Math.round(r.pts/r.max*100),r.items.filter(x=>!x.ok).map(x=>x.id).join(', '),r.timeUp?'Αυτόματη (τέλος χρόνου)':'Από τον μαθητή',...r.items.map(x=>x.ok),''])});
+  const det=[['Ονοματεπώνυμο','Τμήμα','Ημερομηνία','Κωδ.','Μέρος','Ερώτηση','Απάντηση μαθητή','Σωστή απάντηση','Σωστό (1/0)','Ανατροφοδότηση']];
+  A.forEach(r=>{const d=fmtDate(new Date(r.start));r.items.forEach(x=>det.push([r.name,r.cls||'',d,x.id,x.part,x.q,x.ans,x.cor,x.ok,x.ok?'':x.fb]))});
+  return{sum,det,sumW:[6,26,9,12,11,10,14,12,10,10,10,11,11,10,30,18,...ids.map(()=>7),30],detW:[24,9,12,8,8,46,32,40,10,60]}}
+function downloadXlsx(A,fname){const {sum,det,sumW,detW}=buildRows(A);
+  const files=[
+   {name:'[Content_Types].xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/></Types>'},
+   {name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},
+   {name:'xl/workbook.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Σύνοψη" sheetId="1" r:id="rId1"/><sheet name="Αναλυτικά" sheetId="2" r:id="rId2"/></sheets></workbook>'},
+   {name:'xl/_rels/workbook.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'},
+   {name:'xl/styles.xml',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts><fills count="3"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF6C3CF0"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="3"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment wrapText="1" vertical="center"/></xf><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0" applyAlignment="1"><alignment wrapText="1" vertical="top"/></xf></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>'},
+   {name:'xl/worksheets/sheet1.xml',data:sheetXml(sum,sumW)},
+   {name:'xl/worksheets/sheet2.xml',data:sheetXml(det,detW)}];
+  const url=URL.createObjectURL(zip(files));const a=document.createElement('a');a.href=url;a.download=fname;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+</script>
+</body>
+</html>

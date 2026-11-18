@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Βοήθεια · Ο Κύκλος Ανάπτυξης</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1ff;--ink:#1d1640;--muted:#5d5880;--card:#fff;--line:#e2dcf5;
+  --violet:#6c3cf0;--pink:#ff3d8b;--orange:#ff8a1f;--yellow:#ffd23f;--teal:#12b5a5;--blue:#2f7cf6;--green:#1fbf6a;--red:#ff4757;
+  --true:#1fbf6a;--false:#ff4757;
+  --font:"Nunito","Segoe UI",system-ui,sans-serif;--mono:"JetBrains Mono",Consolas,ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:var(--font);color:var(--ink);background:var(--bg);background-image:radial-gradient(800px 500px at 0% 0%,#ffe6f1 0,transparent 60%),radial-gradient(900px 500px at 100% 100%,#dff6ff 0,transparent 60%);font-size:19px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid var(--yellow);outline-offset:2px}
+code,.mono{font-family:var(--mono)}
+/* χωρίς ligatures: το != και το == εμφανίζονται όπως γράφονται στην Python */
+*{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+/* top bar */
+.top{position:sticky;top:0;z-index:20;background:linear-gradient(100deg,#2a1572,#6c3cf0 45%,#ff3d8b 85%,#ff8a1f);color:#fff;box-shadow:0 6px 20px rgba(60,20,140,.25)}
+.top-in{max-width:1400px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px;white-space:nowrap}
+.logo .ph{width:30px;height:46px;border-radius:9px;border:3px solid #fff;position:relative;background:rgba(255,255,255,.15)}
+.logo .ph::after{content:"";position:absolute;left:5px;right:5px;bottom:5px;height:40%;border-radius:3px;background:var(--yellow)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.chip{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:999px;padding:5px 12px;font-weight:800;font-size:14px;display:flex;align-items:center;gap:6px}
+.chip .n{background:rgba(255,255,255,.25);border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font-size:12px}
+.chip.on{background:#fff;color:var(--violet)}
+.chip.done{background:rgba(31,191,106,.55)}
+.clock{display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.22);border-radius:14px;padding:4px 6px 4px 12px}
+.clock b{font-family:var(--mono);font-size:22px;min-width:68px;text-align:center}
+.clock button{border:0;background:#fff;color:var(--violet);border-radius:10px;padding:4px 10px;font-weight:900}
+.prog{height:6px;background:rgba(255,255,255,.25)}
+.prog i{display:block;height:100%;width:0;background:var(--yellow);transition:width .4s}
+/* layout */
+main{max-width:1400px;margin:0 auto;padding:22px 18px 90px}
+.slide{display:none;animation:in .35s ease-out}
+.slide.on{display:block}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.kicker{font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--pink)}
+h1,h2{margin:0;font-weight:900;line-height:1.1}
+h1{font-size:clamp(34px,4.6vw,60px)}
+h2{font-size:clamp(28px,3.2vw,42px)}
+h3{margin:0 0 8px;font-size:22px;font-weight:900}
+.time{font-weight:900;background:#fff;border:3px solid var(--line);border-radius:999px;padding:4px 14px;color:var(--violet);font-size:15px;white-space:nowrap}
+.card{background:var(--card);border:3px solid var(--line);border-radius:24px;padding:20px;box-shadow:0 10px 26px rgba(70,40,160,.08)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.muted{color:var(--muted)}
+.btn{border:0;border-radius:16px;padding:12px 20px;font-weight:900;font-size:18px;color:#fff;background:linear-gradient(180deg,#8a63ff,var(--violet));box-shadow:0 4px 0 #3f1fb0;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #3f1fb0}
+.btn.pink{background:linear-gradient(180deg,#ff6fa8,var(--pink));box-shadow:0 4px 0 #b3125a}
+.btn.orange{background:linear-gradient(180deg,#ffab55,var(--orange));box-shadow:0 4px 0 #b65700}
+.btn.teal{background:linear-gradient(180deg,#3fd3c4,var(--teal));box-shadow:0 4px 0 #087a6f}
+.btn.ghost{background:#fff;color:var(--violet);border:3px solid var(--line);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;border-radius:999px;padding:2px 12px;font-weight:900;font-size:15px}
+.navbar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-top:3px solid var(--line)}
+.navbar .in{max-width:1400px;margin:0 auto;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.navbar .where{font-weight:800;color:var(--muted)}
+/* slide 0 */
+.hero{display:grid;grid-template-columns:1fr;gap:24px;align-items:center;max-width:1000px}
+.hero h1 span{background:linear-gradient(90deg,var(--violet),var(--pink),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent}
+.goals{display:grid;gap:10px;margin-top:16px}
+.goal{display:flex;gap:12px;align-items:center;background:#fff;border:3px solid var(--line);border-radius:18px;padding:10px 14px;font-weight:800}
+.goal .ic{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:22px;flex:none}
+.timeline{display:flex;border-radius:16px;overflow:hidden;margin-top:18px;border:3px solid #fff;box-shadow:0 6px 16px rgba(70,40,160,.12)}
+.timeline div{padding:10px 6px;color:#fff;font-weight:900;font-size:14px;text-align:center}
+.timeline small{display:block;font-weight:700;opacity:.9}
+/* phone */
+.phone{width:min(330px,100%);aspect-ratio:9/17.5;margin:0 auto;border-radius:46px;padding:10px;background:linear-gradient(145deg,#6b7385,#111827 35%,#3d4656);box-shadow:0 24px 50px rgba(20,10,60,.35)}
+.screen{height:100%;border-radius:37px;overflow:hidden;position:relative;color:#fff;padding:18px 20px;display:flex;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 20% 15%,#6a5cff 0,transparent 50%),radial-gradient(ellipse at 90% 80%,#ff3d8b 0,transparent 50%),linear-gradient(165deg,#120f3a,#2a1b6e 50%,#1a1030)}
+.island{width:96px;height:26px;border-radius:14px;background:#05060a;margin:-6px auto 0}
+.clockbig{font-size:56px;font-weight:300;letter-spacing:-2px;margin-top:22px}
+.batt{width:84%;margin-top:22px;border-radius:22px;padding:16px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25)}
+.bshell{display:flex;align-items:center;justify-content:center;gap:0;margin:8px 0}
+.binner{flex:1;height:70px;border:4px solid rgba(255,255,255,.8);border-radius:14px;padding:5px;position:relative}
+.bfill{height:100%;border-radius:7px;transition:width .3s,background .3s}
+.bnum{position:absolute;inset:0;display:grid;place-items:center;font-size:30px;font-weight:900;text-shadow:0 2px 8px #000a}
+.btip{width:8px;height:28px;background:rgba(255,255,255,.8);border-radius:0 5px 5px 0}
+.note{width:84%;margin-top:14px;border-radius:18px;padding:12px;background:rgba(255,255,255,.18);font-size:14px;min-height:70px;display:flex;gap:10px;align-items:flex-start}
+.note .i{font-size:22px}
+.slider{width:100%;accent-color:var(--violet);height:34px}
+.bigpct{font-size:64px;font-weight:900;text-align:center;line-height:1;background:linear-gradient(90deg,var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.predict{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.pbtn{border:3px solid var(--line);background:#fff;border-radius:18px;padding:14px;font-weight:900;font-size:18px}
+.pbtn.g{color:var(--green)}.pbtn.r{color:var(--red)}
+.pbtn.sel{box-shadow:0 0 0 5px #e5dcff;border-color:var(--violet)}
+.reveal{margin-top:12px;padding:14px;border-radius:16px;font-weight:800;display:none}
+.reveal.show{display:block;animation:in .3s}
+.qbox{background:linear-gradient(120deg,#fff6d6,#ffe9f2);border:3px solid #ffd9a0;border-radius:18px;padding:14px 16px;font-weight:800}
+/* operators */
+.lab{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin:10px 0}
+.lab .side{background:#fff;border:3px solid var(--line);border-radius:20px;padding:14px;text-align:center}
+.lab .val{font-family:var(--mono);font-size:56px;font-weight:800}
+.opsel{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.op{border:3px solid var(--line);background:#fff;border-radius:14px;padding:8px 0;font-family:var(--mono);font-size:26px;font-weight:800;color:var(--violet);min-width:72px}
+.op.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+.verdict{margin-top:14px;border-radius:22px;padding:18px;text-align:center;font-size:30px;font-weight:900;color:#fff;transition:background .25s}
+.verdict code{background:rgba(255,255,255,.25);padding:2px 10px;border-radius:10px}
+.flip{perspective:900px;height:170px;cursor:pointer}
+.flip .in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.on .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;padding:16px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-weight:800}
+.flip .f{background:linear-gradient(135deg,#6c3cf0,#ff3d8b);color:#fff}
+.flip .b{background:#fff;border:3px solid var(--line);transform:rotateY(180deg)}
+.flip .f .big{font-family:var(--mono);font-size:30px}
+/* game */
+.game{text-align:center}
+.gcard{margin:14px auto;max-width:640px;background:#fff;border:4px solid var(--line);border-radius:28px;padding:26px;box-shadow:0 14px 30px rgba(70,40,160,.12)}
+.gvars{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.gvars span{font-family:var(--mono);font-weight:800;background:#efe9ff;color:var(--violet);border-radius:12px;padding:4px 12px}
+.gcond{font-family:var(--mono);font-size:44px;font-weight:800}
+.gbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.gbtns button{border:0;border-radius:20px;padding:18px;font-size:26px;font-weight:900;color:#fff}
+.gT{background:linear-gradient(180deg,#45d98a,var(--true));box-shadow:0 5px 0 #0f8b48}
+.gF{background:linear-gradient(180deg,#ff7a86,var(--false));box-shadow:0 5px 0 #b51d2b}
+.score{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.score div{background:#fff;border:3px solid var(--line);border-radius:16px;padding:6px 16px;font-weight:900}
+.gfb{min-height:34px;font-weight:900;font-size:20px;margin-top:10px}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.pop{animation:popk .4s}
+@keyframes popk{50%{transform:scale(1.06)}}
+/* flowchart */
+.fcwrap{background:#fff;border:3px solid var(--line);border-radius:24px;padding:10px}
+svg text{font-family:var(--font);font-weight:800}
+.fc-node{transition:filter .25s}
+.fc-on{filter:drop-shadow(0 0 10px #ffd23f) drop-shadow(0 0 4px #ffd23f)}
+.path{stroke:#9b94c4;stroke-width:4;fill:none;transition:stroke .25s,stroke-width .25s}
+.path.lit{stroke:#ffb400;stroke-width:7}
+.out-term{background:#130f33;color:#eef;border-radius:18px;padding:14px;font-family:var(--mono);font-size:18px;min-height:120px;white-space:pre-wrap}
+.out-term .y{color:var(--yellow)}.out-term .g{color:#5cf2a0}.out-term .r{color:#ff8f99}.out-term .e{color:#ff6b6b;font-weight:800}
+/* code */
+.code{background:#130f33;color:#e9e6ff;border-radius:20px;padding:14px 0;font-family:var(--mono);font-size:20px;line-height:1.7;overflow:auto}
+.code .ln{display:block;padding:0 18px;border-left:6px solid transparent;white-space:pre}
+.code .ln.cur{background:rgba(255,210,63,.18);border-left-color:var(--yellow)}
+.code .ln.skip{opacity:.35}
+.code .ln::before{content:attr(data-n);display:inline-block;width:1.8em;color:#7d76b5}
+.kw{color:#ff7ab6;font-weight:800}.fn{color:#7ddcff}.st{color:#b6f37a}.nu{color:#ffd23f}.op2{color:#ffb35c;font-weight:800}.cm{color:#8e88bd;font-style:italic}
+.ind{background:repeating-linear-gradient(90deg,rgba(255,210,63,.35) 0 2px,transparent 2px 12px);border-radius:3px}
+/* σελίδα 4: μεγαλύτερος κώδικας αριστερά, δεξί μέρος πιο ψηλά */
+.pygrid{grid-template-columns:1.3fr 1fr;align-items:start}
+.pygrid #pyCode{font-size:25px;line-height:1.8;padding:20px 0}
+.pygrid .card{padding:14px 18px;margin-top:-6px}
+.pygrid .card .out-term{min-height:96px}
+.toggles{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.toggle{display:flex;gap:8px;align-items:center;background:#fff;border:3px solid var(--line);border-radius:14px;padding:6px 12px;font-weight:800;font-size:16px}
+.toggle input{width:20px;height:20px;accent-color:var(--pink)}
+/* cycle */
+.cycle{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cstep{border:0;border-radius:22px;padding:16px;color:#fff;text-align:left;box-shadow:0 6px 0 rgba(0,0,0,.18);opacity:.55;transition:opacity .2s,transform .2s}
+.cstep.on{opacity:1;transform:translateY(-4px)}
+.cstep b{display:block;font-size:22px}
+.cstep span{font-size:15px;font-weight:700}
+.cpanel{margin-top:16px}
+.revealcards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.rc{border:3px dashed #cfc6ef;background:#faf8ff;border-radius:18px;padding:14px;min-height:110px;cursor:pointer;font-weight:800}
+.rc .a{display:none;margin-top:8px;font-family:var(--mono);color:var(--violet);font-size:18px}
+.rc.open{border-style:solid;border-color:var(--violet);background:#fff}
+.rc.open .a{display:block}
+.tests{width:100%;border-collapse:separate;border-spacing:0 8px}
+.tests td,.tests th{padding:8px 12px;text-align:left}
+.tests th{color:var(--muted);font-size:15px}
+.tests tr.r td{background:#fff;border-top:3px solid var(--line);border-bottom:3px solid var(--line)}
+.tests tr.r td:first-child{border-left:3px solid var(--line);border-radius:14px 0 0 14px}
+.tests tr.r td:last-child{border-right:3px solid var(--line);border-radius:0 14px 14px 0}
+.badge{display:inline-block;border-radius:999px;padding:2px 10px;font-size:14px;font-weight:900;color:#fff}
+/* bugs */
+.bugcode .tok{cursor:pointer;border-radius:6px;padding:0 2px;transition:background .2s}
+.bugcode .tok:hover{background:rgba(255,255,255,.12)}
+.bugcode .tok.found{background:var(--red);color:#fff}
+.bugcode .tok.miss{animation:shake .4s}
+.buglist{display:grid;gap:8px}
+.bug{display:flex;gap:10px;align-items:center;background:#fff;border:3px solid var(--line);border-radius:14px;padding:8px 12px;font-weight:800;opacity:.45}
+.bug.found{opacity:1;border-color:var(--red)}
+.bug .x{width:30px;height:30px;border-radius:50%;background:#eee;display:grid;place-items:center;flex:none}
+.bug.found .x{background:var(--red);color:#fff}
+/* timer */
+.timer{text-align:center}
+.tdisp{font-family:var(--mono);font-size:clamp(80px,14vw,170px);font-weight:800;line-height:1;margin:10px 0;background:linear-gradient(90deg,var(--teal),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.tdisp.warn{background:linear-gradient(90deg,var(--orange),var(--red));-webkit-background-clip:text;background-clip:text}
+.ring{height:18px;border-radius:999px;background:#e9e3ff;overflow:hidden;max-width:760px;margin:0 auto}
+.ring i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--violet),var(--pink));transition:width 1s linear}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;text-align:left}
+.role{border-radius:20px;padding:16px;color:#fff}
+/* quiz */
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.qopt{border:3px solid var(--line);background:#fff;border-radius:18px;padding:16px;font-size:22px;font-weight:900;text-align:left;display:flex;gap:12px;align-items:center}
+.qopt .k{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:#fff;flex:none}
+.qopt.right{border-color:var(--green);background:#e5fbef}
+.qopt.wrong{border-color:var(--red);background:#ffe8ea}
+.qmeta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.dots{display:flex;gap:6px}
+.dots i{width:14px;height:14px;border-radius:50%;background:#ddd6f7}
+.dots i.on{background:var(--violet)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50;overflow:hidden}
+.confetti i{position:absolute;top:-20px;width:12px;height:18px;border-radius:3px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.tag{display:inline-block;background:#efe9ff;color:var(--violet);border-radius:999px;padding:1px 9px;font-size:12px;font-weight:900;margin-left:8px;white-space:nowrap;text-transform:none;letter-spacing:0;vertical-align:middle}
+.goal .tag{margin-left:auto}
+.timeline div{font-size:12px;padding:10px 2px}
+.recall{margin-top:14px;font-size:16px}
+.recall .code{font-size:15px;padding:8px 0;margin:8px 0;border-radius:12px}
+.prow{display:grid;grid-template-columns:64px 1fr 1fr 34px;gap:8px;align-items:center;margin-top:8px}
+.prow b{font-family:var(--mono);font-size:20px}
+.prow .pbtn{padding:8px;font-size:15px}
+.pres{font-size:22px;text-align:center}
+.btn.ghost.on{background:var(--violet);color:#fff;border-color:var(--violet)}
+.alertwrap{position:fixed;inset:0;z-index:60;background:rgba(20,10,60,.55);backdrop-filter:blur(4px);display:grid;place-items:center;animation:in .3s}
+.alertwrap[hidden]{display:none}
+.alertphone{width:min(320px,80vw);animation:ring .6s ease-in-out 3}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(-6deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(4deg)}}
+.alertnote{font-size:17px;line-height:1.4;width:92%;background:rgba(255,255,255,.95);color:var(--ink)}
+.alertnote .i{font-size:30px}
+/* Εισαγωγή: τελεστές πάνω, κινητό και πρόβλεψη κάτω */
+.labc{padding:12px 16px}
+.labc .lab{margin:0;gap:12px}
+.labc .side{padding:6px 12px}
+.labc .val{font-size:38px;line-height:1.1}
+.labc .slider{height:24px}
+.labc .opsel{grid-template-columns:repeat(6,1fr);gap:6px}
+.labc .op{min-width:64px;font-size:24px;padding:6px 0}
+.labc .verdict{margin-top:8px;padding:8px;font-size:24px;border-radius:16px}
+.introgrid{display:grid;grid-template-columns:270px 1fr 290px;gap:16px;align-items:start;margin-top:14px}
+.introgrid .phone{width:270px}
+.introgrid .clockbig{font-size:44px;margin-top:14px}
+.introgrid .bigpct{font-size:48px}
+.flipcol{display:grid;gap:10px}
+.flipcol .flip{height:118px}
+.flipcol .flip .f,.flipcol .flip .b{padding:10px;font-size:15px}
+.flipcol .flip .f .big{font-size:24px}
+@media (max-width:1150px){.introgrid{grid-template-columns:1fr 1fr}.flipcol{grid-column:1/-1;grid-template-columns:repeat(3,1fr)}.flipcol h3{grid-column:1/-1}}
+@media (max-width:980px){.introgrid,.flipcol{grid-template-columns:1fr}.labc .opsel{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:980px){.grid2,.hero,.grid3,.cycle,.revealcards{grid-template-columns:1fr}.lab{grid-template-columns:1fr}.qopts{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<style>
+main{padding-bottom:40px;max-width:1200px}
+.help{display:flex;gap:14px;align-items:flex-start;background:#e8f6ff;border:3px solid #b9e2ff;border-radius:18px;padding:12px 16px;font-weight:800;margin-bottom:14px}
+.help .i{font-size:30px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="logo"><span class="ph" aria-hidden="true"></span>Βοήθεια · Ο Κύκλος Ανάπτυξης</div>
+  </div>
+  <div class="prog"><i id="prog"></i></div>
+</header>
+<main>
+  <p class="kicker" style="margin:0 0 4px">Α΄ Λυκείου · Python · if / else <span class="tag">α1 · α1.1–α1.3</span></p>
+  <h2 style="margin-bottom:12px">Λύνω ένα πρόβλημα βήμα βήμα: το πακέτο δεδομένων</h2>
+  <div class="help"><span class="i">🧭</span><div>Πάτα τα βήματα <b>1 → 2 → 3 → 4</b> με τη σειρά. Σε κάθε βήμα σκέψου πρώτα μόνος/η σου και μετά πάτησε για να δεις την απάντηση. Μπορείς να γυρίσεις πίσω όσες φορές θέλεις.</div></div>
+<section>
+    <div class="qbox" style="font-size:20px">📶 Το πακέτο της Ελένης έχει <b>1000 MB</b>. Αν χρησιμοποίησε <b>περισσότερα από 1000</b> → «Ξεπέρασες το πακέτο σου!». Αλλιώς → πόσα MB της μένουν.</div>
+  <div class="cycle" style="margin-top:14px">
+    <button class="cstep on" type="button" data-c="0" style="background:var(--blue)"><b>1 · Ανάλυση</b><span>Τι δίνω; Τι παίρνω; Ποια η ερώτηση;</span></button>
+    <button class="cstep" type="button" data-c="1" style="background:var(--violet)"><b>2 · Σχεδίαση</b><span>Η λογική με λόγια: Αν … τότε … αλλιώς</span></button>
+    <button class="cstep" type="button" data-c="2" style="background:var(--teal)"><b>3 · Υλοποίηση</b><span>Πρόγραμμα σε Python</span></button>
+    <button class="cstep" type="button" data-c="3" style="background:var(--orange)"><b>4 · Έλεγχος</b><span>Δοκιμή με έξυπνες τιμές</span></button>
+  </div>
+  <div class="card cpanel" id="cp0">
+    <h3>Πάτησε κάθε κάρτα για να αποκαλυφθεί</h3>
+    <div class="revealcards">
+      <div class="rc" tabindex="0">📥 Είσοδος<div class="a">mb (ακέραιος)</div></div>
+      <div class="rc" tabindex="0">◆ Συνθήκη<div class="a">mb &gt; 1000</div></div>
+      <div class="rc" tabindex="0">📤 Έξοδος<div class="a">Αληθής: «Ξεπέρασες…»<br>Ψευδής: 1000 − mb</div></div>
+    </div>
+  </div>
+  <div class="card cpanel" id="cp1" hidden>
+    <h3>Γράφω τη λογική με λόγια, πριν γράψω κώδικα</h3>
+    <div class="code"><span class="ln" data-n="1">Διάβασε mb</span><span class="ln" data-n="2"><span class="kw">Αν</span> mb &gt; 1000 <span class="kw">τότε</span></span><span class="ln" data-n="3"><span class="ind">    </span>Εμφάνισε «Ξεπέρασες το πακέτο σου!»</span><span class="ln" data-n="4"><span class="kw">Αλλιώς</span></span><span class="ln" data-n="5"><span class="ind">    </span>Εμφάνισε «Σου απομένουν» 1000 − mb «MB»</span></div>
+    <p class="muted" style="font-weight:800">Μετά το «μεταφράζουμε» σε Python: όπου λέμε <span class="mono">Αν … τότε</span> γράφουμε <span class="mono">if … :</span> και όπου λέμε <span class="mono">Αλλιώς</span> γράφουμε <span class="mono">else:</span></p>
+  </div>
+  <div class="card cpanel" id="cp2" hidden>
+    <div class="code" id="mbCode"></div>
+  </div>
+  <div class="card cpanel" id="cp3" hidden>
+    <h3>Διάλεξε τιμές ελέγχου (τουλάχιστον 3) και τρέξε</h3>
+    <div class="row" id="mbPick"></div>
+    <table class="tests"><thead><tr><th>mb</th><th>Η συνθήκη δίνει</th><th>Έξοδος</th></tr></thead><tbody id="mbRows"></tbody></table>
+    <div class="qbox" id="mbAdvice">Διάλεξε τουλάχιστον 3 τιμές: μία <b>μικρότερη από 1000</b>, μία <b>μεγαλύτερη από 1000</b> και… μία ακόμα. Ποια νομίζεις ότι λείπει;</div>
+  </div>
+  <div class="row" style="justify-content:space-between;margin-top:16px">
+    <button class="btn ghost" type="button" id="stPrev">← Προηγούμενο βήμα</button>
+    <span class="muted" style="font-weight:900" id="stWhere">Βήμα 1 από 4</span>
+    <button class="btn" type="button" id="stNext">Επόμενο βήμα →</button>
+  </div>
+</section>
+
+
+</main>
+<div class="confetti" id="confetti"></div>
+<script>
+const $=id=>document.getElementById(id);
+function confetti(n=60){const c=$('confetti');const cols=['#6c3cf0','#ff3d8b','#ff8a1f','#ffd23f','#12b5a5','#2f7cf6'];for(let i=0;i<n;i++){const e=document.createElement('i');e.style.left=Math.random()*100+'vw';e.style.background=cols[i%cols.length];e.style.animationDelay=Math.random()*.4+'s';c.append(e);setTimeout(()=>e.remove(),2200)}}
+/* ---------- 6 cycle ---------- */
+document.querySelectorAll('.cstep').forEach(b=>b.onclick=()=>{const c=+b.dataset.c;document.querySelectorAll('.cstep').forEach(x=>x.classList.toggle('on',x===b));[0,1,2,3].forEach(k=>$('cp'+k).hidden=k!==c)});
+document.querySelectorAll('.rc').forEach(r=>{r.onclick=()=>r.classList.add('open');r.onkeydown=e=>{if(e.key==='Enter')r.classList.add('open')}});
+$('mbCode').innerHTML=[
+ 'mb = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Πόσα MB χρησιμοποίησες; "</span>))',
+ '<span class="kw">if</span> mb <span class="op2">&gt;</span> <span class="nu">1000</span><span class="op2">:</span>',
+ '<span class="ind">    </span><span class="fn">print</span>(<span class="st">"Ξεπέρασες το πακέτο σου!"</span>)',
+ '<span class="kw">else</span><span class="op2">:</span>',
+ '<span class="ind">    </span><span class="fn">print</span>(<span class="st">"Σου απομένουν"</span>, <span class="nu">1000</span> - mb, <span class="st">"MB"</span>)'].map((l,i)=>`<span class="ln" data-n="${i+1}">${l}</span>`).join('');
+const mbVals=[250,999,1000,1001,1250];const mbSel=new Set();
+$('mbPick').innerHTML=mbVals.map(v=>`<button class="btn ghost" type="button" data-v="${v}" style="padding:6px 16px">${v}</button>`).join('')+'<button class="btn orange" type="button" id="mbRun">▶ Τρέξε</button>';
+$('mbPick').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{const v=+b.dataset.v;mbSel.has(v)?mbSel.delete(v):mbSel.add(v);b.style.background=mbSel.has(v)?'#efe9ff':'#fff';b.style.borderColor=mbSel.has(v)?'var(--violet)':''});
+$('mbRun').onclick=()=>{const vs=[...mbSel].sort((a,b)=>a-b);if(!vs.length){$('mbAdvice').textContent='Διάλεξε πρώτα τιμές!';return}
+  $('mbRows').innerHTML=vs.map(v=>{const r=v>1000;return`<tr class="r"><td class="mono"><b>${v}</b></td><td><span class="badge" style="background:${r?'var(--green)':'var(--red)'}">${v} &gt; 1000 → ${r?'Αληθής':'Ψευδής'}</span></td><td class="mono">${r?'Ξεπέρασες το πακέτο σου!':'Σου απομένουν '+(1000-v)+' MB'}</td></tr>`}).join('');
+  const lo=vs.some(v=>v<1000),hi=vs.some(v=>v>1000),eq=vs.includes(1000);
+  $('mbAdvice').innerHTML=(lo&&hi&&eq)?'🏅 Μπράβο! Δοκίμασες μια τιμή κάτω από 1000, μια πάνω από 1000 και <b>ακριβώς το 1000</b>. Το 1000 είναι το «σύνορο» και εκεί γίνονται συνήθως τα λάθη. Αν κατά λάθος γράψεις <span class="mono">&gt;=</span> αντί για <span class="mono">&gt;</span>, η Ελένη με ακριβώς 1000 MB θα δει «Ξεπέρασες το πακέτο σου!», ενώ δεν το ξεπέρασε.':`Σχεδόν! Δοκίμασε ακόμα ${[!lo&&'μια τιμή μικρότερη από 1000',!hi&&'μια τιμή μεγαλύτερη από 1000',!eq&&'ακριβώς το 1000 (το «σύνορο»)'].filter(Boolean).join(' και ')}.`;
+  if(lo&&hi&&eq)confetti(40)};
+
+
+/* οδηγός βημάτων */
+let step=0;
+function stGo(k){step=Math.max(0,Math.min(3,k));document.querySelectorAll('.cstep').forEach(x=>x.classList.toggle('on',+x.dataset.c===step));[0,1,2,3].forEach(i=>$('cp'+i).hidden=i!==step);
+  $('stWhere').textContent=`Βήμα ${step+1} από 4`;$('stPrev').disabled=step===0;$('stNext').disabled=step===3;$('prog').style.width=((step+1)/4*100)+'%'}
+document.querySelectorAll('.cstep').forEach(b=>b.addEventListener('click',()=>stGo(+b.dataset.c)));
+$('stPrev').onclick=()=>stGo(step-1);$('stNext').onclick=()=>stGo(step+1);stGo(0);
+</script>
+</body>
+</html>

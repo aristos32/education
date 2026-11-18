@@ -1,0 +1,8 @@
+HackerRank:
+https://www.hackerrank.com/alyk-while
+
+Προσομοίωση εκτέλεσης δομής while (HTML):
+https://lyk-kokkinochoria-amm.schools.ac.cy/myuploads/cs/While_Simulation.html
+
+Παιχνίδι σύνοψης (HTML):
+https://lyk-kokkinochoria-amm.schools.ac.cy/myuploads/cs/While_Pacman.html
