@@ -36,6 +36,7 @@
 		<Unit filename="example2.cpp">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="example3.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

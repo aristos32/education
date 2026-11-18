@@ -17,6 +17,9 @@ void example3()
     if(booksNumber <= 100){
         totalCost = booksNumber * costPerBook[0];
     }
+    else{
+        booksNumber =
+    }
 
     cout << "Total cost:" << totalCost;
 
