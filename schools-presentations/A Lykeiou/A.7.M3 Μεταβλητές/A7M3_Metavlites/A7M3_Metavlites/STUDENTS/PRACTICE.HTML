@@ -143,6 +143,8 @@ textarea{font:inherit;width:100%;border:1px solid #b9c8d9;border-radius:10px;pad
 .blanks.code .dz{min-width:110px;min-height:44px}
 .row{display:flex;align-items:center;gap:12px;margin:8px 0}
 .row .lab{font-weight:800;color:var(--teal);width:38px;flex:none;font-size:21px;text-align:center}
+.solbox{margin:10px 0;background:#fff8e6;border:2px solid #f0d48a;border-radius:14px;padding:10px 14px}.solbox pre{margin:8px 0}
+.poolh{margin:14px 0 6px;font-weight:800;color:#8a5a00;background:#fff4d6;border-radius:10px;padding:8px 14px;font-size:clamp(15px,2.1vh,18px)}
 .flowv{display:flex;flex-direction:column;align-items:center;gap:2px;margin:12px 0}
 .flowv .dz{min-width:290px;min-height:60px}
 .arr{color:var(--muted);font-size:22px;line-height:18px}
@@ -161,7 +163,7 @@ table.mt{width:100%;border-collapse:separate;border-spacing:0 8px;margin:10px 0}
 .box3 h3{margin:0;color:var(--teal)}
 .box3 svg.fcs{width:100%;max-width:210px}
 pre.cd{margin:0;background:var(--navy);color:#ffd27a;border-radius:12px;padding:10px 14px;font:700 17px/1.5 Consolas,'Courier New',monospace;white-space:pre;text-align:left;width:100%;overflow:auto}
-.aside{display:flex;justify-content:center;margin:8px 0}.aside svg.fcs{max-width:300px;width:100%}
+.prob{background:#fff8e6;border:2px solid #f0d48a;border-radius:14px;padding:10px 16px;margin:0 0 12px}.prob h4{margin:0 0 4px;color:#8a5a00;font-size:clamp(15px,2.1vh,18px)}.prob p{margin:0;font-size:clamp(15px,2.2vh,19px);line-height:1.45}.prob p b{color:#8a5a00}.prob .pex{margin-top:6px;font-weight:600;color:#1f3a5f}.aside{display:flex;justify-content:center;margin:8px 0}.aside svg.fcs{max-width:300px;width:100%}
 .sub2{font-size:20px;color:var(--teal);margin:14px 0 4px}
 .rules.eight{grid-template-columns:repeat(4,1fr)}.rules.eight div{font-size:15px}.rules.eight b{font-size:18px}
 .rules.six{grid-template-columns:repeat(3,1fr)}.rules.six div{font-size:15px}.rules.six b{font-size:18px}
@@ -230,7 +232,7 @@ const PY = (() => {
   const V = (t, v) => ({ t, v });
   const NONE = V('none', null);
   const KW = new Set(['if', 'else', 'elif', 'for', 'while', 'def', 'return', 'import', 'from', 'class', 'and', 'or', 'not', 'in', 'is', 'pass', 'break', 'continue', 'lambda', 'with', 'try', 'except', 'global']);
-  const tname = x => ({ int: 'int', float: 'float', str: 'str', bool: 'bool', none: 'NoneType', tuple: 'tuple', func: 'builtin_function_or_method', type: 'type' })[x.t];
+  const tname = x => ({ int: 'int', float: 'float', str: 'str', bool: 'bool', none: 'NoneType', tuple: 'tuple', complex: 'complex', func: 'builtin_function_or_method', type: 'type' })[x.t];
   function fmtFloat(v) {
     if (!isFinite(v)) return isNaN(v) ? 'nan' : (v > 0 ? 'inf' : '-inf');
     if (Number.isInteger(v) && Math.abs(v) < 1e16) return v.toFixed(1);
@@ -248,9 +250,11 @@ const PY = (() => {
       case 'tuple': return '(' + x.v.map(repr).join(', ') + (x.v.length === 1 ? ',' : '') + ')';
       case 'func': return '<built-in function ' + x.name + '>';
       case 'type': return "<class '" + x.v + "'>";
+      case 'complex': { const f = v => Number.isInteger(v) ? String(v) : fmtFloat(v); return (x.v.re === 0 ? '' : '(' + f(x.v.re)) + (x.v.re === 0 ? '' : (x.v.im < 0 || Object.is(x.v.im, -0) ? '-' : '+')) + f(x.v.re === 0 ? x.v.im : Math.abs(x.v.im)) + 'j' + (x.v.re === 0 ? '' : ')'); }
     }
   }
   const str = x => x.t === 'str' ? x.v : repr(x);
+  const truthy = x => x.t === 'bool' ? x.v : (x.t === 'int' || x.t === 'float') ? x.v !== 0 : (x.t === 'str' || x.t === 'tuple') ? x.v.length > 0 : x.t !== 'none';
   const isNum = x => x.t === 'int' || x.t === 'float' || x.t === 'bool';
   const num = x => x.t === 'bool' ? (x.v ? 1 : 0) : x.v;
 
@@ -279,8 +283,8 @@ const PY = (() => {
       }
       const two = src.substr(i, 2);
       if (['**', '//', '==', '!=', '<=', '>='].includes(two)) { toks.push({ k: 'op', v: two }); i += 2; continue; }
-      if ('+-*/%(),=<>'.includes(c)) { toks.push({ k: 'op', v: c }); i++; continue; }
-      if (c === '[' || c === ']' || c === '{' || c === '}' || c === ':' || c === '.' || c === ';') throw new PyErr('SyntaxError', 'invalid syntax', ln);
+      if ('+-*/%(),=<>:'.includes(c)) { toks.push({ k: 'op', v: c }); i++; continue; }
+      if (c === '[' || c === ']' || c === '{' || c === '}' || c === '.' || c === ';') throw new PyErr('SyntaxError', 'invalid syntax', ln);
       throw new PyErr('SyntaxError', "invalid character '" + c + "' (U+" + c.codePointAt(0).toString(16).toUpperCase().padStart(4, '0') + ')', ln);
     }
     return toks;
@@ -288,7 +292,7 @@ const PY = (() => {
 
   /* ---------------- parser (Pratt) ---------------- */
   const BP = { '==': 5, '!=': 5, '<': 5, '>': 5, '<=': 5, '>=': 5, '+': 10, '-': 10, '*': 20, '/': 20, '//': 20, '%': 20, '**': 40 };
-  function parseLine(toks, ln) {
+  function parseLine(toks, ln, mode) {
     let p = 0;
     const peek = () => toks[p], next = () => toks[p++];
     const err = m => { throw new PyErr('SyntaxError', m || 'invalid syntax', ln); };
@@ -298,6 +302,7 @@ const PY = (() => {
       let node;
       if (t.k === 'num') node = { n: 'num', v: t.v, f: t.f };
       else if (t.k === 'str') { let s = t.v; while (peek() && peek().k === 'str') s += next().v; node = { n: 'str', v: s }; }
+      else if (t.k === 'name' && t.v === 'not') { if (!peek()) err(); node = { n: 'not', a: expr(3) }; }
       else if (t.k === 'name') {
         if (KW.has(t.v)) err();
         node = t.v === 'True' || t.v === 'False' ? { n: 'bool', v: t.v === 'True' } : t.v === 'None' ? { n: 'none' } : { n: 'name', v: t.v };
@@ -341,20 +346,43 @@ const PY = (() => {
       let left = primary();
       for (;;) {
         const t = peek(); if (!t) break;
-        if (t.k !== 'op') err('invalid syntax. Perhaps you forgot a comma?');
+        if (t.k === 'name' && (t.v === 'and' || t.v === 'or')) {
+          const bp = t.v === 'or' ? 1 : 2; if (bp <= minbp) break;
+          next(); if (!peek()) err();
+          left = { n: 'boolop', op: t.v, a: left, b: expr(bp) }; continue;
+        }
+        if (t.k !== 'op') { if (t.k === 'name' && (t.v === 'if' || t.v === 'else' || t.v === 'in' || t.v === 'is')) err(); err('invalid syntax. Perhaps you forgot a comma?'); }
         const bp = BP[t.v]; if (bp === undefined || bp <= minbp) break;
         next(); if (!peek()) err();
+        if (bp === 5) {
+          const ops = [t.v], items = [left, expr(5)];
+          while (peek() && peek().k === 'op' && BP[peek().v] === 5 && 5 > minbp) { ops.push(next().v); if (!peek()) err(); items.push(expr(5)); }
+          left = { n: 'cmp', ops, items }; continue;
+        }
         left = { n: 'bin', op: t.v, a: left, b: expr(t.v === '**' ? bp - 1 : bp) };
       }
       return left;
+    }
+    if (mode === 'expr') {
+      if (!toks.length) err();
+      const e = expr(0);
+      if (peek()) { if (isOp(peek(), '=')) err("invalid syntax. Maybe you meant '==' or ':=' instead of '='?"); err(); }
+      return e;
     }
     if (!toks.length) return null;
     if (toks[0].k === 'name' && toks[0].v === 'print' && toks[1] && !(toks[1].k === 'op' && '(=+-*/%'.includes(toks[1].v)))
       err("Missing parentheses in call to 'print'. Did you mean print(...)?");
     let st;
-    if (toks[0].k === 'name' && isOp(toks[1], '=')) {
+    const rhs = () => { const first = expr(0); if (!isOp(peek(), ',')) return first; const items = [first];
+      while (isOp(peek(), ',')) { next(); if (!peek()) break; items.push(expr(0)); } return { n: 'tuple', items }; };
+    let q = 0; const names = [];
+    while (toks[q] && toks[q].k === 'name' && isOp(toks[q + 1], ',')) { names.push(toks[q].v); q += 2; }
+    if (names.length && toks[q] && toks[q].k === 'name' && isOp(toks[q + 1], '=')) {
+      names.push(toks[q].v); if (names.some(x => KW.has(x))) err();
+      p = q + 2; if (!peek()) err(); st = { n: 'assign', names, e: rhs() };
+    } else if (toks[0].k === 'name' && isOp(toks[1], '=')) {
       if (KW.has(toks[0].v)) err();
-      p = 2; if (!peek()) err(); st = { n: 'assign', name: toks[0].v, e: expr(0) };
+      p = 2; if (!peek()) err(); st = { n: 'assign', name: toks[0].v, e: rhs() };
     } else if (toks[0].k !== 'name' && isOp(toks[1], '=') && toks.length > 2) {
       err(toks[0].k === 'num' ? 'cannot assign to literal here. Maybe you meant \'==\' instead of \'=\'?' : 'cannot assign to expression here. Maybe you meant \'==\' instead of \'=\'?');
     } else {
@@ -369,23 +397,41 @@ const PY = (() => {
   /* ---------------- runtime ---------------- */
   const E = (type, msg) => new PyErr(type, msg);
   function pyformat(fmt, args) {
-    let k = 0;
-    const out = fmt.replace(/%([-+ 0#]*)(\d*)(?:\.(\d+))?([diouxXeEfFgGcrs%])/g, (m, flags, width, prec, conv) => {
-      if (conv === '%') return '%';
+    /* sequential scan, same order and messages as CPython's str % */
+    let k = 0, i = 0, out = '';
+    const one = (flags, width, prec, conv) => {
       if (k >= args.length) throw E('TypeError', 'not enough arguments for format string');
       const a = args[k++]; let s;
       if ('fFeEgG'.includes(conv)) {
         if (!isNum(a)) throw E('TypeError', 'must be real number, not ' + tname(a));
-        const pr = prec === undefined ? 6 : +prec, x = num(a);
+        const pr = prec === null ? 6 : prec, x = num(a);
         s = conv === 'f' || conv === 'F' ? fixedPy(x, pr) : conv === 'e' || conv === 'E' ? x.toExponential(pr).replace(/e([+-])(\d)$/, 'e$10$2') : String(+x.toPrecision(pr || 1));
       } else if ('diu'.includes(conv)) {
         if (!isNum(a)) throw E('TypeError', '%' + conv + ' format: a real number is required, not ' + tname(a));
         s = String(Math.trunc(num(a)));
-      } else if (conv === 's') s = str(a); else if (conv === 'r') s = repr(a); else s = str(a);
+      } else if (conv === 'r') s = repr(a); else s = str(a);
       if (flags.includes('+') && !s.startsWith('-') && 'fFeEgGdiu'.includes(conv)) s = '+' + s;
-      if (width && s.length < +width) s = flags.includes('-') ? s.padEnd(+width) : (flags.includes('0') && 'fFdiu'.includes(conv) ? (s[0] === '-' ? '-' + s.slice(1).padStart(+width - 1, '0') : s.padStart(+width, '0')) : s.padStart(+width));
+      if (width && s.length < width) s = flags.includes('-') ? s.padEnd(width) : (flags.includes('0') && 'fFdiu'.includes(conv) ? (s[0] === '-' ? '-' + s.slice(1).padStart(width - 1, '0') : s.padStart(width, '0')) : s.padStart(width));
       return s;
-    });
+    };
+    while (i < fmt.length) {
+      const c = fmt[i];
+      if (c !== '%') { out += c; i++; continue; }
+      i++;
+      let flags = ''; while (i < fmt.length && '-+ 0#'.includes(fmt[i])) flags += fmt[i++];
+      let w = ''; while (i < fmt.length && /\d/.test(fmt[i])) w += fmt[i++];
+      let prec = null;
+      if (i < fmt.length && fmt[i] === '.') { i++; let d = ''; while (i < fmt.length && /\d/.test(fmt[i])) d += fmt[i++]; prec = d === '' ? 0 : +d; }
+      while (i < fmt.length && 'hlL'.includes(fmt[i])) i++;
+      if (i >= fmt.length) throw E('ValueError', 'incomplete format');
+      const conv = fmt[i];
+      if (conv === '%') { out += '%'; i++; continue; }
+      if (!'diouxXeEfFgGcrsa'.includes(conv)) {
+        const cp = conv.codePointAt(0);
+        throw E('ValueError', "unsupported format character '" + (cp > 127 ? '?' : conv) + "' (0x" + cp.toString(16) + ') at index ' + i);
+      }
+      out += one(flags, w ? +w : 0, prec, conv); i++;
+    }
     if (k < args.length) throw E('TypeError', 'not all arguments converted during string formatting');
     return out;
   }
@@ -423,7 +469,7 @@ const PY = (() => {
         case '/': if (y === 0) throw E('ZeroDivisionError', 'division by zero'); return V('float', x / y);
         case '//': if (y === 0) throw E('ZeroDivisionError', fl ? 'float floor division by zero' : 'integer division or modulo by zero'); return V(T, Math.floor(x / y));
         case '%': if (y === 0) throw E('ZeroDivisionError', fl ? 'float modulo' : 'integer modulo by zero'); return V(T, x - Math.floor(x / y) * y);
-        case '**': if (x === 0 && y < 0) throw E('ZeroDivisionError', '0.0 cannot be raised to a negative power'); return V(fl || y < 0 ? 'float' : 'int', Math.pow(x, y));
+        case '**': if (x === 0 && y < 0) throw E('ZeroDivisionError', '0.0 cannot be raised to a negative power'); if (x < 0 && !Number.isInteger(y)) { const r = Math.pow(-x, y), th = Math.PI * y; return V('complex', { re: r * Math.cos(th), im: r * Math.sin(th) }); } return V(fl || y < 0 ? 'float' : 'int', Math.pow(x, y));
       }
     }
     if (a.t === 'str' && b.t === 'str' && op === '+') return V('str', a.v + b.v);
@@ -481,6 +527,27 @@ const PY = (() => {
       type: F('type', async args => { argc('type', args, 1, 1); return V('type', tname(args[0])); }),
     };
   }
+  function levCost(a, b) {
+    const M = 2, sub = (x, y) => x === y ? 0 : (x.toLowerCase() === y.toLowerCase() ? 1 : M);
+    let row = []; for (let j = 0; j <= b.length; j++) row.push(j * M);
+    for (let i = 1; i <= a.length; i++) {
+      const nr = [i * M];
+      for (let j = 1; j <= b.length; j++) nr.push(Math.min(row[j] + M, nr[j - 1] + M, row[j - 1] + sub(a[i - 1], b[j - 1])));
+      row = nr;
+    }
+    return row[b.length];
+  }
+  function suggestName(w, cands) {
+    let best = null, bd = Infinity;
+    for (const c of cands) {
+      if (c === w) continue;
+      const mx = Math.min(Math.floor((w.length + c.length + 3) * 2 / 6), bd - 1);
+      const d = levCost(w, c);
+      if (d > mx) continue;
+      if (best === null || d < bd) { best = c; bd = d; }
+    }
+    return best;
+  }
   async function ev(node, env, io) {
     switch (node.n) {
       case 'num': return node.f ? V('float', parseFloat(node.v)) : V('int', parseInt(node.v, 10));
@@ -490,7 +557,8 @@ const PY = (() => {
       case 'name':
         if (Object.prototype.hasOwnProperty.call(env, node.v)) return env[node.v];
         if (Object.prototype.hasOwnProperty.call(env.__b, node.v)) return env.__b[node.v];
-        throw E('NameError', "name '" + node.v + "' is not defined" + (env.__b[node.v.toLowerCase()] ? ". Did you mean: '" + node.v.toLowerCase() + "'?" : ''));
+        { const sg = suggestName(node.v, Object.keys(env).filter(k => k !== '__b').concat(Object.keys(env.__b)));
+          throw E('NameError', "name '" + node.v + "' is not defined" + (sg ? ". Did you mean: '" + sg + "'?" : '')); }
       case 'tuple': { const v = []; for (const x of node.items) v.push(await ev(x, env, io)); return V('tuple', v); }
       case 'un': {
         const a = await ev(node.a, env, io);
@@ -498,6 +566,16 @@ const PY = (() => {
         return V(a.t === 'float' ? 'float' : 'int', node.op === '-' ? -num(a) : num(a));
       }
       case 'bin': { const a = await ev(node.a, env, io), b = await ev(node.b, env, io); return binop(node.op, a, b); }
+      case 'cmp': {
+        let a = await ev(node.items[0], env, io);
+        for (let k = 0; k < node.ops.length; k++) {
+          const b = await ev(node.items[k + 1], env, io), r = compare(node.ops[k], a, b);
+          if (!r.v) return r; a = b;
+        }
+        return V('bool', true);
+      }
+      case 'boolop': { const a = await ev(node.a, env, io); if (node.op === 'and' ? !truthy(a) : truthy(a)) return a; return await ev(node.b, env, io); }
+      case 'not': return V('bool', !truthy(await ev(node.a, env, io)));
       case 'call': {
         const f = await ev(node.f, env, io); const args = [], kw = {};
         for (const x of node.args) args.push(await ev(x, env, io));
@@ -508,30 +586,116 @@ const PY = (() => {
     }
   }
   /* run a whole program. io = {out(text, kind), input(): Promise<string>, err(text)} */
+  const HEADS = { if: 'if', elif: 'elif', else: 'else', while: 'while', for: 'for', def: 'function definition' };
+  function parseProgram(src) {
+    const raw = src.replace(/\r/g, '').split('\n'), L = [];
+    for (let k = 0; k < raw.length; k++) {
+      const r = raw[k]; if (!r.trim() || r.trim().startsWith('#')) continue;
+      let w = 0; for (const ch of r) { if (ch === ' ') w++; else if (ch === '\t') w = (Math.floor(w / 8) + 1) * 8; else break; }
+      L.push({ ln: k + 1, ind: w, raw: r, toks: lex(r, k + 1) });
+    }
+    let i = 0;
+    const stack = [0];
+    const IE = (m, ln) => new PyErr('IndentationError', m, ln);
+    function simple(toks, ln) { return parseLine(toks, ln); }
+    function header(line, kw) {        /* returns {cond, inline} for 'kw ... :' */
+      const t = line.toks, last = t.length - 1;
+      let colon = -1, depth = 0;
+      for (let j = 1; j < t.length; j++) { const x = t[j]; if (x.k === 'op' && x.v === '(') depth++; else if (x.k === 'op' && x.v === ')') depth--; else if (x.k === 'op' && x.v === ':' && depth === 0) { colon = j; break; } }
+      if (kw === 'else') {
+        if (colon !== 1) throw new PyErr('SyntaxError', "expected ':'", line.ln);
+        return { cond: null, inline: t.slice(2) };
+      }
+      if (colon < 0) {
+        if (t.length === 1) throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+        const has = t.some(x => x.k === 'op' && x.v === '=');
+        if (has) parseLine(t.slice(1), line.ln, 'expr');
+        throw new PyErr('SyntaxError', "expected ':'", line.ln);
+      }
+      if (colon === 1) throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+      return { cond: parseLine(t.slice(1, colon), line.ln, 'expr'), inline: t.slice(colon + 1) };
+    }
+    function body(hline, h, kw) {
+      if (h.inline.length) return [{ ln: hline.ln, raw: hline.raw, st: simple(h.inline, hline.ln) }];
+      const nx = L[i];
+      if (!nx || nx.ind <= hline.ind) throw IE("expected an indented block after '" + kw + "' statement on line " + hline.ln, nx ? nx.ln : hline.ln);
+      return block(nx.ind);
+    }
+    function block(ind) {
+      stack.push(ind); const out = [];
+      while (i < L.length) {
+        const line = L[i];
+        if (line.ind < ind) { if (!stack.includes(line.ind)) throw IE('unindent does not match any outer indentation level', line.ln); break; }
+        if (line.ind > ind) throw IE('unexpected indent', line.ln);
+        const t0 = line.toks[0], kw = t0 && t0.k === 'name' ? t0.v : '';
+        if (kw === 'if') {
+          const node = { ln: line.ln, raw: line.raw, st: { n: 'if', arms: [] } };
+          let h = header(line, 'if'); i++;
+          node.st.arms.push({ ln: line.ln, raw: line.raw, cond: h.cond, body: body(line, h, 'if') });
+          while (i < L.length && L[i].ind === ind && L[i].toks[0] && L[i].toks[0].k === 'name' && (L[i].toks[0].v === 'elif' || L[i].toks[0].v === 'else')) {
+            const ln2 = L[i], k2 = ln2.toks[0].v; h = header(ln2, k2); i++;
+            node.st.arms.push({ ln: ln2.ln, raw: ln2.raw, cond: h.cond, body: body(ln2, h, k2) });
+            if (k2 === 'else') break;
+          }
+          out.push(node); continue;
+        }
+        if (kw === 'elif' || kw === 'else') throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+        if (kw === 'pass' && line.toks.length === 1) { out.push({ ln: line.ln, raw: line.raw, st: { n: 'pass' } }); i++; continue; }
+        if (line.toks.some(x => x.k === 'op' && x.v === ':')) {
+          if (HEADS[kw]) throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+          throw new PyErr('SyntaxError', 'invalid syntax', line.ln);
+        }
+        out.push({ ln: line.ln, raw: line.raw, st: simple(line.toks, line.ln) }); i++;
+      }
+      stack.pop(); return out;
+    }
+    if (L.length && L[0].ind > 0) throw IE('unexpected indent', L[0].ln);
+    return block(0);
+  }
+  async function execBlock(stmts, env, io) {
+    for (const s of stmts) {
+      const st = s.st;
+      try {
+        if (st.n === 'if') {
+          let done = false;
+          for (const arm of st.arms) {
+            let go;
+            if (arm.cond === null) go = true;
+            else { try { go = truthy(await ev(arm.cond, env, io)); } catch (e) { if (e instanceof PyErr && !e.at) e.at = arm; throw e; } }
+            if (go) { await execBlock(arm.body, env, io); done = true; break; }
+          }
+          continue;
+        }
+        if (st.n === 'pass') continue;
+        if (st.n === 'assign' && st.names) {
+          const v = await ev(st.e, env, io), k = st.names.length;
+          let items; if (v.t === 'tuple') items = v.v; else if (v.t === 'str') items = [...v.v].map(c => V('str', c));
+          else throw E('TypeError', 'cannot unpack non-iterable ' + tname(v) + ' object');
+          if (items.length > k) throw E('ValueError', 'too many values to unpack (expected ' + k + ')');
+          if (items.length < k) throw E('ValueError', 'not enough values to unpack (expected ' + k + ', got ' + items.length + ')');
+          st.names.forEach((nm, j) => { env[nm] = items[j]; });
+        } else if (st.n === 'assign') env[st.name] = await ev(st.e, env, io); else await ev(st.e, env, io);
+      } catch (e) { if (e instanceof PyErr && !e.at) e.at = s; throw e; }
+    }
+  }
   async function run(src, io, fname) {
     fname = fname || 'program.py';
-    const lines = src.replace(/\r/g, '').split('\n'), prog = [];
-    for (let k = 0; k < lines.length; k++) {
-      const raw = lines[k]; if (!raw.trim() || raw.trim().startsWith('#')) continue;
-      try {
-        if (/^\s/.test(raw)) throw new PyErr('IndentationError', 'unexpected indent', k + 1);
-        const st = parseLine(lex(raw, k + 1), k + 1); if (st) prog.push([k + 1, st, raw]);
-      } catch (e) {
-        if (!(e instanceof PyErr)) throw e;
-        io.err('  File "' + fname + '", line ' + (k + 1) + '\n    ' + raw.trim() + '\n' + e.type + ': ' + e.message);
-        return { ok: false, type: e.type, line: k + 1 };
-      }
+    let prog;
+    try { prog = parseProgram(src); }
+    catch (e) {
+      if (!(e instanceof PyErr)) throw e;
+      const raws = src.replace(/\r/g, '').split('\n'), r = raws[e.line - 1];
+      io.err('  File "' + fname + '", line ' + e.line + (r !== undefined && r.trim() ? '\n    ' + r.trim() : '') + '\n' + e.type + ': ' + e.message);
+      return { ok: false, type: e.type, line: e.line };
     }
     const env = { __b: builtins() };
-    for (const [ln, st, raw] of prog) {
-      try {
-        if (st.n === 'assign') env[st.name] = await ev(st.e, env, io); else await ev(st.e, env, io);
-      } catch (e) {
-        if (e instanceof Stop) return { ok: false, type: 'Stopped', line: ln };
-        if (!(e instanceof PyErr)) throw e;
-        io.err('Traceback (most recent call last):\n  File "' + fname + '", line ' + ln + ', in <module>\n    ' + raw.trim() + '\n' + e.type + ': ' + e.message);
-        return { ok: false, type: e.type, line: ln };
-      }
+    try { await execBlock(prog, env, io); }
+    catch (e) {
+      if (e instanceof Stop) return { ok: false, type: 'Stopped', line: 0 };
+      if (!(e instanceof PyErr)) throw e;
+      const at = e.at || { ln: 0, raw: '' };
+      io.err('Traceback (most recent call last):\n  File "' + fname + '", line ' + at.ln + ', in <module>\n    ' + at.raw.trim() + '\n' + e.type + ': ' + e.message);
+      return { ok: false, type: e.type, line: at.ln };
     }
     return { ok: true };
   }
@@ -566,7 +730,18 @@ const PYIDE = (() => {
     ta.addEventListener('input', () => { sync(); opt.onChange && opt.onChange(ta.value); });
     ta.addEventListener('scroll', () => { gut.scrollTop = ta.scrollTop; });
     ta.addEventListener('keydown', e => {
-      if (e.key === 'Tab') { e.preventDefault(); const s = ta.selectionStart; ta.setRangeText('    ', s, ta.selectionEnd, 'end'); sync(); opt.onChange && opt.onChange(ta.value); }
+      const chg = () => { sync(); opt.onChange && opt.onChange(ta.value); };
+      const s0 = ta.selectionStart, s1 = ta.selectionEnd, ls = ta.value.lastIndexOf('\n', s0 - 1) + 1, before = ta.value.slice(ls, s0);
+      if (e.key === 'Tab' && e.shiftKey) { e.preventDefault(); const m = /^ {1,4}/.exec(ta.value.slice(ls)); if (m) { ta.setRangeText('', ls, ls + m[0].length, 'preserve'); chg(); } }
+      else if (e.key === 'Tab') { e.preventDefault(); ta.setRangeText('    ', s0, s1, 'end'); chg(); }
+      else if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault(); let ind = /^[ \t]*/.exec(before)[0];
+        if (/:\s*(#.*)?$/.test(before)) ind += '    ';
+        ta.setRangeText('\n' + ind, s0, s1, 'end'); chg();
+      }
+      else if (e.key === 'Backspace' && s0 === s1 && before.length && /^ +$/.test(before)) {
+        e.preventDefault(); const n = before.length % 4 || 4; ta.setRangeText('', s0 - n, s0, 'end'); chg();
+      }
       if (e.key === 'F5') { e.preventDefault(); runIt(); }
     });
     el.querySelector('.pyrun').onclick = () => runIt();
@@ -599,7 +774,7 @@ const PYIDE = (() => {
   return { mount };
 })();
 </script><script>
-const EX=[{"type": "sort", "icon": "rules", "cls": "main", "code": "A7.3.1", "pill": {"el": "Αναγνωριστικά", "en": "Identifiers"}, "title": {"el": "🏷️ Αποδεκτά αναγνωριστικά;", "en": "🏷️ Valid identifiers?"}, "instr": {"el": "Σύρε κάθε αναγνωριστικό (όνομα μεταβλητής) στο κουτί ΝΑΙ αν είναι αποδεκτό ή στο ΟΧΙ αν δεν είναι. Μετά τον έλεγχο θα δεις τον λόγο για όσα έκανες λάθος.", "en": "Drag each identifier (variable name) into YES if it is valid or NO if it is not. After checking you will see the reason for any you got wrong."}, "bins": [{"id": "y", "cls": "in", "name": {"el": "✓ ΝΑΙ, αποδεκτό", "en": "✓ YES, valid"}}, {"id": "n", "cls": "main", "name": {"el": "✗ ΟΧΙ, δεν είναι αποδεκτό", "en": "✗ NO, not valid"}}], "chips": {"i0": {"code": "MyName"}, "i1": {"code": "2Lessons"}, "i2": {"code": "My Name"}, "i3": {"code": "myName"}, "i4": {"code": "Name-Surname"}, "i5": {"code": "NAME_SURNAME"}, "i6": {"code": "print"}, "i7": {"code": "Print"}, "i8": {"code": "My(Name)"}, "i9": {"code": "float"}, "i10": {"code": "Num1"}, "i11": {"code": "X"}, "i12": {"code": "_number"}}, "answer": {"i0": "y", "i1": "n", "i2": "n", "i3": "y", "i4": "n", "i5": "y", "i6": "n", "i7": "y", "i8": "n", "i9": "n", "i10": "y", "i11": "y", "i12": "y"}, "explain": {"i0": {"el": "Ξεκινά με γράμμα, μόνο γράμματα.", "en": "Starts with a letter, letters only."}, "i1": {"el": "Ξεκινά με αριθμό.", "en": "Starts with a digit."}, "i2": {"el": "Έχει κενό.", "en": "It has a space."}, "i3": {"el": "Αποδεκτό (διαφορετικό από το MyName!).", "en": "Valid (different from MyName!)."}, "i4": {"el": "Η παύλα (-) δεν επιτρέπεται.", "en": "The hyphen (-) is not allowed."}, "i5": {"el": "Η κάτω παύλα επιτρέπεται.", "en": "The underscore is allowed."}, "i6": {"el": "Δεσμευμένη λέξη: θα χάσει τη λειτουργία της.", "en": "Reserved word: it would lose its function."}, "i7": {"el": "Αποδεκτό: η Python ξεχωρίζει το Print από το print.", "en": "Valid: Python tells Print apart from print."}, "i8": {"el": "Οι παρενθέσεις δεν επιτρέπονται.", "en": "Brackets are not allowed."}, "i9": {"el": "Δεσμευμένη λέξη (τύπος δεδομένων).", "en": "Reserved word (a data type)."}, "i10": {"el": "Ψηφίο μετά το γράμμα: επιτρέπεται.", "en": "A digit after the letter: allowed."}, "i11": {"el": "Ένα γράμμα αρκεί.", "en": "One letter is enough."}, "i12": {"el": "Μπορεί να ξεκινά με κάτω παύλα.", "en": "It may start with an underscore."}}, "lesson": {"el": "Γράμματα, ψηφία και _ · ξεκινά με γράμμα ή _ · όχι κενά, παύλες, παρενθέσεις · όχι δεσμευμένες λέξεις · πεζά ≠ κεφαλαία.", "en": "Letters, digits and _ · starts with a letter or _ · no spaces, hyphens, brackets · no reserved words · lowercase ≠ uppercase."}}, {"type": "sort", "icon": "data", "cls": "st", "code": "A7.3.2", "pill": {"el": "Τύποι", "en": "Types"}, "title": {"el": "🔢 Ποιος τύπος δεδομένου;", "en": "🔢 Which data type?"}, "instr": {"el": "Σύρε κάθε περιεχόμενο στον κατάλληλο τύπο δεδομένου.", "en": "Drag each content item to the right data type."}, "bins": [{"id": "int", "cls": "in", "name": {"el": "int", "en": "int"}, "sub": {"el": "ακέραιος", "en": "integer"}}, {"id": "float", "cls": "st", "name": {"el": "float", "en": "float"}, "sub": {"el": "πραγματικός", "en": "real"}}, {"id": "str", "cls": "main", "name": {"el": "str", "en": "str"}, "sub": {"el": "αλφαριθμητικό", "en": "string"}}], "chips": {"onoma": {"el": "Όνομα Σχολείου", "en": "School name"}, "tmimata": {"el": "Αριθμός τμημάτων του σχολείου", "en": "Number of classes in the school"}, "mesos": {"el": "Μέσος όρος επίδοσης μαθητών ανά τμήμα", "en": "Average student score per class"}, "synolo": {"el": "Συνολικός αριθμός μαθητών του σχολείου", "en": "Total number of students in the school"}, "fylo": {"el": "Φύλο (αγόρι/κορίτσι)", "en": "Gender (boy/girl)"}}, "answer": {"onoma": "str", "tmimata": "int", "mesos": "float", "synolo": "int", "fylo": "str"}, "explain": {"onoma": {"el": "Κείμενο.", "en": "Text."}, "tmimata": {"el": "Μετράμε τμήματα: ακέραιος.", "en": "We count classes: an integer."}, "mesos": {"el": "Ο μέσος όρος έχει συνήθως δεκαδικά.", "en": "An average usually has decimals."}, "synolo": {"el": "Μετράμε μαθητές: ακέραιος.", "en": "We count students: an integer."}, "fylo": {"el": "Κείμενο (π.χ. 'αγόρι').", "en": "Text (e.g. 'boy')."}}, "lesson": {"el": "Μετράμε κάτι; int. Έχει δεκαδικά; float. Είναι κείμενο; str.", "en": "Do we count something? int. Does it have decimals? float. Is it text? str."}}, {"type": "match", "icon": "book", "cls": "out", "code": "A7.3.1", "pill": {"el": "Ονόματα", "en": "Names"}, "title": {"el": "✏️ Κατάλληλο αναγνωριστικό", "en": "✏️ A suitable identifier"}, "instr": {"el": "Σύρε σε κάθε περιεχόμενο ένα κατάλληλο αναγνωριστικό. Δύο κάρτες περισσεύουν: δεν είναι αποδεκτά ονόματα.", "en": "Drag a suitable identifier to each content item. Two cards are left over: they are not valid names."}, "heads": [{"el": "Περιεχόμενο", "en": "Content"}, {"el": "Αναγνωριστικό", "en": "Identifier"}], "rows": [{"label": {"el": "Όνομα Σχολείου", "en": "School name"}, "slot": "s1"}, {"label": {"el": "Αριθμός τμημάτων του σχολείου", "en": "Number of classes in the school"}, "slot": "s2"}, {"label": {"el": "Μέσος όρος επίδοσης μαθητών ανά τμήμα", "en": "Average student score per class"}, "slot": "s3"}, {"label": {"el": "Συνολικός αριθμός μαθητών του σχολείου", "en": "Total number of students in the school"}, "slot": "s4"}, {"label": {"el": "Φύλο (αγόρι/κορίτσι)", "en": "Gender (boy/girl)"}, "slot": "s5"}], "chips": {"a": {"code": "onoma_sxoleiou"}, "b": {"code": "arithmos_tmimaton"}, "c": {"code": "mesos_oros"}, "d": {"code": "synolo_mathiton"}, "e": {"code": "fylo"}, "x1": {"code": "2tmimata"}, "x2": {"code": "mesos oros"}}, "answer": {"s1": "a", "s2": "b", "s3": "c", "s4": "d", "s5": "e"}, "lesson": {"el": "Το όνομα δείχνει τι περιέχει η μεταβλητή. Για πολλές λέξεις χρησιμοποιούμε κάτω παύλα: mesos_oros.", "en": "The name shows what the variable holds. For several words we use the underscore: mesos_oros."}}, {"type": "code", "icon": "calculator", "cls": "in", "code": "A7.3.3–7", "pill": {"el": "Δεκαπλάσιο", "en": "Ten times"}, "fname": "M3_ask3.py", "title": {"el": "🔟 Το δεκαπλάσιο ενός ακεραίου (M3_ask3.py)", "en": "🔟 Ten times an integer (M3_ask3.py)"}, "instr": {"el": "Το M3_ask3.py έχει μόνο την εντολή εισόδου. Συμπλήρωσε τις κατάλληλες εντολές ώστε να υπολογίζει και να τυπώνει το δεκαπλάσιο ενός ακέραιου αριθμού, με μήνυμα στο input() και στο print. Πάτησε ▶ Run για να το δοκιμάσεις στο Shell και μετά Έλεγχος.", "en": "M3_ask3.py only has the input command. Add the right commands so that it calculates and prints ten times an integer, with a message in input() and in print. Press ▶ Run to try it in the Shell, then Check."}, "start": "x=int(input())\n", "solution": {"el": "x=int(input('Δώσε έναν ακέραιο: '))\nx=x*10\nprint('Το δεκαπλάσιο είναι:', x)\n", "en": "x=int(input('Give an integer: '))\nx=x*10\nprint('Ten times the number is:', x)\n"}, "tests": [[[7], [70]], [[-3], [-30]], [[12], [120]]], "req": ["prompt", "label"], "lesson": {"el": "Είσοδος με int(input('μήνυμα')), επεξεργασία με εκχώρηση (x=x*10), έξοδος με print('μήνυμα', x). Ελέγχουμε με περισσότερες από μία τιμές, και αρνητικές.", "en": "Input with int(input('message')), processing with assignment (x=x*10), output with print('message', x). We test with more than one value, negative ones too."}}],T={"el": {"mission": "Αποστολή", "check": "✓ Έλεγχος", "reset": "↺ Από την αρχή", "sol": "💡 Δείξε τη λύση", "next": "Επόμενη αποστολή →", "finish": "Ολοκλήρωση 🏆", "empty": "✓ Όλα τοποθετήθηκαν", "missing": "Συμπλήρωσε πρώτα όλα τα κενά.", "some": "σωστά. Διόρθωσε τα κόκκινα και ξαναπροσπάθησε.", "allok": "🎉 Μπράβο! Όλα σωστά.", "helped": "💡 Αυτή είναι η σωστή λύση. Μελέτησέ τη και προχώρα.", "test": "🧪 Έλεγχος με τιμές", "in": "Είσοδος", "out": "Τι πρέπει να τυπώσει;", "line": "γραμμή", "shows": "Εμφανίζει", "syn": "Συντακτικό λάθος", "log": "Λογικό λάθος", "none": "Σωστή", "bugs_help": "Πάτησε μια γραμμή για να αλλάξεις: Σωστή → Συντακτικό λάθος → Λογικό λάθος.", "fixes": "✔ Οι διορθώσεις:", "begin": "Ξεκινάμε →", "endT": "🏆 Ολοκλήρωσες τις αποστολές!", "endX": "⏰ Ο χρόνος τελείωσε", "st1": "σωστές με την πρώτη προσπάθεια", "st2": "αποστολές ολοκληρώθηκαν", "st3": "με βοήθεια (λύση)", "again": "↺ Ξανά από την αρχή", "notice": "⏱️ Έχεις <b>10΄</b>. Σύρε τις κάρτες ή πάτησε πρώτα την κάρτα και μετά το κουτί. Πάτησε μια τοποθετημένη κάρτα για να επιστρέψει πίσω. Δεν ζητάμε όνομα και δεν αποθηκεύεται τίποτα.", "t0": "⏰ Ο χρόνος τελείωσε.", "tend": "✓ Ολοκληρώθηκε.", "tstart": "Ο χρόνος αρχίζει με την Έναρξη.", "t1": "Απομένει έως 1 λεπτό.", "t2": "Απομένουν έως 2 λεπτά.", "trun": "Εμπέδωση · 10΄", "trunA": "Αξιολόγηση · 10΄", "name": "Ονοματεπώνυμο", "class": "Τμήμα", "needName": "Συμπλήρωσε ονοματεπώνυμο και τμήμα για να ξεκινήσεις.", "task": "Δραστηριότητα", "noticeA": "⏱️ Έχεις <b>10΄</b>. Απάντησε σε όλες τις δραστηριότητες. Μπορείς να πηγαίνεις μπρος-πίσω. Η βοήθεια 💡 δίνει μόνο μια μικρή υπόδειξη και μετράει. Στο τέλος πάτησε <b>Υποβολή</b> και αποθήκευσε τα αποτελέσματά σου.", "prev": "← Προηγούμενη", "nextA": "Επόμενη →", "hint": "💡 Βοήθεια", "submit": "Υποβολή ✓", "confirm": "Δεν έχεις απαντήσει σε όλες τις δραστηριότητες. Θέλεις σίγουρα να υποβάλεις;", "resT": "📋 Τα αποτελέσματά σου", "score": "Βαθμολογία", "hintsU": "βοήθειες", "save": "💾 Αποθήκευση αποτελεσμάτων (HTML)", "saved": "✓ Τα αποτελέσματα αποθηκεύτηκαν.", "cancel": "Η αποθήκευση ακυρώθηκε. Μπορείς να ξαναδοκιμάσεις.", "dl": "Έλεγξε τις Λήψεις του browser. Αν δεν ξεκινήσει η λήψη, πάτησε εδώ: ", "dlLink": "📥 Λήψη αρχείου αποτελεσμάτων", "date": "Ημερομηνία", "answers": "Οι απαντήσεις σου", "empty2": "—", "saveFirst": "Μην κλείσεις τη σελίδα πριν αποθηκεύσεις!", "repTitle": "Αξιολόγηση", "blank": "κενό", "step": "βήμα", "t0A": "⏰ Ο χρόνος τελείωσε· οι απαντήσεις υποβλήθηκαν.", "origCode": "Αρχικός κώδικας", "expect": "Αναμένεται", "yours": "Το πρόγραμμά σου εμφάνισε", "codeSome": "έλεγχοι πέτυχαν. Τρέξε το πρόγραμμα (▶), δες τι εμφανίζει και διόρθωσέ το."}, "en": {"mission": "Mission", "check": "✓ Check", "reset": "↺ Start over", "sol": "💡 Show solution", "next": "Next mission →", "finish": "Finish 🏆", "empty": "✓ Everything is placed", "missing": "Fill in all the gaps first.", "some": "correct. Fix the red ones and try again.", "allok": "🎉 Well done! All correct.", "helped": "💡 This is the correct solution. Study it and move on.", "test": "🧪 Test with values", "in": "Input", "out": "What should it print?", "line": "line", "shows": "Displays", "syn": "Syntax error", "log": "Logical error", "none": "Correct", "bugs_help": "Tap a line to change it: Correct → Syntax error → Logical error.", "fixes": "✔ The fixes:", "begin": "Let's start →", "endT": "🏆 You completed the missions!", "endX": "⏰ Time is up", "st1": "correct on the first try", "st2": "missions completed", "st3": "with help (solution)", "again": "↺ Start again", "notice": "⏱️ You have <b>10′</b>. Drag the cards, or tap a card first and then the box. Tap a placed card to send it back. We don't ask for your name and nothing is saved.", "t0": "⏰ Time is up.", "tend": "✓ Completed.", "tstart": "The time starts when you press Start.", "t1": "Up to 1 minute left.", "t2": "Up to 2 minutes left.", "trun": "Practice · 10′", "trunA": "Assessment · 10′", "name": "Full name", "class": "Class", "needName": "Fill in your full name and class to start.", "task": "Task", "noticeA": "⏱️ You have <b>10′</b>. Answer all the tasks. You can move back and forth. Help 💡 gives only a small tip and is counted. At the end press <b>Submit</b> and save your results.", "prev": "← Previous", "nextA": "Next →", "hint": "💡 Help", "submit": "Submit ✓", "confirm": "You haven't answered all the tasks. Do you really want to submit?", "resT": "📋 Your results", "score": "Score", "hintsU": "hints used", "save": "💾 Save results (HTML)", "saved": "✓ The results were saved.", "cancel": "Saving was cancelled. You can try again.", "dl": "Check your browser's Downloads. If the download doesn't start, click here: ", "dlLink": "📥 Download results file", "date": "Date", "answers": "Your answers", "empty2": "—", "saveFirst": "Don't close the page before saving!", "repTitle": "Assessment", "blank": "gap", "step": "step", "t0A": "⏰ Time is up; your answers were submitted.", "origCode": "Original code", "expect": "Expected", "yours": "Your program displayed", "codeSome": "checks passed. Run the program (▶), see what it displays and fix it."}},HERO={"label": {"el": "Εμπέδωση · 4 αποστολές · 10΄ · ΦΥΛΛΟ ΕΡΓΑΣΙΑΣ Α.7.Μ3", "en": "Practice · 4 missions · 10′ · Worksheet A.7.M3"}, "h": {"el": "Ονόματα, τύποι και τιμές!", "en": "Names, types and values!"}, "p": {"el": "Θα ελέγξεις αναγνωριστικά, θα διαλέξεις τύπους δεδομένων, θα συμπληρώσεις και θα διορθώσεις προγράμματα με μεταβλητές.", "en": "You will check identifiers, choose data types, and complete and fix programs that use variables."}, "icons": [["rules", "main"], ["data", "st"], ["book", "out"], ["calculator", "in"], ["gamepad", "out"], ["search", "main"]], "recap": {"el": "💡 <b>Θυμήσου:</b> όνομα = γράμματα, ψηφία, _ (όχι στην αρχή αριθμός, όχι δεσμευμένες λέξεις) · τύποι <b>int</b>, <b>float</b>, <b>str</b> · η <b>input()</b> δίνει str → int()/float() · <b>μεταβλητή = έκφραση</b> · <b>print('%.2f' % x)</b> για δεκαδικά.", "en": "💡 <b>Remember:</b> name = letters, digits, _ (no digit first, no reserved words) · types <b>int</b>, <b>float</b>, <b>str</b> · <b>input()</b> gives a str → int()/float() · <b>variable = expression</b> · <b>print('%.2f' % x)</b> for decimals."}, "home": {"el": "📚 Για το σπίτι: άσκηση 7 του Τετραδίου (δέμα ταχυδρομείου: τύποι και αναγνωριστικά).", "en": "📚 Homework: Workbook exercise 7 (parcel post: types and identifiers)."}, "labelA": {"el": "Αξιολόγηση · 4 δραστηριότητες · 10΄ · ΦΥΛΛΟ ΕΡΓΑΣΙΑΣ Α.7.Μ3", "en": "Assessment · 4 tasks · 10′ · Worksheet A.7.M3"}, "hA": {"el": "Δείξε τι έμαθες!", "en": "Show what you have learned!"}, "pA": {"el": "Γράψε το ονοματεπώνυμο και το τμήμα σου. Οι απαντήσεις δεν ελέγχονται αμέσως: τη βαθμολογία θα τη δεις μετά την Υποβολή. Στο τέλος αποθήκευσε τα αποτελέσματα ως αρχείο HTML.", "en": "Write your full name and class. Answers are not checked straight away: you will see your score after you Submit. At the end, save your results as an HTML file."}, "title": {"el": "Μεταβλητές", "en": "Variables"}},MODE="practice",CODE="A7M3",ASSESS=MODE==='assess';
+const EX=[{"type": "sort", "icon": "rules", "cls": "main", "code": "A7.3.1", "pill": {"el": "Αναγνωριστικά", "en": "Identifiers"}, "title": {"el": "🏷️ Αποδεκτά αναγνωριστικά;", "en": "🏷️ Valid identifiers?"}, "instr": {"el": "Σύρε κάθε αναγνωριστικό (όνομα μεταβλητής) στο κουτί ΝΑΙ αν είναι αποδεκτό ή στο ΟΧΙ αν δεν είναι. Μετά τον έλεγχο θα δεις τον λόγο για όσα έκανες λάθος.", "en": "Drag each identifier (variable name) into YES if it is valid or NO if it is not. After checking you will see the reason for any you got wrong."}, "bins": [{"id": "y", "cls": "in", "name": {"el": "✓ ΝΑΙ, αποδεκτό", "en": "✓ YES, valid"}}, {"id": "n", "cls": "main", "name": {"el": "✗ ΟΧΙ, δεν είναι αποδεκτό", "en": "✗ NO, not valid"}}], "chips": {"i0": {"code": "MyName"}, "i1": {"code": "2Lessons"}, "i2": {"code": "My Name"}, "i3": {"code": "myName"}, "i4": {"code": "Name-Surname"}, "i5": {"code": "NAME_SURNAME"}, "i6": {"code": "print"}, "i7": {"code": "Print"}, "i8": {"code": "My(Name)"}, "i9": {"code": "float"}, "i10": {"code": "Num1"}, "i11": {"code": "X"}, "i12": {"code": "_number"}}, "answer": {"i0": "y", "i1": "n", "i2": "n", "i3": "y", "i4": "n", "i5": "y", "i6": "n", "i7": "y", "i8": "n", "i9": "n", "i10": "y", "i11": "y", "i12": "y"}, "explain": {"i0": {"el": "Ξεκινά με γράμμα, μόνο γράμματα.", "en": "Starts with a letter, letters only."}, "i1": {"el": "Ξεκινά με αριθμό.", "en": "Starts with a digit."}, "i2": {"el": "Έχει κενό.", "en": "It has a space."}, "i3": {"el": "Αποδεκτό (διαφορετικό από το MyName!).", "en": "Valid (different from MyName!)."}, "i4": {"el": "Η παύλα (-) δεν επιτρέπεται.", "en": "The hyphen (-) is not allowed."}, "i5": {"el": "Η κάτω παύλα επιτρέπεται.", "en": "The underscore is allowed."}, "i6": {"el": "Δεσμευμένη λέξη: θα χάσει τη λειτουργία της.", "en": "Reserved word: it would lose its function."}, "i7": {"el": "Αποδεκτό: η Python ξεχωρίζει το Print από το print.", "en": "Valid: Python tells Print apart from print."}, "i8": {"el": "Οι παρενθέσεις δεν επιτρέπονται.", "en": "Brackets are not allowed."}, "i9": {"el": "Δεσμευμένη λέξη (τύπος δεδομένων).", "en": "Reserved word (a data type)."}, "i10": {"el": "Ψηφίο μετά το γράμμα: επιτρέπεται.", "en": "A digit after the letter: allowed."}, "i11": {"el": "Ένα γράμμα αρκεί.", "en": "One letter is enough."}, "i12": {"el": "Μπορεί να ξεκινά με κάτω παύλα.", "en": "It may start with an underscore."}}, "lesson": {"el": "Γράμματα, ψηφία και _ · ξεκινά με γράμμα ή _ · όχι κενά, παύλες, παρενθέσεις · όχι δεσμευμένες λέξεις · πεζά ≠ κεφαλαία.", "en": "Letters, digits and _ · starts with a letter or _ · no spaces, hyphens, brackets · no reserved words · lowercase ≠ uppercase."}}, {"type": "sort", "icon": "data", "cls": "st", "code": "A7.3.2", "pill": {"el": "Τύποι", "en": "Types"}, "title": {"el": "🔢 Ποιος τύπος δεδομένου;", "en": "🔢 Which data type?"}, "instr": {"el": "Σύρε κάθε περιεχόμενο στον κατάλληλο τύπο δεδομένου.", "en": "Drag each content item to the right data type."}, "bins": [{"id": "int", "cls": "in", "name": {"el": "int", "en": "int"}, "sub": {"el": "ακέραιος", "en": "integer"}}, {"id": "float", "cls": "st", "name": {"el": "float", "en": "float"}, "sub": {"el": "πραγματικός", "en": "real"}}, {"id": "str", "cls": "main", "name": {"el": "str", "en": "str"}, "sub": {"el": "αλφαριθμητικό", "en": "string"}}], "chips": {"onoma": {"el": "Όνομα Σχολείου", "en": "School name"}, "tmimata": {"el": "Αριθμός τμημάτων του σχολείου", "en": "Number of classes in the school"}, "mesos": {"el": "Μέσος όρος επίδοσης μαθητών ανά τμήμα", "en": "Average student score per class"}, "synolo": {"el": "Συνολικός αριθμός μαθητών του σχολείου", "en": "Total number of students in the school"}, "fylo": {"el": "Φύλο (αγόρι/κορίτσι)", "en": "Gender (boy/girl)"}}, "answer": {"onoma": "str", "tmimata": "int", "mesos": "float", "synolo": "int", "fylo": "str"}, "explain": {"onoma": {"el": "Κείμενο.", "en": "Text."}, "tmimata": {"el": "Μετράμε τμήματα: ακέραιος.", "en": "We count classes: an integer."}, "mesos": {"el": "Ο μέσος όρος έχει συνήθως δεκαδικά.", "en": "An average usually has decimals."}, "synolo": {"el": "Μετράμε μαθητές: ακέραιος.", "en": "We count students: an integer."}, "fylo": {"el": "Κείμενο (π.χ. 'αγόρι').", "en": "Text (e.g. 'boy')."}}, "lesson": {"el": "Μετράμε κάτι; int. Έχει δεκαδικά; float. Είναι κείμενο; str.", "en": "Do we count something? int. Does it have decimals? float. Is it text? str."}}, {"type": "match", "icon": "book", "cls": "out", "code": "A7.3.1", "pill": {"el": "Ονόματα", "en": "Names"}, "title": {"el": "✏️ Κατάλληλο αναγνωριστικό", "en": "✏️ A suitable identifier"}, "instr": {"el": "Σύρε σε κάθε περιεχόμενο ένα κατάλληλο αναγνωριστικό. Δύο κάρτες περισσεύουν: δεν είναι αποδεκτά ονόματα.", "en": "Drag a suitable identifier to each content item. Two cards are left over: they are not valid names."}, "heads": [{"el": "Περιεχόμενο", "en": "Content"}, {"el": "Αναγνωριστικό", "en": "Identifier"}], "rows": [{"label": {"el": "Όνομα Σχολείου", "en": "School name"}, "slot": "s1"}, {"label": {"el": "Αριθμός τμημάτων του σχολείου", "en": "Number of classes in the school"}, "slot": "s2"}, {"label": {"el": "Μέσος όρος επίδοσης μαθητών ανά τμήμα", "en": "Average student score per class"}, "slot": "s3"}, {"label": {"el": "Συνολικός αριθμός μαθητών του σχολείου", "en": "Total number of students in the school"}, "slot": "s4"}, {"label": {"el": "Φύλο (αγόρι/κορίτσι)", "en": "Gender (boy/girl)"}, "slot": "s5"}], "chips": {"a": {"code": "onoma_sxoleiou"}, "b": {"code": "arithmos_tmimaton"}, "c": {"code": "mesos_oros"}, "d": {"code": "synolo_mathiton"}, "e": {"code": "fylo"}, "x1": {"code": "2tmimata"}, "x2": {"code": "mesos oros"}}, "answer": {"s1": "a", "s2": "b", "s3": "c", "s4": "d", "s5": "e"}, "lesson": {"el": "Το όνομα δείχνει τι περιέχει η μεταβλητή. Για πολλές λέξεις χρησιμοποιούμε κάτω παύλα: mesos_oros.", "en": "The name shows what the variable holds. For several words we use the underscore: mesos_oros."}}, {"type": "code", "icon": "calculator", "cls": "in", "code": "A7.3.3–7", "pill": {"el": "Δεκαπλάσιο", "en": "Ten times"}, "fname": "M3_ask3.py", "title": {"el": "🔟 Το δεκαπλάσιο ενός ακεραίου (M3_ask3.py)", "en": "🔟 Ten times an integer (M3_ask3.py)"}, "instr": {"el": "Το M3_ask3.py έχει μόνο την εντολή εισόδου. Συμπλήρωσε τις κατάλληλες εντολές ώστε να υπολογίζει και να τυπώνει το δεκαπλάσιο ενός ακέραιου αριθμού, με μήνυμα στο input() και στο print. Πάτησε ▶ Run για να το δοκιμάσεις στο Shell και μετά Έλεγχος.", "en": "M3_ask3.py only has the input command. Add the right commands so that it calculates and prints ten times an integer, with a message in input() and in print. Press ▶ Run to try it in the Shell, then Check."}, "start": "x=int(input())\n", "solution": {"el": "x=int(input('Δώσε έναν ακέραιο: '))\nx=x*10\nprint('Το δεκαπλάσιο είναι:', x)\n", "en": "x=int(input('Give an integer: '))\nx=x*10\nprint('Ten times the number is:', x)\n"}, "tests": [[[7], [70]], [[-3], [-30]], [[12], [120]]], "req": ["prompt", "label"], "lesson": {"el": "Είσοδος με int(input('μήνυμα')), επεξεργασία με εκχώρηση (x=x*10), έξοδος με print('μήνυμα', x). Ελέγχουμε με περισσότερες από μία τιμές, και αρνητικές.", "en": "Input with int(input('message')), processing with assignment (x=x*10), output with print('message', x). We test with more than one value, negative ones too."}}],T={"el": {"problem": "Το πρόβλημα", "showCode": "Δείξε τον κώδικα (βοήθεια)", "hideCode": "Κρύψε τον κώδικα", "solH": "Ένας σωστός κώδικας: διάβασέ τον, κατάλαβέ τον και δοκίμασε να τον γράψεις μόνος/η σου.", "useCode": "Βάλε τον στον editor", "poolFlow": "Σύρε κάθε σχήμα στο σωστό κενό του λογικού διαγράμματος πιο πάνω (πάτησε σχήμα και μετά κενό). Δύο σχήματα είναι λάθος και περισσεύουν.", "poolAll": "Σύρε τις κάρτες στα σωστά κενά πιο πάνω (ή πάτησε κάρτα και μετά κενό).", "mission": "Αποστολή", "check": "✓ Έλεγχος", "reset": "↺ Από την αρχή", "sol": "💡 Δείξε τη λύση", "next": "Επόμενη αποστολή →", "finish": "Ολοκλήρωση 🏆", "empty": "✓ Όλα τοποθετήθηκαν", "missing": "Συμπλήρωσε πρώτα όλα τα κενά.", "some": "σωστά. Διόρθωσε τα κόκκινα και ξαναπροσπάθησε.", "allok": "🎉 Μπράβο! Όλα σωστά.", "helped": "💡 Αυτή είναι η σωστή λύση. Μελέτησέ τη και προχώρα.", "test": "🧪 Έλεγχος με τιμές", "in": "Είσοδος", "out": "Τι πρέπει να τυπώσει;", "line": "γραμμή", "shows": "Εμφανίζει", "syn": "Συντακτικό λάθος", "log": "Λογικό λάθος", "none": "Σωστή", "bugs_help": "Πάτησε μια γραμμή για να αλλάξεις: Σωστή → Συντακτικό λάθος → Λογικό λάθος.", "fixes": "✔ Οι διορθώσεις:", "begin": "Ξεκινάμε →", "endT": "🏆 Ολοκλήρωσες τις αποστολές!", "endX": "⏰ Ο χρόνος τελείωσε", "st1": "σωστές με την πρώτη προσπάθεια", "st2": "αποστολές ολοκληρώθηκαν", "st3": "με βοήθεια (λύση)", "again": "↺ Ξανά από την αρχή", "notice": "⏱️ Έχεις <b>10΄</b>. Σύρε τις κάρτες ή πάτησε πρώτα την κάρτα και μετά το κουτί. Πάτησε μια τοποθετημένη κάρτα για να επιστρέψει πίσω. Δεν ζητάμε όνομα και δεν αποθηκεύεται τίποτα.", "t0": "⏰ Ο χρόνος τελείωσε.", "tend": "✓ Ολοκληρώθηκε.", "tstart": "Ο χρόνος αρχίζει με την Έναρξη.", "t1": "Απομένει έως 1 λεπτό.", "t2": "Απομένουν έως 2 λεπτά.", "trun": "Εμπέδωση · 10΄", "trunA": "Αξιολόγηση · 10΄", "name": "Ονοματεπώνυμο", "class": "Τμήμα", "needName": "Συμπλήρωσε ονοματεπώνυμο και τμήμα για να ξεκινήσεις.", "task": "Δραστηριότητα", "noticeA": "⏱️ Έχεις <b>10΄</b>. Απάντησε σε όλες τις δραστηριότητες. Μπορείς να πηγαίνεις μπρος-πίσω. Η βοήθεια 💡 δίνει μόνο μια μικρή υπόδειξη και μετράει. Στο τέλος πάτησε <b>Υποβολή</b> και αποθήκευσε τα αποτελέσματά σου.", "prev": "← Προηγούμενη", "nextA": "Επόμενη →", "hint": "💡 Βοήθεια", "submit": "Υποβολή ✓", "confirm": "Δεν έχεις απαντήσει σε όλες τις δραστηριότητες. Θέλεις σίγουρα να υποβάλεις;", "grade": "Βαθμός", "pts": "μονάδες", "gradeRule": "κάθε δραστηριότητα X μονάδες", "codeCrit": "Πρόγραμμα: βαθμολογείται με το αν τρέχει χωρίς λάθος και δίνει σωστό αποτέλεσμα σε κάθε δοκιμή.", "toAssess": "Πάμε στην Αξιολόγηση →", "bonusP2": "Πρώτα αποθήκευσε την αναφορά σου (κουμπί πιο πάνω). Μετά, αν έχεις χρόνο, συνέχισε με τις επιπρόσθετες ασκήσεις Python. Έχουν τη δική τους αναφορά.", "bonusT": "➕ Επιπρόσθετες ασκήσεις", "bonusP": "Τελείωσες! Αν έχεις χρόνο, λύσε επιπρόσθετα προβλήματα Python. Έχουν τη δική τους, ξεχωριστή αναφορά.", "bonusBtn": "➕ Επιπρόσθετες ασκήσεις →", "resT": "📋 Τα αποτελέσματά σου", "score": "Βαθμολογία", "hintsU": "βοήθειες", "save": "💾 Αποθήκευση αποτελεσμάτων (HTML)", "saved": "✓ Τα αποτελέσματα αποθηκεύτηκαν.", "cancel": "Η αποθήκευση ακυρώθηκε. Μπορείς να ξαναδοκιμάσεις.", "dl": "Έλεγξε τις Λήψεις του browser. Αν δεν ξεκινήσει η λήψη, πάτησε εδώ: ", "dlLink": "📥 Λήψη αρχείου αποτελεσμάτων", "date": "Ημερομηνία", "answers": "Οι απαντήσεις σου", "empty2": "—", "saveFirst": "Μην κλείσεις τη σελίδα πριν αποθηκεύσεις!", "repTitle": "Αξιολόγηση", "blank": "κενό", "step": "βήμα", "t0A": "⏰ Ο χρόνος τελείωσε· οι απαντήσεις υποβλήθηκαν.", "origCode": "Αρχικός κώδικας", "expect": "Αναμένεται", "yours": "Το πρόγραμμά σου εμφάνισε", "codeSome": "έλεγχοι πέτυχαν. Τρέξε το πρόγραμμα (▶), δες τι εμφανίζει και διόρθωσέ το."}, "en": {"problem": "The problem", "showCode": "Show the code (help)", "hideCode": "Hide the code", "solH": "One correct program: read it, understand it, and try writing it yourself.", "useCode": "Put it in the editor", "poolFlow": "Drag each shape into the right gap of the flowchart above (or tap a shape, then a gap). Two shapes are wrong and are left over.", "poolAll": "Drag the cards into the right gaps above (or tap a card, then a gap).", "mission": "Mission", "check": "✓ Check", "reset": "↺ Start over", "sol": "💡 Show solution", "next": "Next mission →", "finish": "Finish 🏆", "empty": "✓ Everything is placed", "missing": "Fill in all the gaps first.", "some": "correct. Fix the red ones and try again.", "allok": "🎉 Well done! All correct.", "helped": "💡 This is the correct solution. Study it and move on.", "test": "🧪 Test with values", "in": "Input", "out": "What should it print?", "line": "line", "shows": "Displays", "syn": "Syntax error", "log": "Logical error", "none": "Correct", "bugs_help": "Tap a line to change it: Correct → Syntax error → Logical error.", "fixes": "✔ The fixes:", "begin": "Let's start →", "endT": "🏆 You completed the missions!", "endX": "⏰ Time is up", "st1": "correct on the first try", "st2": "missions completed", "st3": "with help (solution)", "again": "↺ Start again", "notice": "⏱️ You have <b>10′</b>. Drag the cards, or tap a card first and then the box. Tap a placed card to send it back. We don't ask for your name and nothing is saved.", "t0": "⏰ Time is up.", "tend": "✓ Completed.", "tstart": "The time starts when you press Start.", "t1": "Up to 1 minute left.", "t2": "Up to 2 minutes left.", "trun": "Practice · 10′", "trunA": "Assessment · 10′", "name": "Full name", "class": "Class", "needName": "Fill in your full name and class to start.", "task": "Task", "noticeA": "⏱️ You have <b>10′</b>. Answer all the tasks. You can move back and forth. Help 💡 gives only a small tip and is counted. At the end press <b>Submit</b> and save your results.", "prev": "← Previous", "nextA": "Next →", "hint": "💡 Help", "submit": "Submit ✓", "confirm": "You haven't answered all the tasks. Do you really want to submit?", "grade": "Grade", "pts": "points", "gradeRule": "each task X points", "codeCrit": "Program: marked on whether it runs without errors and gives the right result in each test.", "toAssess": "On to the Assessment →", "bonusP2": "First save your report (button above). Then, if you have time, carry on with the additional Python exercises. They have their own report.", "bonusT": "➕ Additional exercises", "bonusP": "You are done! If you have time, solve additional Python problems. They have their own, separate report.", "bonusBtn": "➕ Additional exercises →", "resT": "📋 Your results", "score": "Score", "hintsU": "hints used", "save": "💾 Save results (HTML)", "saved": "✓ The results were saved.", "cancel": "Saving was cancelled. You can try again.", "dl": "Check your browser's Downloads. If the download doesn't start, click here: ", "dlLink": "📥 Download results file", "date": "Date", "answers": "Your answers", "empty2": "—", "saveFirst": "Don't close the page before saving!", "repTitle": "Assessment", "blank": "gap", "step": "step", "t0A": "⏰ Time is up; your answers were submitted.", "origCode": "Original code", "expect": "Expected", "yours": "Your program displayed", "codeSome": "checks passed. Run the program (▶), see what it displays and fix it."}},HERO={"label": {"el": "Εμπέδωση · 4 αποστολές · 10΄ · ΦΥΛΛΟ ΕΡΓΑΣΙΑΣ Α.7.Μ3", "en": "Practice · 4 missions · 10′ · Worksheet A.7.M3"}, "h": {"el": "Ονόματα, τύποι και τιμές!", "en": "Names, types and values!"}, "p": {"el": "Θα ελέγξεις αναγνωριστικά, θα διαλέξεις τύπους δεδομένων, θα συμπληρώσεις και θα διορθώσεις προγράμματα με μεταβλητές.", "en": "You will check identifiers, choose data types, and complete and fix programs that use variables."}, "icons": [["rules", "main"], ["data", "st"], ["book", "out"], ["calculator", "in"], ["gamepad", "out"], ["search", "main"]], "recap": {"el": "💡 <b>Θυμήσου:</b> όνομα = γράμματα, ψηφία, _ (όχι στην αρχή αριθμός, όχι δεσμευμένες λέξεις) · τύποι <b>int</b>, <b>float</b>, <b>str</b> · η <b>input()</b> δίνει str → int()/float() · <b>μεταβλητή = έκφραση</b> · <b>print('%.2f' % x)</b> για δεκαδικά.", "en": "💡 <b>Remember:</b> name = letters, digits, _ (no digit first, no reserved words) · types <b>int</b>, <b>float</b>, <b>str</b> · <b>input()</b> gives a str → int()/float() · <b>variable = expression</b> · <b>print('%.2f' % x)</b> for decimals."}, "home": {"el": "📚 Για το σπίτι: άσκηση 7 του Τετραδίου (δέμα ταχυδρομείου: τύποι και αναγνωριστικά).", "en": "📚 Homework: Workbook exercise 7 (parcel post: types and identifiers)."}, "labelA": {"el": "Αξιολόγηση · 4 δραστηριότητες · 10΄ · ΦΥΛΛΟ ΕΡΓΑΣΙΑΣ Α.7.Μ3", "en": "Assessment · 4 tasks · 10′ · Worksheet A.7.M3"}, "hA": {"el": "Δείξε τι έμαθες!", "en": "Show what you have learned!"}, "pA": {"el": "Γράψε το ονοματεπώνυμο και το τμήμα σου. Οι απαντήσεις δεν ελέγχονται αμέσως: τη βαθμολογία θα τη δεις μετά την Υποβολή. Στο τέλος αποθήκευσε τα αποτελέσματα ως αρχείο HTML.", "en": "Write your full name and class. Answers are not checked straight away: you will see your score after you Submit. At the end, save your results as an HTML file."}, "title": {"el": "Μεταβλητές", "en": "Variables"}},MODE="practice",CODE="A7M3",HAS_IDLE=true,ASSESS=MODE==='assess';
 const app=document.getElementById('app');const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const L=()=>window.LANG||'el',t=k=>T[L()][k],tx=o=>o==null?'':(typeof o==='string'?o:(o[L()]??o.el));
@@ -623,6 +798,7 @@ function missionsBar(){if(ASSESS){const a=EX.map((_,k)=>answered(k));return '<di
 function inputsOf(i){const e=EX[i],r=[];if(e.type==='trace')e.rows.forEach((x,ri)=>{x.vals.forEach((v,vi)=>{if(v!==null)r.push(i+':r'+ri+'v'+vi)});if(x.out!==null)r.push(i+':r'+ri+'o')});if(e.test)e.test.rows.forEach((x,ri)=>x[1].forEach((_,oi)=>r.push(i+':'+ri+'-'+oi)));return r}
 function answered(i){const e=EX[i],s=st[i];let ok=true;if(e.type==='code')return codeS[i].trim()!==e.start.trim();if(e.type==='sort')ok=Object.keys(e.chips).every(c=>s[c]);else if(e.type==='bugs')ok=Object.keys(s).length>0;else if(e.type!=='trace')ok=slotIds(e).every(k=>s[k]);return ok&&inputsOf(i).every(k=>(tv[k]||'').trim()!=='')}
 function body(i){const e=EX[i];let h='';
+ if(e.problem)h+='<div class="prob"><h4>📌 '+t('problem')+'</h4><p>'+tx(e.problem)+'</p>'+(e.pex?'<p class="pex">🔢 '+tx(e.pex)+'</p>':'')+'</div>';
  if(e.aside)h+='<div class="aside">'+tx(e.aside)+'</div>';
  if(e.listing)h+='<pre class="cd">'+esc(e.listing)+'</pre>';
  if(e.type==='blanks')h+='<div class="blanks'+(e.mono?' code':'')+'">'+e.parts.map(p=>'<p>'+esc(tx(p)).replace(/\{(s\d+)\}/g,(_,s)=>dz(i,s))+'</p>').join('')+'</div>';
@@ -635,24 +811,25 @@ function body(i){const e=EX[i];let h='';
  else if(e.type==='bugs'){h+='<p class="muted">'+t('bugs_help')+'</p><div class="legend2"><span style="background:#3d5677;color:#bcd0e6">'+t('none')+'</span><span style="background:#c4533c;color:white">'+t('syn')+'</span><span style="background:#d9991a">'+t('log')+'</span></div><div class="bugs">'+e.lines.map((ln,k)=>{const v=st[i][k]||'',mk=marks[i]&&marks[i]['l'+k];return '<button class="bl '+v+(mk?' '+mk:'')+'" data-line="'+k+'"><span class="lno">'+(k+1)+'</span><code>'+esc(ln)+'</code><span class="tag">'+(v==='syn'?t('syn'):v==='log'?t('log'):t('none'))+'</span></button>'}).join('')+'</div>';
   if(done[i]&&e.fixes)h+='<div class="fixes"><b>'+t('fixes')+'</b>'+e.fixes.map(f=>'<br>'+(f.line+1)+': <code>'+esc(f.code)+'</code> — '+esc(tx(f.why))).join('')+'</div>'}
  else if(e.type==='trace'){h+='<table class="tbl"><tr><th>'+t('line')+'</th>'+e.vars.map(v=>'<th>'+v+'</th>').join('')+'<th>'+t('shows')+'</th></tr>'+e.rows.map((r,ri)=>'<tr><td class="cd">'+esc(r.code)+'</td>'+e.vars.map((v,vi)=>'<td>'+(r.vals[vi]===null?'':inp(i,'r'+ri+'v'+vi,v))+'</td>').join('')+'<td>'+(r.out===null?'':inp(i,'r'+ri+'o',t('shows')))+'</td></tr>').join('')+'</table>'}
- if(e.type==='code'){h+='<div class="pybtns"><button id="pyRun" class="primary">▶ Run Module (F5)</button><button id="pyReset">↺ '+t('origCode')+'</button></div><div id="pyhost"></div>';
-  if(!ASSESS&&codeRes[i])h+='<h3 class="sub2">'+t('test')+'</h3><table class="ctest"><tr><th>'+t('in')+'</th><th>'+t('expect')+'</th><th>'+t('yours')+'</th><th></th></tr>'+codeRes[i].tests.map(r=>'<tr><td>'+esc(r.inputs.join(', ')||'—')+'</td><td>'+esc(r.expect.map(v=>e.dec!=null?Number(v).toFixed(e.dec):v).join(', '))+'</td><td>'+esc((r.err?r.err.split('\n').pop():r.printed.trim())||'—')+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')+codeRes[i].reqs.map(r=>'<tr><td colspan="3">'+esc(tx(r.label))+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')+'</table>';
+ if(e.type==='code'){h+='<div class="pybtns"><button id="pyRun" class="primary">▶ Run Module (F5)</button><button id="pyReset">↺ '+t('origCode')+'</button>'+(!ASSESS&&e.solution?'<button id="pyShow">💡 '+t('showCode')+'</button>':'')+'</div>'+(!ASSESS&&e.solution?'<div id="solbox" class="solbox" hidden><b>💡 '+t('solH')+'</b><pre class="cd">'+esc(tx(e.solution))+'</pre><button id="pyUse">📋 '+t('useCode')+'</button></div>':'')+'<div id="pyhost"></div>';
+  if(!ASSESS&&codeRes[i])h+='<h3 class="sub2">'+t('test')+'</h3><table class="ctest"><tr><th>'+t('in')+'</th><th>'+t('expect')+'</th><th>'+t('yours')+'</th><th></th></tr>'+codeRes[i].tests.map(r=>'<tr><td>'+esc(r.inputs.join(', ')||'—')+'</td><td>'+esc(r.expect.map(v=>fmtV(v,e.dec)).join(', '))+'</td><td>'+esc((r.err?r.err.split('\n').pop():r.printed.trim())||'—')+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')+codeRes[i].reqs.map(r=>'<tr><td colspan="3">'+esc(tx(r.label))+'</td><td class="'+(r.pass?'ok':'bad')+'">'+(r.pass?'✓':'✗')+'</td></tr>').join('')+'</table>';
   return h}
+ if(chipIds(e).length){const placed=e.type==='sort'?new Set(Object.keys(st[i])):new Set(Object.values(st[i]));
+  h+='<div class="poolh">🧩 '+t(e.type==='flow'?'poolFlow':'poolAll')+'</div><div class="pool" data-pool="1" data-empty="'+esc(t('empty'))+'">'+ORDER[i].filter(c=>!placed.has(c)).map(c=>chip(i,c)).join('')+'</div>'}
  if(e.test){const q=e.test;h+='<h3 class="sub2">'+t('test')+'</h3><table class="tbl"><tr>'+q.cols.map(c=>'<th>'+t('in')+': '+c+'</th>').join('')+q.out.map(c=>'<th>'+t('out')+'<br>'+c+'</th>').join('')+'</tr>'+
   q.rows.map((r,ri)=>'<tr>'+r[0].map(v=>'<td>'+v+'</td>').join('')+r[1].map((v,oi)=>'<td>'+inp(i,ri+'-'+oi,q.out[oi])+'</td>').join('')+'</tr>').join('')+'</table>'}
- if(chipIds(e).length){const placed=e.type==='sort'?new Set(Object.keys(st[i])):new Set(Object.values(st[i]));
-  h+='<div class="pool" data-pool="1" data-empty="'+esc(t('empty'))+'">'+ORDER[i].filter(c=>!placed.has(c)).map(c=>chip(i,c)).join('')+'</div>'}
+
  return h}
 function show(html){const k=stage+'|'+m;const changed=k!==lastK;app.innerHTML=html;if(changed){app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter');lastK=k;window.scrollTo(0,0)}bind()}
 function render(){
  if(ASSESS&&stage==='start'){show('<div class="paper"><div class="hero"><div><div class="label">'+tx(HERO.labelA)+'</div><h1>'+tx(HERO.hA)+'</h1><p>'+tx(HERO.pA)+'</p></div><div class="heroart">'+HERO.icons.map(x=>IC(x[0],x[1])).join('')+'</div></div>'+'<label for="nm">'+t('name')+'</label><input id="nm" autocomplete="name" value="'+esc(student)+'"><label for="cl">'+t('class')+'</label><input id="cl" value="'+esc(classroom)+'" placeholder="π.χ. Α1 / A1">'+'<div class="rules '+(N>6?'eight':'six')+'" style="margin-top:14px">'+EX.map((e,k)=>{const ti=tx(e.title);return '<div><b>'+esc(ti.split(' ')[0])+' '+t('task')+' '+(k+1)+'</b>'+esc(ti.replace(/^\S+\s/,''))+'</div>'}).join('')+'</div>'+'<div class="notice"><p>'+t('noticeA')+'</p></div><p class="error" id="err"></p><button id="begin" class="primary">'+t('begin')+'</button></div>');return}
- if(ASSESS&&stage==='end'){const R=results,sum=R.reduce((a,r)=>a+r.ok,0),tot=R.reduce((a,r)=>a+r.total,0),hu=hintUsed.filter(Boolean).length;show('<div class="paper"><h1>'+(expired?t('t0A'):t('resT'))+'</h1><p><b>'+esc(student)+'</b> · '+esc(classroom)+'</p><div class="stats three"><div><b>'+sum+'/'+tot+'</b><span>'+t('score')+'</span></div><div><b>'+Math.round(100*sum/Math.max(1,tot))+'%</b><span>&nbsp;</span></div><div><b>'+hu+'</b><span>💡 '+t('hintsU')+'</span></div></div>'+'<div class="task">'+EX.map((e,k)=>'<p><b>'+(k+1)+'. '+esc(tx(e.title))+'</b> — '+R[k].ok+'/'+R[k].total+(hintUsed[k]?' 💡':'')+'</p>').join('')+'</div>'+'<div class="notice"><p>⚠️ '+t('saveFirst')+'</p></div><div class="foot"><span id="saveStatus"></span><button id="saveR" class="primary">'+t('save')+'</button></div></div>');return}
+ if(ASSESS&&stage==='end'){const R=results,sum=R.reduce((a,r)=>a+r.ok,0),tot=R.reduce((a,r)=>a+r.total,0),hu=hintUsed.filter(Boolean).length;show('<div class="paper"><h1>'+(expired?t('t0A'):t('resT'))+'</h1><p><b>'+esc(student)+'</b> · '+esc(classroom)+'</p><div class="stats three"><div><b>'+gradeOf(R)+' / 10</b><span>'+t('grade')+'</span></div><div><b>'+sum+'/'+tot+'</b><span>'+t('score')+' ('+Math.round(100*sum/Math.max(1,tot))+'%)</span></div><div><b>'+hu+'</b><span>💡 '+t('hintsU')+'</span></div></div>'+'<div class="task">'+EX.map((e,k)=>'<p><b>'+(k+1)+'. '+esc(tx(e.title))+'</b> — '+R[k].ok+'/'+R[k].total+' → <b>'+fmt1(ptsOf(R[k]))+' / '+perTask+'</b> '+t('pts')+(hintUsed[k]?' 💡':'')+'</p>').join('')+'</div>'+'<div class="notice"><p>⚠️ '+t('saveFirst')+'</p></div><div class="foot"><span id="saveStatus"></span><button id="saveR" class="primary">'+t('save')+'</button></div>'+(HAS_IDLE?'<div class="notice" style="background:#fff4d6;border-color:#e6b94a"><p><b>'+t('bonusT')+'</b> · '+t('bonusP2')+'</p><p><a id="toAdd" class="button primary" style="font-size:1.1em;padding:12px 22px" href="'+addUrl()+'">'+t('bonusBtn')+'</a></p></div>':'')+'</div>');return}
  if(stage==='start'){show('<div class="paper"><div class="hero"><div><div class="label">'+tx(HERO.label)+'</div><h1>'+tx(HERO.h)+'</h1><p>'+tx(HERO.p)+'</p></div><div class="heroart">'+HERO.icons.map(x=>IC(x[0],x[1])).join('')+'</div></div>'
   +'<div class="rules '+(N>6?'eight':'six')+'">'+EX.map((e,k)=>{const ti=tx(e.title);return '<div><b>'+esc(ti.split(' ')[0])+' '+t('mission')+' '+(k+1)+'</b>'+esc(ti.replace(/^\S+\s/,''))+'</div>'}).join('')+'</div>'
   +'<div class="notice"><p>'+t('notice')+'</p></div><button id="begin" class="primary">'+t('begin')+'</button></div>');return}
  if(stage==='end'){const f=first.filter(v=>v===true).length,d=done.filter(Boolean).length,hp=helped.filter(Boolean).length;
   show('<div class="paper"><h1>'+(expired?t('endX'):t('endT'))+'</h1><div class="stats three"><div><b>'+f+'/'+N+'</b><span>✓ '+t('st1')+'</span></div><div><b>'+d+'/'+N+'</b><span>🏁 '+t('st2')+'</span></div><div><b>'+hp+'</b><span>💡 '+t('st3')+'</span></div></div>'
-  +'<div class="lesson">'+tx(HERO.recap)+'</div><div class="task"><p>'+tx(HERO.home)+'</p></div><div class="foot"><span></span><button id="again">'+t('again')+'</button></div></div>');return}
+  +'<div class="lesson">'+tx(HERO.recap)+'</div><div class="task"><p>'+tx(HERO.home)+'</p></div><div class="foot"><button id="again">'+t('again')+'</button><a class="button primary" style="font-size:1.1em;padding:12px 22px" href="ASSESSMENT.HTML?lang='+L()+'">📝 '+t('toAssess')+'</a></div></div>');return}
  const e=EX[m];let h=missionsBar()+'<div class="paper"><div class="mhead">'+IC(e.icon,'mi '+e.cls)+'<div><div class="label">'+t(ASSESS?'task':'mission')+' '+(m+1)+' · '+e.code+'</div><h1>'+esc(tx(e.title))+'</h1><p>'+esc(tx(e.instr))+'</p></div></div>'+body(m);
  if(ASSESS){if(hintUsed[m])h+='<div class="feedback">💡 '+esc(tx(e.hint))+'</div>';h+='<div class="foot"><span><button id="prv" '+(m===0?'disabled':'')+'>'+t('prev')+'</button> '+(e.hint?'<button id="hnt" '+(hintUsed[m]?'disabled':'')+'>'+t('hint')+'</button>':'')+'</span>'+(m<N-1?'<button id="nxt" class="primary">'+t('nextA')+'</button>':'<button id="sub" class="primary">'+t('submit')+'</button>')+'</div></div>';show(h);return}
  if(fb[m])h+='<div class="feedback'+(fb[m][0]==='ok'?' ok':'')+'">'+fb[m][1]()+'</div>';
@@ -667,7 +844,7 @@ function place(chipId,slot){const e=EX[m],s=st[m];
 function bind(){const on=(id,f)=>{if($(id))$(id).onclick=f};
  if(ide){ide.stop();ide=null}
  if($('pyhost')){const i=m,e=EX[i];ide=PYIDE.mount($('pyhost'),{code:codeS[i],fname:e.fname,shell:shellS[i],onChange:v=>{codeS[i]=v;if(!ASSESS&&codeRes[i]){codeRes[i]=null;fb[i]=null}},onShell:h=>shellS[i]=h});
-  on('pyRun',()=>{if(timeout())return;ide.run()});on('pyReset',()=>{ide.setCode(e.start);ide.clear()});if(stage!=='play'||done[i])$('pyhost').querySelector('.pycode').readOnly=true}
+  on('pyRun',()=>{if(timeout())return;ide.run()});on('pyReset',()=>{ide.setCode(e.start);ide.clear()});on('pyShow',()=>{const b=$('solbox');b.hidden=!b.hidden;$('pyShow').textContent='💡 '+t(b.hidden?'showCode':'hideCode')});on('pyUse',()=>{ide.setCode(tx(e.solution));codeS[i]=tx(e.solution);$('solbox').hidden=true;$('pyShow').textContent='💡 '+t('showCode')});if(ASSESS&&(stage!=='play'||done[i]))$('pyhost').querySelector('.pycode').readOnly=true}
  on('begin',()=>{if(ASSESS){student=$('nm').value.trim();classroom=$('cl').value.trim();if(!student||!classroom){$('err').textContent=t('needName');return}}stage='play';deadline=Date.now()+TOTAL*1000;render();tick()});
  on('prv',()=>{if(timeout())return;m--;sel=null;render()});on('nxt',()=>{if(timeout())return;m++;sel=null;render()});
  on('hnt',()=>{hintUsed[m]=true;render()});on('sub',()=>{if(timeout())return;if(!EX.every((_,k)=>answered(k))&&!confirm(t('confirm')))return;submit(false)});on('saveR',saveReport);
@@ -694,7 +871,8 @@ function activate(target){if(stage!=='play'||done[m]||timeout())return;const e=E
 app.addEventListener('click',e=>activate(e.target));
 app.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.wc,.dz')){e.preventDefault();activate(e.target)}});
 const norm=v=>String(v??'').trim().replace(/\s+/g,' ').replace(/,(?=\d)/g,'.');
-const same=(a,b)=>{const x=norm(a),y=norm(b);if(x===y)return true;const p=parseFloat(x),q=parseFloat(y);return x!==''&&!isNaN(p)&&!isNaN(q)&&/^-?[\d.]+$/.test(x)&&/^-?[\d.]+$/.test(String(y))&&Math.abs(p-q)<1e-9};
+const boolW=v=>{const s=norm(v).toLowerCase();return ['true','t','αληθής','αληθης','α'].includes(s)?'T':['false','f','ψευδής','ψευδης','ψ'].includes(s)?'F':null};
+const same=(a,b)=>{const x=norm(a),y=norm(b);if(x===y)return true;if(boolW(a)&&boolW(a)===boolW(b))return true;const p=parseFloat(x),q=parseFloat(y);return x!==''&&!isNaN(p)&&!isNaN(q)&&/^-?[\d.]+$/.test(x)&&/^-?[\d.]+$/.test(String(y))&&Math.abs(p-q)<1e-9};
 function grade(i){const e=EX[i],s=st[i],mk={};let ok=0,total=0;const TV=k=>tv[i+':'+k];
  if(e.type==='sort')Object.keys(e.chips).forEach(c=>{total++;const g=s[c]===e.answer[c];if(g)ok++;mk[c]=g?'ok':'bad'});
  else if(e.type==='bugs')e.lines.forEach((_,k)=>{total++;const g=(s[k]||'')===(e.answer[k]||'');if(g)ok++;mk['l'+k]=g?'ok':'bad'});
@@ -715,15 +893,23 @@ function reportItems(i){const e=EX[i],s=st[i],R=results[i],mk=R.mk,li=[],mark=g=
  return li}
 function safeName(v){return v.trim().replace(/[^\p{L}\p{N}_-]+/gu,'_').slice(0,90)||'x'}
 async function saveReport(){const status=$('saveStatus'),title=CODE+' · '+t('repTitle')+' · '+tx(HERO.title);const R=results,sum=R.reduce((a,r)=>a+r.ok,0),tot=R.reduce((a,r)=>a+r.total,0);
- const body=EX.map((e,k)=>'<article><h2>'+(k+1)+'. '+esc(tx(e.title))+' — '+R[k].ok+'/'+R[k].total+(hintUsed[k]?' 💡':'')+'</h2><ul>'+reportItems(k).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></article>').join('');
- const html='<!doctype html><html lang="'+L()+'"><meta charset="utf-8"><title>'+esc(title)+'</title><style>body{font:18px/1.5 Arial;max-width:960px;margin:30px auto;padding:20px;color:#213450}h1{color:#146f86}h2{font-size:20px;margin:0 0 6px}article{border-bottom:1px solid #ccc;padding:12px 0}li{font-family:Consolas,monospace;font-size:16px;overflow-wrap:anywhere}.sc{font-size:26px;font-weight:bold;color:#146f86}</style><h1>'+esc(title)+'</h1><p>'+t('name')+': <b>'+esc(student)+'</b><br>'+t('class')+': <b>'+esc(classroom)+'</b><br>'+t('date')+': '+new Date().toLocaleString(L()==='el'?'el-CY':'en-GB')+'</p><p class="sc">'+t('score')+': '+sum+'/'+tot+' ('+Math.round(100*sum/Math.max(1,tot))+'%) · 💡 '+hintUsed.filter(Boolean).length+' '+t('hintsU')+(expired?' · ⏰':'')+'</p>'+body+'</html>';
+ const body=EX.map((e,k)=>'<article><h2>'+(k+1)+'. '+esc(tx(e.title))+' — '+fmt1(ptsOf(R[k]))+' / '+perTask+' '+t('pts')+' <small>('+R[k].ok+'/'+R[k].total+')</small>'+(hintUsed[k]?' 💡':'')+'</h2>'+(e.type==='code'?'<p class="crit">'+t('codeCrit')+'</p><pre>'+esc(codeS[k].split('\n').map((x,j)=>String(j+1).padStart(2,' ')+'| '+x).join('\n'))+'</pre><p>'+pyLink(k)+'</p><ul>'+reportItems(k).filter(x=>!/^ ?\d+\| /.test(x)).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<ul>'+reportItems(k).map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>')+'</article>').join('');
+ const html='<!doctype html><html lang="'+L()+'"><meta charset="utf-8"><title>'+esc(title)+'</title><style>body{font:18px/1.5 Arial;max-width:960px;margin:30px auto;padding:20px;color:#213450}h1{color:#146f86}h2{font-size:20px;margin:0 0 6px}article{border-bottom:1px solid #ccc;padding:12px 0}li{font-family:Consolas,monospace;font-size:16px;overflow-wrap:anywhere}pre{font:16px Consolas,monospace;background:#f4f6f9;padding:8px 12px;border-radius:8px;white-space:pre-wrap}.crit{color:#586a7d;font-size:15px;margin:0}.sc{font-size:26px;font-weight:bold;color:#146f86}</style><h1>'+esc(title)+'</h1><p>'+t('name')+': <b>'+esc(student)+'</b><br>'+t('class')+': <b>'+esc(classroom)+'</b><br>'+t('date')+': '+new Date().toLocaleString(L()==='el'?'el-CY':'en-GB')+'</p><p class="sc">'+t('grade')+': '+gradeOf(R)+' / 10</p><p>'+t('score')+': '+sum+'/'+tot+' ('+Math.round(100*sum/Math.max(1,tot))+'%) · '+t('gradeRule').replace('X',perTask)+' · 💡 '+hintUsed.filter(Boolean).length+' '+t('hintsU')+(expired?' · ⏰':'')+'</p>'+body+'</html>';
  const filename=CODE+'_ASSESSMENT_'+safeName(student)+'_'+safeName(classroom)+'.html';
- if(window.showSaveFilePicker&&window.isSecureContext&&window.top===window.self){try{const h=await window.showSaveFilePicker({suggestedName:filename,types:[{description:'HTML',accept:{'text/html':['.html']}}]});const w=await h.createWritable();await w.write(html);await w.close();status.textContent=t('saved');return}catch(err){if(err.name==='AbortError'){status.textContent=t('cancel');return}}}
- const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));a.download=filename;a.textContent=t('dlLink');a.className='button primary';status.replaceChildren(t('dl'),a);a.click()}
+ if(window.showSaveFilePicker&&window.isSecureContext&&window.top===window.self){try{const h=await window.showSaveFilePicker({suggestedName:filename,types:[{description:'HTML',accept:{'text/html':['.html']}}]});const w=await h.createWritable();await w.write(html);await w.close();status.textContent=t('saved');showBonus();return}catch(err){if(err.name==='AbortError'){status.textContent=t('cancel');return}}}
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html;charset=utf-8'}));a.download=filename;a.textContent=t('dlLink');a.className='button primary';status.replaceChildren(t('dl'),a);a.click();showBonus()}
+const ptsOf=r=>10/N*r.ok/Math.max(1,r.total),fmt1=x=>(Math.round(x*10)/10).toFixed(1).replace(/\.0$/,''),gradeOf=R=>fmt1(R.reduce((a,r)=>a+ptsOf(r),0)),perTask=fmt1(10/N);
+const pyLink=k=>{const e=EX[k];return '<a download="'+esc(e.fname||'program.py')+'" href="data:text/x-python;charset=utf-8,'+encodeURIComponent(codeS[k].replace(/\n/g,'\r\n'))+'">⬇ '+esc(e.fname||'program.py')+'</a>'};
+function addUrl(){return 'ADDITIONAL.HTML?lang='+L()+'&bonus=1&name='+encodeURIComponent(student)+'&class='+encodeURIComponent(classroom)}
+function showBonus(){return;if(!HAS_IDLE||$('bonusBox'))return;const u='ADDITIONAL.HTML?lang='+L()+'&bonus=1&name='+encodeURIComponent(student)+'&class='+encodeURIComponent(classroom);$('saveR').closest('.paper').insertAdjacentHTML('beforeend','<div id="bonusBox" class="notice" style="background:#fff4d6;border-color:#e6b94a"><p><b>'+t('bonusT')+'</b> · '+t('bonusP')+'</p><p><a class="button primary" href="'+u+'">'+t('bonusBtn')+'</a></p></div>')}
 const numsOf=t=>(String(t).match(/-?\d+(?:\.\d+)?/g)||[]).map(Number);
 function subseq(have,want){let k=0;for(const x of have){if(k<want.length&&Math.abs(x-want[k])<0.051)k++}return k===want.length}
-async function runCode(i){const e=EX[i],src=codeS[i],tests=[];for(const [inp,exp] of e.tests){const r=await PY.test(src,inp);tests.push({inputs:inp,expect:exp,printed:r.printed,err:r.err,pass:r.ok&&subseq(numsOf(r.printed),exp)})}
- const reqs=(e.req||[]).map(q=>{let pass=true;if(q==='prompt')pass=!/input\(\s*\)/.test(src);if(q==='label')pass=tests.some(r=>/\p{L}/u.test(r.printed));return {label:q==='prompt'?{el:'Κάθε input() έχει μήνυμα για τον χρήστη',en:'Every input() has a message for the user'}:{el:'Το print εμφανίζει και μήνυμα, όχι μόνο τον αριθμό',en:'print also shows a message, not just the number'},pass}});
+function lineEnds(l,s,ch){l=String(l).trim().toLowerCase().replace(/[.!;]+$/,'');s=String(s).toLowerCase();if(!(l===s||l.endsWith(' '+s)||l.endsWith(':'+s)))return false;return !(ch||[]).some(c=>{c=String(c).toLowerCase();return c!==s&&c.length>s.length&&c.endsWith(s)&&(l===c||l.endsWith(' '+c))})}
+function matchOut(printed,want,ch){const lines=String(printed).split('\n');if(want.every(x=>typeof x==='number')){if(!subseq(numsOf(printed),want))return false;if(ch&&ch.length)for(const line of lines)for(const c of ch)if(lineEnds(line,c,ch))return false;return true}let k=0;for(const line of lines){const nums=numsOf(line);let ni=0;while(k<want.length){const w=want[k];if(typeof w==='number'){while(ni<nums.length&&Math.abs(nums[ni]-w)>=0.051)ni++;if(ni<nums.length){ni++;k++;continue}break}if(lineEnds(line,w,ch))k++;break}}if(k<want.length)return false;if(ch&&ch.length){const wanted=want.filter(x=>typeof x!=='number');for(const line of lines)for(const c of ch)if(!wanted.includes(c)&&lineEnds(line,c,ch))return false}return true}
+const fmtV=(v,d)=>typeof v==='number'&&d!=null?Number(v).toFixed(d):v;
+
+async function runCode(i){const e=EX[i],src=codeS[i],tests=[];for(const [inp,exp] of e.tests){const r=await PY.test(src,inp);tests.push({inputs:inp,expect:exp,printed:r.printed,err:r.err,pass:r.ok&&matchOut(r.printed,exp,e.choices)})}
+ const reqs=(e.req||[]).map(q=>{let pass=true;if(q==='prompt')pass=!/input\(\s*\)/.test(src);if(q==='label')pass=tests.some(r=>/\p{L}/u.test(r.printed));if(q==='fmt')pass=tests.every(r=>r.expect.every(v=>typeof v!=='number'||(r.printed.match(/-?\d+(?:\.\d+)?/g)||[]).includes(Number(v).toFixed(e.dec))));return {label:q==='prompt'?{el:'Κάθε input() έχει μήνυμα για τον χρήστη',en:'Every input() has a message for the user'}:q==='fmt'?{el:'Το αποτέλεσμα τυπώνεται με '+e.dec+' δεκαδικό ψηφίο (π.χ. %.'+e.dec+'f)',en:'The result is printed with '+e.dec+' decimal place(s) (e.g. %.'+e.dec+'f)'}:{el:'Το print εμφανίζει και μήνυμα, όχι μόνο τον αριθμό',en:'print also shows a message, not just the number'},pass}});
  const ok=tests.filter(r=>r.pass).length+reqs.filter(r=>r.pass).length;return {tests,reqs,ok,total:tests.length+reqs.length}}
 async function checkCode(){const i=m,R=await runCode(i);codeRes[i]=R;checked[i]=true;const all=R.ok===R.total;if(first[i]===null)first[i]=all;
  if(all){done[i]=true;fb[i]=['ok',()=>t('allok')];confetti()}else{const o=R.ok,tt=R.total,e1=R.tests.find(r=>r.err);fb[i]=['bad',()=>o+'/'+tt+' '+t('codeSome')+(e1?'<br><code>'+esc(e1.err.split('\n').pop())+'</code>':'')]}render()}
