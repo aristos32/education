@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1795010610 source:c:\users\arist\onedrive - moec\documents\education\paidagogiko\–—’ 019-1 - –À«—œ÷œ—… «\c++\aristos test\main.cpp
+1795270301 source:c:\users\arist\onedrive - moec\documents\education\paidagogiko\–—’ 019-1 - –À«—œ÷œ—… «\c++\aristos test\main.cpp
 	<iostream>
 	<cmath>
 	<iomanip>
@@ -10,6 +10,11 @@
 	<iomanip>
 
 1794821391 source:c:\users\arist\onedrive - moec\documents\education\paidagogiko\–—’ 019-1 - –À«—œ÷œ—… «\c++\aristos test\example1.cpp
+	<iostream>
+	<cmath>
+	<iomanip>
+
+1795268593 source:c:\users\arist\onedrive - moec\documents\education\paidagogiko\–—’ 019-1 - –À«—œ÷œ—… «\c++\aristos test\example3.cpp
 	<iostream>
 	<cmath>
 	<iomanip>

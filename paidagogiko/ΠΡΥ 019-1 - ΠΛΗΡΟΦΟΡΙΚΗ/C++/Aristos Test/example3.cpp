@@ -14,13 +14,23 @@ void example3()
     cout << "Enter books number:" << endl;
     cin >> booksNumber;
 
-    if(booksNumber <= 100){
-        totalCost = booksNumber * costPerBook[0];
-    }
-    else{
-        booksNumber = booksNumber - 100;
+    if (booksNumber > 500)
+    {
+        totalCost = (booksNumber - 500) * costPerBook[2];
+        booksNumber = 500;
     }
 
-    cout << "Total cost:" << totalCost;
+    if (booksNumber > 100)
+    {
+        totalCost = totalCost + (booksNumber - 100) * costPerBook[1];
+        booksNumber = 100;
+    }
+
+    if (booksNumber > 0)
+    {
+        totalCost = totalCost + booksNumber * costPerBook[0];
+    }
+
+    cout << "Total cost:" << totalCost << endl;
 
 }
