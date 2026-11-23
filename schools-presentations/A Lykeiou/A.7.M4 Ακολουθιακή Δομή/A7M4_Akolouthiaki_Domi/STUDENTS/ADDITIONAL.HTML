@@ -488,6 +488,27 @@ const PY = (() => {
       type: F('type', async args => { argc('type', args, 1, 1); return V('type', tname(args[0])); }),
     };
   }
+  function levCost(a, b) {
+    const M = 2, sub = (x, y) => x === y ? 0 : (x.toLowerCase() === y.toLowerCase() ? 1 : M);
+    let row = []; for (let j = 0; j <= b.length; j++) row.push(j * M);
+    for (let i = 1; i <= a.length; i++) {
+      const nr = [i * M];
+      for (let j = 1; j <= b.length; j++) nr.push(Math.min(row[j] + M, nr[j - 1] + M, row[j - 1] + sub(a[i - 1], b[j - 1])));
+      row = nr;
+    }
+    return row[b.length];
+  }
+  function suggestName(w, cands) {
+    let best = null, bd = Infinity;
+    for (const c of cands) {
+      if (c === w) continue;
+      const mx = Math.min(Math.floor((w.length + c.length + 3) * 2 / 6), bd - 1);
+      const d = levCost(w, c);
+      if (d > mx) continue;
+      if (best === null || d < bd) { best = c; bd = d; }
+    }
+    return best;
+  }
   async function ev(node, env, io) {
     switch (node.n) {
       case 'num': return node.f ? V('float', parseFloat(node.v)) : V('int', parseInt(node.v, 10));
@@ -497,7 +518,8 @@ const PY = (() => {
       case 'name':
         if (Object.prototype.hasOwnProperty.call(env, node.v)) return env[node.v];
         if (Object.prototype.hasOwnProperty.call(env.__b, node.v)) return env.__b[node.v];
-        throw E('NameError', "name '" + node.v + "' is not defined" + (env.__b[node.v.toLowerCase()] ? ". Did you mean: '" + node.v.toLowerCase() + "'?" : ''));
+        { const sg = suggestName(node.v, Object.keys(env).filter(k => k !== '__b').concat(Object.keys(env.__b)));
+          throw E('NameError', "name '" + node.v + "' is not defined" + (sg ? ". Did you mean: '" + sg + "'?" : '')); }
       case 'tuple': { const v = []; for (const x of node.items) v.push(await ev(x, env, io)); return V('tuple', v); }
       case 'un': {
         const a = await ev(node.a, env, io);
