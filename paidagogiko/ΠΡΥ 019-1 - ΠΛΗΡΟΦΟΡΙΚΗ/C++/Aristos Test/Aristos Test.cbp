@@ -38,6 +38,8 @@
 		</Unit>
 		<Unit filename="example3.cpp" />
 		<Unit filename="example4.cpp" />
+		<Unit filename="example5.cpp" />
+		<Unit filename="example6.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>
