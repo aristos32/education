@@ -7,13 +7,12 @@
 
 ΑΡΧΕΙΑ
 PROFESSOR/INDEX.HTML – Μενού καθηγητή: ροή 40΄, δείκτες με αντιστοίχιση, απαντήσεις Εμπέδωσης και Kahoot.
-PROFESSOR/INTRODUCTION.HTML – Αφόρμηση (5΄): «Η αριθμομηχανή-ρομπότ»: η τάξη λέει στο ρομπότ με ποια σειρά να κάνει τις 5 πράξεις της έκφρασης (10 − 4) * 2 + 3 ** 2 / 3. Η έκφραση «μικραίνει» σε κάθε βήμα μέχρι το 15.0.
-PROFESSOR/THEORY.HTML – Θεωρία (10΄): 8 διαφάνειες: τελεστές + − * / **, η / δίνει δεκαδικό, δύναμη και ρίζα (**0.5), προτεραιότητα, ίση προτεραιότητα και αρνητικό πρόσημο, υπολογισμός βήμα-βήμα, από τον τύπο στην Python, ένα πρόγραμμα (°C σε °F). Ερώτηση συζήτησης σε κάθε διαφάνεια, χρονόμετρο και εξαγωγή PDF. Βέλη και PgUp/PgDn για αλλαγή διαφάνειας.
-STUDENTS/PRACTICE.HTML – Εμπέδωση (10΄), 4 αποστολές για μάθηση:
+PROFESSOR/INTRODUCTION.HTML – Αφόρμηση (5΄): «Η αριθμομηχανή-ρομπότ»: η τάξη βάζει στη σωστή σειρά τις 3 πράξεις της έκφρασης 2 + 3 * 4 ** 2 (δύναμη → πολλαπλασιασμός → πρόσθεση = 50).
+PROFESSOR/THEORY.HTML – Θεωρία (10΄): 6 διαφάνειες: τελεστές + − * / **, η / δίνει δεκαδικό, δύναμη και ρίζα (**0.5), προτεραιότητα, ίση προτεραιότητα και αρνητικό πρόσημο, υπολογισμός βήμα-βήμα και από τον τύπο στην Python. Ερώτηση συζήτησης σε κάθε διαφάνεια, χρονόμετρο και εξαγωγή PDF. Βέλη και PgUp/PgDn για αλλαγή διαφάνειας.
+STUDENTS/PRACTICE.HTML – Εμπέδωση (10΄), 3 αποστολές για μάθηση:
    1. 🧮 Βρες τα αποτελέσματα των εκφράσεων
    2. 📊 Με ποια σειρά γίνονται οι πράξεις;
    3. 📐 Από τον μαθηματικό τύπο στην Python
-   4. 🐍 Γράψε το πρόγραμμα: κινητική ενέργεια
    Άμεσος έλεγχος, εξηγήσεις, «Δείξε τη λύση» μετά από λάθος, στατιστικά στο τέλος.
 STUDENTS/ASSESSMENT.HTML – Αξιολόγηση (10΄), 3 δραστηριότητες:
    1. 📐 Υποτείνουσα ορθογωνίου τριγώνου
@@ -21,17 +20,16 @@ STUDENTS/ASSESSMENT.HTML – Αξιολόγηση (10΄), 3 δραστηριότ
    3. 📋 Προκαταρκτική εκτέλεση: F = x³ + 2y² + 3z
 STUDENTS/ADDITIONAL.HTML – Επιπρόσθετες ασκήσεις Python (προσομοιωτής IDLE): ανοίγει από την Αξιολόγηση, αφού ο μαθητής αποθηκεύσει την αναφορά της. Ξεχωριστή οθόνη για κάθε πρόβλημα (περιγραφή, βήματα, παράδειγμα εκτέλεσης, υπόδειξη, Editor + Shell, Run/F5, «Έλεγχος λύσης», Open/Save As .py) και δική του, ξεχωριστή αναφορά HTML. Μηνύματα λάθους όπως της Python.
    Προβλήματα: M5_ask4.py ⭐ Απόσταση δύο σημείων · M5_ask5.py ⭐⭐ Όγκος και επιφάνεια σφαίρας · M5_ask6.py ⭐⭐ Έκπτωση και ΦΠΑ · M5_ask7.py ⭐⭐⭐ Εμβαδόν τριγώνου: ο τύπος του Ήρωνα · Ελεύθερο πρόγραμμα.
-SOLUTIONS/ – Λύσεις (.py) για τον καθηγητή, έτοιμες να ανοίξουν στο IDLE: M5_ask2.py · M5_ask3.py · M5_ask4.py · M5_ask5.py · M5_ask6.py · M5_ask7.py. ΜΗΝ τις δώσετε στους μαθητές πριν από την αξιολόγηση.
+SOLUTIONS/ – Λύσεις (.py) για τον καθηγητή, έτοιμες να ανοίξουν στο IDLE: M5_ask3.py · M5_ask4.py · M5_ask5.py · M5_ask6.py · M5_ask7.py. ΜΗΝ τις δώσετε στους μαθητές πριν από την αξιολόγηση.
    Ονοματεπώνυμο και τμήμα στην αρχή. Χωρίς άμεσο έλεγχο και χωρίς λύσεις· μία μικρή υπόδειξη ανά δραστηριότητα (καταγράφεται).
    Μετά την Υποβολή: βαθμολογία ανά δραστηριότητα και κουμπί «Αποθήκευση αποτελεσμάτων (HTML)» με όλες τις απαντήσεις (✓/✗). Αν τελειώσει ο χρόνος, γίνεται αυτόματη υποβολή.
 
 ΣΥΝΟΨΗ (5΄) – Κλείδωμα υπολογιστών μέσω NetSupport, προφορική ανάκληση των δεικτών επιτυχίας και Kahoot 4 ερωτήσεων (το πλήρες Kahoot 10 ερωτήσεων για επανάληψη). Για το σπίτι / για πολύ καλούς μαθητές: οι 4 Επιπρόσθετες ασκήσεις (απόσταση σημείων από την άσκηση 4 του Τετραδίου και 3 πιο απαιτητικά προβλήματα).
 
 ΑΠΑΝΤΗΣΕΙΣ ΕΜΠΕΔΩΣΗΣ
-1 22 · 48 · 0.0 · 18 · 25 · 6.0
+1 22 · 48 · 6.0
 2 2**3 = 8 → 4*5 = 20 → 20 − 3 = 17 → 17 + 8 = 25
 3 E = m*U**2/2 · Y = (A**2+B**2)**0.5 · F = x**3+2*y**2+3*z · M = (a+b)/2
-4 m, U = float(input('…')) · E = m*U**2/2 · print → 9.0
 
 ΑΠΑΝΤΗΣΕΙΣ ΑΞΙΟΛΟΓΗΣΗΣ
 1 A, B = float(input('…')) · Y = (A**2+B**2)**0.5 · print → 5.0
@@ -52,6 +50,6 @@ ENGLISH
 A.7.M5 · Arithmetic operators — Α΄ Λυκείου, 40′ lesson, Worksheet A.7.M5.
 Every page has ΕΛ / EN buttons (top right); the chosen language carries over between pages.
 PROFESSOR: INDEX.HTML (teacher menu) · INTRODUCTION.HTML (5′ warm-up) · THEORY.HTML (10′, slides, discussion questions, timer, PDF in Greek or English).
-STUDENTS: PRACTICE.HTML (10′, 4 missions to learn, instant checking and solutions) · ASSESSMENT.HTML (10′, 3 tasks, name and class, small counted hints, no solutions, score after Submit, results saved as HTML).
+STUDENTS: PRACTICE.HTML (10′, 3 missions to learn, instant checking and solutions) · ASSESSMENT.HTML (10′, 3 tasks, name and class, small counted hints, no solutions, score after Submit, results saved as HTML).
 Summary (5′): NetSupport lock, oral recall, 4-question Kahoot (full 10-question Kahoot for revision; Greek and English spreadsheets + image zips). Homework / for very good students: the 4 Additional exercises (distance between points from Workbook exercise 4 and 3 harder problems).
 Self-contained HTML, works offline. Keep the PROFESSOR and STUDENTS folders side by side.
