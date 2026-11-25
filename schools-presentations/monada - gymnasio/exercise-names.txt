@@ -16,7 +16,7 @@
 14.word-font-size-color               Word – Μέγεθος και χρώμα γραμματοσειράς σε προτάσεις
 15.word-text-alignment                Word – Στοίχιση αριστερά / κέντρο / δεξιά (πρόσκληση πάρτι)
 16.excel-pie-chart                    Excel – Πίνακας φρούτων + γράφημα πίτας με ετικέτες δεδομένων
-17.powerpoint-slide-transition        PowerPoint – Μετάβαση Fade, Apply To All, δοκιμή με F5 (συνέχεια των 4–5)
+17.powerpoint-slide-transition        PowerPoint – Μετάβαση Fade, Apply To All, δοκιμή με F5
 18.word-bullets-numbering             Word – Κουκκίδες και αρίθμηση σε λίστες
 19.excel-formula-multiply             Excel – Τύπος με * (Τιμή × Πόσα), σύρσιμο τύπου, SUM (κυλικείο)
 20.powerpoint-theme-picture           PowerPoint – Θέμα σχεδίασης (Design) και εικόνα από Stock Images
