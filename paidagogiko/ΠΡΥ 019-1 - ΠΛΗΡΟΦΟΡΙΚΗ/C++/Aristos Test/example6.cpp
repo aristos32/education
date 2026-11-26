@@ -30,16 +30,19 @@ void example6()
             // if we have match, update string pointer to current index
             if(codeLetter==encryptedString[j]){
                 letterFound = true;
-                positions += j;
+                positions += to_string(j) + " ";
                 encryptedStringStartingIndex = j + 1;
+                break;
             }
 
         }
 
+        // continue to next letter
         if(letterFound==true){
             codeFound = true;
             continue;
         }
+        // one letter not found -> fail
         else{
             codeFound = false;
             break;
@@ -54,7 +57,7 @@ void example6()
     }
     else{
         // print -1
-        cout << "not found " << endl;
+        cout << "not found " << "-1" << endl;
     }
 
 
