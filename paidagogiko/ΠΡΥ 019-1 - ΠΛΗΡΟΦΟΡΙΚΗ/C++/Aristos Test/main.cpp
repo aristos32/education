@@ -11,8 +11,10 @@ void example3();
 void example4();
 void example5();
 void example6();
+void example7();
+void example8();
 
 int main()
 {
-    example6();
+    example8();
 }
