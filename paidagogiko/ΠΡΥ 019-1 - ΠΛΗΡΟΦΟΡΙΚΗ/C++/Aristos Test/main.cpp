@@ -13,8 +13,9 @@ void example5();
 void example6();
 void example7();
 void example8();
+void example9();
 
 int main()
 {
-    example8();
+    example9();
 }
