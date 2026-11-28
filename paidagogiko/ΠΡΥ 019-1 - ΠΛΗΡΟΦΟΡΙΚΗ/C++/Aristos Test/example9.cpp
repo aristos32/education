@@ -4,6 +4,26 @@ using namespace std;
 
 void fill(int arr[]); // prototype
 void print(int arr[]); // prototype
+void shift_right(int a[], int n); // prototype
+
+void example9()
+{
+    int A[N];
+    int n;
+
+    // insert elements
+    fill(A);
+
+    // read number of shift positions
+    cout << "Enter the number of positions to shift: ";
+    cin >> n;
+
+    // shift elements
+    shift_right(A, n);
+
+    // display shifted table
+    print(A);
+}
 
 void shift_right(int a[], int n){
     int lastElement;
@@ -25,26 +45,6 @@ void shift_right(int a[], int n){
 
 }
 
-void example9()
-{
-    int A[N];
-    int n;
-
-    // insert elements
-    fill(A);
-
-    // read number of shift positions
-    cout << "Enter the number of positions to shift: ";
-    cin >> n;
-
-    // shift elements
-    shift_right(A, n);
-
-    // display shifted table
-    print(A);
-
-}
-
 void fill(int arr[]){
     cout << "Insert " << N << " elements: ";
 
@@ -54,6 +54,8 @@ void fill(int arr[]){
 }
 
 void print(int arr[]){
+    cout << "Shifted array: ";
+
     for(int i=0; i<N; i++){
         cout << arr[i] << " ";
     }
